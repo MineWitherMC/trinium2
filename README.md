@@ -15,10 +15,13 @@ sometimes useful).
 
 Compatibility
 -------------
-- Definitely works on Minetest 0.5-dev.
-- *Should* work on Minetest 0.4.16.
-- Incompatible with most mods because of their hardcoded recipe system.
-Use it as a standalone (sub)game instead.
-- Recommended: Gettext enabled for MT, you'll see dummy strings without it.
-- Recommended: Minetest with commit 1e71e11, same as above if you don't use
-one of supported languages (for now it's English and Russian).
+Requires Minetest 0.5 with Gettext.
+
+Technical information: currently used Minetest 0.5 features:
+- Valleys/Carpathian
+- Clientside Translations
+- Palettes/Overlays (will be used in upcoming release)
+- Restricted mapgens (because no one should use v6/v5 or even v7)
+- `on_rightclick` triggering when `formspec` is set
+- Prepends
+- `mod.conf`
