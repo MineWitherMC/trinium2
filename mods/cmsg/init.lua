@@ -1,7 +1,7 @@
 cmsg = {} -- API map
 cmsg.time = 10
 cmsg.max_messages = 15
-cmsg.color = "#808080"
+cmsg.color = "FFFFFF"
 
 local keys = {} -- map
 local messages = {} -- map of lists
@@ -23,7 +23,7 @@ minetest.register_on_joinplayer(function(player)
 	huds[pn] = player:hud_add({
 		hud_elem_type = "text",
 		text = "",
-		number = cmsg.color,
+		number = tonumber(cmsg.color, 16),
 		position = {x = 0.75, y = 0.475},
 		offset = {x = -0, y = -256},
 		direction = 3,

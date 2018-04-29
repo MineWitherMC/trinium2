@@ -150,7 +150,7 @@ end
 
 function api.get_item_identifier(stack)
 	local s = stack:to_string():split(" ")
-	return s[1]..(s[4] and " "..table.concat(table.mtail(s, 3), " ") or "")
+	return s[1]..(s[3] and " "..table.concat(table.mtail(s, 2), " ") or "")
 end
 
 function api.sort_by_param(param)

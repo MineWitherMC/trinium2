@@ -25,7 +25,7 @@ M.xpcatalyst = materials.add("experience_catalyst", {
 
 M.forcirium = materials.add("forcirium", {
 	formula = {{"iron", 1}, {"extrium", 1}, {"caesium", 2}, {"fluorine", 1}},
-	types = {"ingot", "gem", "dust", "water_cell"},
+	types = {"ingot", "gem", "dust"},
 	color = {220, 239, 4},
 	description = S"Forcillium",
 	data = {melting_point = 2963, water_mix_velocity = 750},

@@ -4,21 +4,6 @@ local M = materials.materials
 local S = materials.S
 
 --[[ Elements ]]--
-M.sodium = V.sodium:register_material({
-	description = S"Sodium",
-	types = {"dust"},
-})
-
-M.aluminium = V.aluminium:register_material({
-	description = S"Aluminium",
-	types = {"ingot", "dust"},
-})
-
-M.silicon = V.silicon:register_material({
-	description = S"Silicon",
-	types = {"ingot", "dust", "plate"},
-})
-
 M.titanium = V.titanium:register_material({
 	description = S"Titanium",
 	types = {"ingot", "dust", "plate"},

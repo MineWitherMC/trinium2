@@ -177,7 +177,7 @@ materials.add_combination("brick_compression", {
 
 materials.add_type("ore", function(def)
 	local def1 = {
-		description = S("material.type.ore @1", def.name),
+		description = S("@1 Ore", def.name),
 		groups = {cracky = def.data.hardness or 2},
 		tiles = {"trinium_mapgen.stone.png^(trinium_materials.ore.png^[colorize:#"..def.color..")"},
 	}

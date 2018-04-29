@@ -115,7 +115,7 @@ end
 
 function nei.draw_recipe(item, player, rec_id, tbl1, rec_method)
 	local recipes1 = tbl1[item]
-	if not recipes then return "", 0, 0, 0 end
+	if not recipes1 then return "", 0, 0, 0 end
 	recipes1 = table.remap(table.filter(recipes1, function(v1)
 		local v = recipes.recipe_registry[v1]
 		return v.type == (rec_method or v.type) and recipes.methods[v.type].can_perform(player, v.data)

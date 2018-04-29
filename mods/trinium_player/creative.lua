@@ -10,7 +10,7 @@ if trinium.creative_mode then
 		groups = {hidden_from_nei = 1},
 		tool_capabilities = {
 			full_punch_interval = 0.5,
-			max_drop_level = 3,
+			max_drop_level = 456,
 			groupcaps = {
 				cracky = caps,
 				choppy = caps,
@@ -27,6 +27,22 @@ if trinium.creative_mode then
 		privs.fly = 1
 		minetest.set_player_privs(player:get_player_name(), privs)
 	end)
+else
+	minetest.register_item(":", {
+		type = "none",
+		wield_image = "wieldhand.png",
+		wield_scale = {x = 1, y = 1, z = 2.5},
+		tool_capabilities = {
+			full_punch_interval = 0.9,
+			max_drop_level = 0,
+			groupcaps = {
+				crumbly = {times = {[2] = 3.00, [3] = 0.70}, uses = 0, maxlevel = 1},
+				snappy = {times = {[3] = 0.40}, uses = 0, maxlevel = 1},
+				oddly_breakable_by_hand = {times = {3.50, 2.00, 0.70}, uses = 0},
+			},
+			damage_groups = {fleshy = 1},
+		}
+	})
 end
 
 local old_handle_node_drops = minetest.handle_node_drops
