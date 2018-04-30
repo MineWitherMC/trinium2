@@ -12,12 +12,12 @@ local function get_formspec_array(searchstring, mode)
 	local ss, items = searchstring:lower()
 	local formspec, lengthPerPage, i, j = {}, 56, 0, 1
 	items = table.filter(minetest.registered_items, function(v)
-			return (
-				v.mod_origin ~= "*builtin*" and
-				not (v.groups or {}).hidden_from_nei and
-				not (v.groups or {}).hidden_from_irp and
-				((v.description and v.description:lower():find(ss)) or v.name:lower():find(ss))
-			)
+		return (
+			v.mod_origin ~= "*builtin*" and
+			not (v.groups or {}).hidden_from_nei and
+			not (v.groups or {}).hidden_from_irp and
+			((v.description and v.description:lower():find(ss)) or v.name:lower():find(ss) or v.mod_origin:lower():find(ss))
+		)
 	end)
 	local x, y
 	local page_amount = math.max(math.ceil(table.count(items) / lengthPerPage), 1)
@@ -48,7 +48,9 @@ local function get_formspec_array(searchstring, mode)
 			y = (i - x) / 8
 			formspec[j] = formspec[j]..([=[
 				item_image_button[%s,%s;1,1;%s;view_recipe~%s;]
-			]=]):format(x, y + 1, v.name, v.name)
+				tooltip[view_recipe~%s;%s]
+			]=]):format(x, y + 1, v.name, v.name, v.name, api.get_field(v.name, "description")..
+					"\n"..minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))))
 			i = i + 1
 			if i >= lengthPerPage then
 				i = 0

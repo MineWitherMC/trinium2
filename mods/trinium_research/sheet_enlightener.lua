@@ -3,8 +3,6 @@ local S = research.S
 local M = trinium.materials.materials
 local api = trinium.api
 
-api.dump(api.get_fs_texture("trinium_materials:stardust", M.pyrocatalyst:get"dust", M.bifrost:get"dust",
- 		M.xpcatalyst:get"dust", M.forcirium2:get"dust", M.endium:get"dust"))
 
 local enlightener_formspec = ([=[
 	size[10,7.5]

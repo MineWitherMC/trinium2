@@ -28,13 +28,16 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 
 		after_dig_node = function(pos, oldnode, oldmeta, digger)
 			local ctrlpos = oldmeta.fields.controller_pos
-			local dsp = minetest.deserialize(ctrlpos)
-			if ctrlpos and minetest.get_node(dsp).name == "pulse_network:controller" then
-				local ctrlmeta = minetest.get_meta(dsp)
+			if not ctrlpos then return end
+			ctrlpos = ctrlpos:data()
+			if not ctrlpos then return end
+			if ctrlpos and minetest.get_node(ctrlpos).name == "pulse_network:controller" then
+				local ctrlmeta = minetest.get_meta(ctrlpos)
 				local cs = ctrlmeta:get_int"capacity_types"
 				local items = ctrlmeta:get_int"capacity_items"
 				ctrlmeta:set_int("capacity_types", cs - add_types)
 				ctrlmeta:set_int("capacity_items", items - add_items)
+				pulse.trigger_update(ctrlpos)
 			end
 		end,
 	})

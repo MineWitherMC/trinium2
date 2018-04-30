@@ -241,8 +241,6 @@ minetest.register_node("trinium_research:table", {
 	end,
 
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
-		local pn = digger:get_player_name()
-
 		local sh, l = oldmetadata.inventory.research_notes[1], oldmetadata.inventory.lens[1]
 		if not sh:is_empty() then
 			minetest.item_drop(sh, digger, pos)

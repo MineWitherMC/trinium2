@@ -88,7 +88,7 @@ end
 
 function table.tail(t)
 	local function helper(head, ...) return #{...} > 0 and {...} or nil end
-	return helper((table.unpack or unpack)(t))
+	return helper((table.unpack or unpack)(t)) or {}
 end
 
 function table.mtail(t, mult)

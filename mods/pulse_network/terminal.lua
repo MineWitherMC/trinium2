@@ -14,10 +14,19 @@ local function generate_buttons(ctrlpos, index, search)
 		if c > index and (k:lower():find(search:lower()) or
 				minetest.registered_items[k].description:lower():find(search:lower())) then
 			acquired = acquired + 1
+			local key = table.exists(inv_list, api.functions.equal(k))
 			str = str..([=[
 				item_image_button[%s,%s;1,1;%s;take_items~%s;%s]
-			]=]):format(math.modulate(acquired, 8) - 1, math.ceil(acquired / 8) - 1, k:split(" ")[1],
-					table.exists(inv_list, api.functions.equal(k)), v)
+			]=]):format(math.modulate(acquired, 8) - 1, math.ceil(acquired / 8) - 1, k:split" "[1], key, v)
+			local s = ItemStack(("%s 1 %s"):format(
+				k:split(" ")[1],
+				table.concat(table.tail(k:split" "), " ")
+			)):get_meta():get_string("description")
+			if s ~= "" then
+				str = str..([=[
+					tooltip[take_items~%s;%s]
+				]=]):format(key, s)
+			end
 		end
 	end
 	local max = math.min(meta:get_int"capacity_types" - index, 40)
@@ -33,7 +42,8 @@ end
 
 local function get_terminal_formspec(ctrlpos, index, searchstring)
 	local meta = minetest.get_meta(ctrlpos)
-	local CI, UI, CT, UT = meta:get_int"capacity_items", meta:get_int"used_items", meta:get_int"capacity_types", meta:get_int"used_types"
+	local CI, UI, CT, UT = meta:get_int"capacity_items", meta:get_int"used_items",
+			meta:get_int"capacity_types", meta:get_int"used_types"
 	return ([[
 		size[8,12]
 		list[context;input;0,5.5;1,1]
@@ -115,7 +125,7 @@ minetest.register_node("pulse_network:terminal", {
 				local inv_list = ctrlmeta:get_string"inventory_list":data()
 				local id = inv_list[tonumber(ksplit[2])]
 				local inv = ctrlmeta:get_string"inventory":data()
-				local ksplit2 = id:split(" ")
+				local ksplit2 = id:split" "
 				local tester = ItemStack(ksplit2[1])
 				if not tester:is_known() then
 					inv[id] = nil

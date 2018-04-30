@@ -124,8 +124,8 @@ function api.string_separation(str)
 	return api.string_capitalization(str):gsub("_", " ")
 end
 
-function api.formspec_restore(str)
-	return str:gsub("\\\\", "\\"):gsub("\\%[", "["):gsub("\\%]", "]"):gsub("\\,", ","):gsub("\\;", ";")
+function api.string_superseparation(str)
+	return api.string_separation(str):gsub("%W%l", string.upper)
 end
 
 function api.translate_requirements(tbl)
@@ -205,6 +205,12 @@ function api.get_fs_texture(...)
 		table.insert(textures, table.concat{"(", api.get_texture(v), ")^[brighten"})
 	end
 	return (table.unpack or unpack)(textures)
+end
+
+function api.get_field(item, fn)
+	local item = minetest.registered_items[item]
+	if not item then return nil end
+	return item[fn]
 end
 
 api.functions = {} -- table of functions
