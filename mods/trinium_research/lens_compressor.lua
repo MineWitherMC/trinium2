@@ -38,6 +38,7 @@ minetest.register_node("trinium_research:lens_curver", {
 			{-0.025, -0.3, -0.1, 0.025, -0.18, 0.1},
 		}
 	},
+	sounds = trinium.sounds.default_stone,
 
 	after_place_node = function(pos, player)
 		local meta = minetest.get_meta(pos)

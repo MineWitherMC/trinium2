@@ -128,6 +128,7 @@ minetest.register_node("trinium_research:table", {
 			{-0.075, 0.34, -0.325, 0.075, 0.38, -0.175}, -- lens bottom
 		}
 	},
+	sounds = trinium.sounds.default_stone,
 
 	after_place_node = function(pos, player)
 		local meta = minetest.get_meta(pos)

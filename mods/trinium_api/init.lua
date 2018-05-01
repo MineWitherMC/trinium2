@@ -23,8 +23,9 @@ end
 assert(loadfile(path.."/data_pointers.lua"))(secret_api)
 
 dofile(path.."/data_mesh.lua")
-dofile(path.."/fluids.lua")
 dofile(path.."/random.lua")
 dofile(path.."/recipes.lua")
 dofile(path.."/stdlib.lua")
 dofile(path.."/multiblock.lua")
+dofile(path.."/sounds.lua")
+dofile(path.."/fluids.lua")

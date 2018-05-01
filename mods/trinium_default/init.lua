@@ -2,6 +2,7 @@ trinium.default = {}
 local default = trinium.default
 default.S = minetest.get_translator("trinium_default")
 local S = default.S
+local ss = trinium.sounds
 
 -- Reflector Glass
 minetest.register_node("trinium_default:reflector_glass", {
@@ -12,6 +13,7 @@ minetest.register_node("trinium_default:reflector_glass", {
 	paramtype = "light",
 	groups = {cracky = 2},
 	light_source = 7,
+	sounds = ss.default_glass,
 })
 
 -- Lamp Frame
@@ -20,6 +22,7 @@ minetest.register_node("trinium_default:lamp_frame", {
 	description = S"Advanced Lamp Frame",
 	drawtype = "glasslike",
 	groups = {cracky = 3},
+	sounds = ss.default_glass,
 })
 
 -- Forcillium Lamp
@@ -39,4 +42,5 @@ minetest.register_node("trinium_default:forcirium_lamp", {
 	drawtype = "glasslike",
 	light_source = 14,
 	groups = {cracky = 1, level = 2},
+	sounds = ss.default_glass,
 })

@@ -3,22 +3,26 @@ local S = research.S
 local M = trinium.materials.materials
 local api = trinium.api
 local recipes = trinium.recipes
+local ss = trinium.sounds
 
 -- Multiblock components
 minetest.register_node("trinium_research:chassis", {
 	tiles = {"trinium_research.chassis.png"},
 	description = S"Research Chassis",
 	groups = {cracky = 3},
+	sounds = ss.default_stone,
 })
 minetest.register_node("trinium_research:casing", {
 	tiles = {"trinium_research.casing.png"},
 	description = S"Research Casing",
 	groups = {cracky = 2},
+	sounds = ss.default_stone,
 })
 minetest.register_node("trinium_research:wall", {
 	tiles = {"trinium_research.wall.png"},
 	description = S"Research Wall",
 	groups = {cracky = 1},
+	sounds = ss.default_metal,
 })
 
 -- Knowledge Charms

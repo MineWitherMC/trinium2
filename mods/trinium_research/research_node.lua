@@ -9,6 +9,7 @@ minetest.register_node("trinium_research:node_controller", {
 	description = S"Research Node Controller",
 	groups = {cracky = 1},
 	paramtype2 = "facedir",
+	sounds = trinium.sounds.default_stone,
 	on_rightclick = function(pos, node, player, itemstack, pt_th)
 		local meta = minetest.get_meta(pos)
 		if meta:get_int"assembled" == 0 then

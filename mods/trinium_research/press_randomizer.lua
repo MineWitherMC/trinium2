@@ -39,6 +39,7 @@ minetest.register_node("trinium_research:randomizer", {
 			{-0.025, 0.4, -0.1, 0.025, 0.28, 0.1},
 		}
 	},
+	sounds = trinium.sounds.default_stone,
 
 	after_place_node = function(pos, player)
 		local meta = minetest.get_meta(pos)

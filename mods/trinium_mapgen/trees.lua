@@ -1,9 +1,11 @@
 local S = trinium.mapgen.S
+local ss = trinium.sounds
 
 minetest.register_node("trinium_mapgen:wood_log_fir", {
 	tiles = {"trinium_mapgen.wood.log.fir.png", "trinium_mapgen.wood.log.fir.png", "trinium_mapgen.wood.bark.fir.png"},
 	description = S"Fir Log",
 	groups = {wood = 1, choppy = 2},
+	sounds = ss.default_wood,
 })
 
 minetest.register_node("trinium_mapgen:wood_leaves_fir", {
@@ -11,6 +13,7 @@ minetest.register_node("trinium_mapgen:wood_leaves_fir", {
 	description = S"Fir Needles",
 	groups = {snappy = 3, leaves = 8},
 	drop = "",
+	sounds = ss.default_leaves,
 })
 minetest.register_alias("trinium:block_fir_log", "trinium_mapgen:wood_log_fir")
 minetest.register_alias("trinium:block_fir_leaves", "trinium_mapgen:wood_leaves_fir")
@@ -37,10 +40,11 @@ minetest.register_decoration({
 })
 
 minetest.register_node("trinium_mapgen:wood_log_acacia", {
-	tiles = {"trinium_mapgen.wood.log.acacia.png", "trinium_mapgen.wood.log.acacia.png", 
+	tiles = {"trinium_mapgen.wood.log.acacia.png", "trinium_mapgen.wood.log.acacia.png",
 			"trinium_mapgen.wood.bark.acacia.png"},
 	description = S"Acacia Log",
 	groups = {wood = 1, choppy = 2},
+	sounds = ss.default_wood,
 })
 minetest.register_alias("trinium:block_acacia_log", "trinium_mapgen:wood_log_acacia")
 minetest.register_alias("trinium:block_acacia_leaves", "trinium_mapgen:wood_leaves_acacia")
@@ -50,6 +54,7 @@ minetest.register_node("trinium_mapgen:wood_leaves_acacia", {
 	description = S"Acacia Leaves",
 	groups = {snappy = 3, leaves = 5},
 	drop = "",
+	sounds = ss.default_leaves,
 })
 
 minetest.register_decoration({
@@ -74,10 +79,11 @@ minetest.register_decoration({
 })
 
 minetest.register_node("trinium_mapgen:wood_log_maple", {
-	tiles = {"trinium_mapgen.wood.log.maple.png", "trinium_mapgen.wood.log.maple.png", 
+	tiles = {"trinium_mapgen.wood.log.maple.png", "trinium_mapgen.wood.log.maple.png",
 			"trinium_mapgen.wood.bark.maple.png"},
 	description = S"Maple Log",
 	groups = {wood = 1, choppy = 2},
+	sounds = ss.default_wood,
 })
 minetest.register_alias("trinium:block_wood", "trinium_mapgen:wood_log_maple")
 minetest.register_alias("trinium:block_maple_log", "trinium_mapgen:wood_log_maple")
@@ -87,6 +93,7 @@ minetest.register_node("trinium_mapgen:wood_leaves_maple", {
 	description = S"Maple Leaves",
 	groups = {snappy = 3, leaves = 4},
 	drop = "",
+	sounds = ss.default_leaves,
 })
 minetest.register_alias("trinium:block_leaves", "trinium_mapgen:wood_leaves_maple")
 minetest.register_alias("trinium:block_maple_leaves", "trinium_mapgen:wood_leaves_maple")

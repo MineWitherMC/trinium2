@@ -1,11 +1,13 @@
 local S = trinium.mapgen.S
 local api = trinium.api
+local ss = trinium.sounds
 
 -- Cobble
 minetest.register_node("trinium_mapgen:cobble", {
 	tiles = {"trinium_mapgen.cobble.png"},
 	description = S"Cobblestone",
 	groups = {stone = 1, cracky = 3},
+	sounds = ss.default_stone,
 })
 -- Basic Stone
 minetest.register_node("trinium_mapgen:stone", {
@@ -13,6 +15,7 @@ minetest.register_node("trinium_mapgen:stone", {
 	description = S"Stone",
 	groups = {stone = 1, cracky = 3},
 	drop = "trinium_mapgen:cobble",
+	sounds = ss.default_stone,
 })
 minetest.register_alias("mapgen_stone", "trinium_mapgen:stone")
 
@@ -21,6 +24,7 @@ minetest.register_node("trinium_mapgen:dirt", {
 	tiles = {"trinium_mapgen.dirt.png"},
 	description = S"Dirt",
 	groups = {soil = 1, crumbly = 3},
+	sounds = ss.default_dirt,
 })
 minetest.register_alias("mapgen_dirt", "trinium_mapgen:dirt")
 
@@ -29,6 +33,7 @@ minetest.register_node("trinium_mapgen:sand", {
 	tiles = {"trinium_mapgen.sand.png"},
 	description = S"Sand",
 	groups = {crumbly = 3, falling_node = 1},
+	sounds = ss.default_sand,
 })
 minetest.register_alias("mapgen_sand", "trinium_mapgen:sand")
 
@@ -39,6 +44,9 @@ minetest.register_node("trinium_mapgen:dirt_with_grass", {
 	description = S"Dirt with Grass",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
+	sounds = api.set_defaults({
+		footstep = {name = "trinium.grass_footstep", gain = 0.25},
+	}, ss.default_dirt),
 })
 
 -- Dirt+Snow
@@ -48,6 +56,7 @@ minetest.register_node("trinium_mapgen:dirt_with_snow", {
 	description = S"Dirt with Snow",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
+	sounds = ss.default_snow,
 })
 
 -- Dirt+Podzol
@@ -57,6 +66,9 @@ minetest.register_node("trinium_mapgen:dirt_with_podzol", {
 	description = S"Dirt with Podzol",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
+	sounds = api.set_defaults({
+		footstep = {name = "trinium.grass_footstep", gain = 0.35},
+	}, ss.default_dirt),
 })
 
 -- Dirt+Dry grass
@@ -66,6 +78,9 @@ minetest.register_node("trinium_mapgen:dirt_with_dry_grass", {
 	description = S"Dirt with Dry Grass",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
+	sounds = api.set_defaults({
+		footstep = {name = "trinium.grass_footstep", gain = 0.35},
+	}, ss.default_dirt),
 })
 
 -- Snow
@@ -73,6 +88,7 @@ minetest.register_node("trinium_mapgen:snow", {
 	tiles = {"trinium_mapgen.snow.png"},
 	description = S"Snow",
 	groups = {soil = 1, crumbly = 3},
+	sounds = ss.default_snow,
 })
 
 -- Snow Layer
@@ -87,6 +103,7 @@ minetest.register_node("trinium_mapgen:minisnow", {
 		type = "fixed",
 		fixed = {{-0.5, -0.5, -0.5, 0.5, -0.375, 0.5}},
 	},
+	sounds = ss.default_snow,
 })
 
 minetest.register_abm({
@@ -140,6 +157,7 @@ minetest.register_node("trinium_mapgen:gravel", {
 	tiles = {"trinium_mapgen.gravel.png"},
 	description = S"Gravel",
 	groups = {crumbly = 2, falling_node = 1},
+	sounds = ss.default_gravel,
 })
 minetest.register_alias("mapgen_gravel", "trinium_mapgen:gravel")
 
@@ -175,6 +193,7 @@ minetest.register_node("trinium_mapgen:clay", {
 			{items = {"trinium_materials:clay"}, rarity = 4},
 		},
 	},
+	sounds = ss.default_sand,
 })
 minetest.register_ore{
 	ore_type = "blob",

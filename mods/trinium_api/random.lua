@@ -91,6 +91,7 @@ function api.search(begin, serialize, vertex)
 end
 
 function api.set_defaults(tbl, reserved_tbl)
+	tbl = tbl or {}
 	for k,v in pairs(reserved_tbl) do
 		if not tbl[k] then
 			tbl[k] = v

@@ -180,6 +180,7 @@ materials.add_type("ore", function(def)
 		description = S("@1 Ore", def.name),
 		groups = {cracky = def.data.hardness or 2},
 		tiles = {"trinium_mapgen.stone.png^(trinium_materials.ore.png^[colorize:#"..def.color..")"},
+		sounds = trinium.sounds.default_stone,
 	}
 	if table.exists(def.types, function(x) return x == "gem" end) then
 		def1.drop = "trinium_materials:gem_"..def.id

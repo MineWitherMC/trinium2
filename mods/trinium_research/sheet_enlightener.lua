@@ -50,6 +50,8 @@ minetest.register_node("trinium_research:enlightener", {
 			{-0.1, 0.32, -0.1, 0.1, 0.29, 0.1},
 		}
 	},
+	sounds = trinium.sounds.default_stone,
+	
 	after_place_node = function(pos, player)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()

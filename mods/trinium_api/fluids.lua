@@ -15,6 +15,7 @@ function api.register_fluid(srcname, flname, srcdescr, fldescr, color, def)
 	def.groups = def.groups or {}
 	def.groups.liquid = 3
 	def.post_effect_color = {a = 103, r = 30, g = 60, b = 90}
+	def.sounds = def.sounds or trinium.sounds.default_water
 	local def2 = table.copy(def)
 
 	def.drawtype = "liquid"
