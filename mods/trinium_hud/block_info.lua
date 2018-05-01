@@ -44,60 +44,51 @@ minetest.register_on_joinplayer(function(player)
 	block_descriptions[pn] = ""
 end)
 
+local prohibited = {
+	torchlike = 1, signlike = 1,
+	airlike = 1, liquid = 1, flowingliquid = 1,
+	plantlike = 1, fencelike = 1, firelike = 1, raillike = 1, plantlike_rooted = 1,
+	nodebox = 1, mesh = 1,
+}
 local function generate_inv_cube(node)
+	if  prohibited[node.drawtype] then return "" end
+
     local tiles = node.tiles
     local overlay_tiles = node.overlay_tiles
+	if not tiles then return "" end
+	if #tiles == 0 then return "" end
 
-    if tiles then
-        for i,v in pairs(tiles) do
-            if type(v) == "table" then
-                if tiles[i].name then
-                    tiles[i] = tiles[i].name
-                else
-                    return ""
-                end
-            end
-        end
+	for i = 1, 6 do
+		if not tiles[i] then tiles[i] = tiles[i - 1] end
+		if overlay_tiles and not overlay_tiles[i] then overlay_tiles[i] = overlay_tiles[i - 1] end
 
-        if overlay_tiles then
-            if #tiles < 6 then
-                for i = #tiles + 1, 6 do
-                    tiles[i] = tiles[#tiles]
-                end
-            end
-            if #overlay_tiles < 6 then
-                for i = #overlay_tiles + 1, 6 do
-                    overlay_tiles[i] = overlay_tiles[#overlay_tiles]
-                end
-            end
-            for i = 1, #overlay_tiles do
-                if type(overlay_tiles[i]) == "table" then
-                    if overlay_tiles[i].name then
-                        overlay_tiles[i] = overlay_tiles[i].name
-                    else
-                        return "aspect_tempus.png"
-                    end
-                end
-                tiles[i] = "("..tiles[i]..")^("..overlay_tiles[i]..")"
-            end
-        end
+		for k,v in pairs{tiles, overlay_tiles} do
+			if v and type(v[i]) == "table" then
+				if v[i].name then
+					v[i] = v[i].name
+				else
+					return ""
+				end
+			end
+		end
+		if overlay_tiles then
+			tiles = table.map(tiles, function(v, k)
+				return "("..v..")^("..overlay_tiles[k]..")")
+			end)
+		end
+	end
 
-        if node.drawtype == "normal" or node.drawtype == "allfaces" or node.drawtype == "allfaces_optional" or
-				node.drawtype == "glasslike" or node.drawtype == "glasslike_framed" or
-				node.drawtype == "glasslike_framed_optional" then
-            if #tiles == 1 then -- Whole block
-                return minetest.inventorycube(tiles[1], tiles[1], tiles[1])
-			elseif #tiles == 2 then -- Top differs
-                return minetest.inventorycube(tiles[1], tiles[2], tiles[2])
-            elseif #tiles == 3 then -- Top and Bottom differ
-                return minetest.inventorycube(tiles[1], tiles[3], tiles[3])
-            elseif #tiles == 6 then -- All sides
-                return minetest.inventorycube(tiles[1], tiles[6], tiles[5])
-            end
-        end
-    end
-
-    return ""
+    if #tiles == 1 then -- Whole block
+        return minetest.inventorycube(tiles[1], tiles[1], tiles[1])
+	elseif #tiles == 2 then -- Top differs
+        return minetest.inventorycube(tiles[1], tiles[2], tiles[2])
+    elseif #tiles == 3 then -- Top and Bottom differ
+        return minetest.inventorycube(tiles[1], tiles[3], tiles[3])
+    elseif #tiles == 6 then -- All sides
+        return minetest.inventorycube(tiles[1], tiles[6], tiles[5])
+    else
+		return ""
+	end
 end
 
 local function get_pointed_node(player)
@@ -112,7 +103,8 @@ local function get_pointed_node(player)
 end
 
 hud.register_globalstep("block_info", {
-	period = 0.2,
+	period = 0.05,
+	consistent = true,
 	callback = function()
 		local players = minetest.get_connected_players()
 		for i = 1, #players do

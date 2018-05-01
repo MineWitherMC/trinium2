@@ -36,7 +36,7 @@ minetest.register_alias("mapgen_sand", "trinium_mapgen:sand")
 minetest.register_node("trinium_mapgen:dirt_with_grass", {
 	tiles = {"trinium_mapgen.grass.normal.png", "trinium_mapgen.dirt.png",
 			"trinium_mapgen.dirt.png^trinium_mapgen.grass.normal.overlay.png"},
-	description = S"node.dirt.grass",
+	description = S"Dirt with Grass",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
 })
@@ -45,7 +45,7 @@ minetest.register_node("trinium_mapgen:dirt_with_grass", {
 minetest.register_node("trinium_mapgen:dirt_with_snow", {
 	tiles = {"trinium_mapgen.grass.snow.png", "trinium_mapgen.dirt.png",
 			"trinium_mapgen.dirt.png^trinium_mapgen.grass.snow.overlay.png"},
-	description = S"node.dirt.snow",
+	description = S"Dirt with Snow",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
 })
@@ -54,7 +54,7 @@ minetest.register_node("trinium_mapgen:dirt_with_snow", {
 minetest.register_node("trinium_mapgen:dirt_with_podzol", {
 	tiles = {"trinium_mapgen.grass.podzol.png", "trinium_mapgen.dirt.png",
 			"trinium_mapgen.dirt.png^trinium_mapgen.grass.podzol.overlay.png"},
-	description = S"node.dirt.podzol",
+	description = S"Dirt with Podzol",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
 })
@@ -63,7 +63,7 @@ minetest.register_node("trinium_mapgen:dirt_with_podzol", {
 minetest.register_node("trinium_mapgen:dirt_with_dry_grass", {
 	tiles = {"trinium_mapgen.grass.dry.png", "trinium_mapgen.dirt.png",
 			"trinium_mapgen.dirt.png^trinium_mapgen.grass.dry.overlay.png"},
-	description = S"node.dirt.savanna",
+	description = S"Dirt with Dry Grass",
 	groups = {soil = 1, crumbly = 3, grass = 1},
 	drop = "trinium_mapgen:dirt",
 })
@@ -129,7 +129,7 @@ minetest.register_abm({
 				node1 = node1.node_top
 			end
 			if node1 == "trinium_mapgen:sand" then node1 = "trinium_mapgen:dirt_with_dry_grass" end
-			if node1 == "ignore" then node1 = "trinium_mapgen:dirt_with_grass" end
+			if node1 == "trinium_mapgen:gravel" then node1 = "trinium_mapgen:dirt_with_snow" end
 			minetest.set_node(pos, {name = node1})
 		end
 	end,

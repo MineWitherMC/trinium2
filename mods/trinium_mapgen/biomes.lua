@@ -11,11 +11,11 @@ minetest.register_biome{
 
 minetest.register_biome{
 	name = "tundra_beach",
-	node_top = "trinium:gravel",
+	node_top = "trinium_mapgen:gravel",
 	depth_top = 1,
-	node_filler = "trinium:gravel",
+	node_filler = "trinium_mapgen:gravel",
 	depth_filler = 2,
-	node_riverbed = "trinium:gravel",
+	node_riverbed = "trinium_mapgen:gravel",
 	depth_riverbed = 2,
 	y_max = 1,
 	y_min = -3,
