@@ -150,7 +150,6 @@ local function get_formspec(player, id, item, mode)
 			]=]):format(width - 2, item, new_id - 1, width - 1, item, new_id + 1)
 		end
 
-		api.dump(formspec)
 		return formspec
 	else
 		local stack = minetest.registered_items[item].stack_max

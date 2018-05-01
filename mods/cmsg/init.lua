@@ -20,7 +20,7 @@ end
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
-	huds[pn] = player:hud_add({
+	huds[pn] = player:hud_add{
 		hud_elem_type = "text",
 		text = "",
 		number = tonumber(cmsg.color, 16),
@@ -28,8 +28,8 @@ minetest.register_on_joinplayer(function(player)
 		offset = {x = -0, y = -256},
 		direction = 3,
 		alignment = {x = 0, y = 1},
-		scale = {x = 800, y = cmsg.max_messages},
-	})
+		scale = {x = 800, y = 20 * cmsg.max_messages},
+	}
 	messages[pn] = {}
 end)
 

@@ -4,14 +4,10 @@ local DataMesh = api.DataMesh
 function api.dump(...)
 	local string, add = ""
 	for _,x in ipairs{...} do
-		add = minetest.serialize(x)
-		if add:sub(1, 7) == "return " then
-			add = add:sub(8)
-		end
+		add = dump(x)
 		if type(x) == "string" then
 			add = add:sub(2, -2)
 		end
-		add = add:gsub('loadstring%(".-"%)', '<function>')
 		string = string..add.."  "
 	end
 	minetest.log("warning", string:sub(1, -3))

@@ -123,12 +123,11 @@ minetest.register_abm({
 				nodedef.liquidtype ~= "none" then
 			local biome = minetest.get_biome_name(minetest.get_biome_data(pos).biome)
 			local node1 = minetest.registered_biomes[biome]
-			if not node1 or not node1.node_top then 
+			if not node1 or not node1.node_top then
 				node1 = "trinium_mapgen:dirt_with_grass"
 			else
 				node1 = node1.node_top
 			end
-
 			if node1 == "trinium_mapgen:sand" then node1 = "trinium_mapgen:dirt_with_dry_grass" end
 			if node1 == "ignore" then node1 = "trinium_mapgen:dirt_with_grass" end
 			minetest.set_node(pos, {name = node1})
@@ -145,8 +144,8 @@ minetest.register_node("trinium_mapgen:gravel", {
 minetest.register_alias("mapgen_gravel", "trinium_mapgen:gravel")
 
 -- Water
-api.register_fluid("trinium_mapgen:water_source", "trinium_mapgen:water_flowing", 
-	S"Water", S"Flowing Water", 
+api.register_fluid("trinium_mapgen:water_source", "trinium_mapgen:water_flowing",
+	S"Water", S"Flowing Water",
 	"0000DC", {
 		alpha = 160,
 		liquid_viscosity = 1,
@@ -154,8 +153,8 @@ api.register_fluid("trinium_mapgen:water_source", "trinium_mapgen:water_flowing"
 minetest.register_alias("mapgen_water_source", "trinium_mapgen:water_source")
 
 -- River Water
-api.register_fluid("trinium_mapgen:river_water_source", "trinium_mapgen:river_water_flowing", 
-	S"River Water", S"Flowing River Water", 
+api.register_fluid("trinium_mapgen:river_water_source", "trinium_mapgen:river_water_flowing",
+	S"River Water", S"Flowing River Water",
 	"3399EC", {
 		alpha = 160,
 		liquid_viscosity = 1,
@@ -171,11 +170,11 @@ minetest.register_node("trinium_mapgen:clay", {
 	drop = {
 		-- max_items = 3,
 		items = {
-			{items = {"trinium_materials:clay 3"}, rarity = 1}, 
-			{items = {"trinium_materials:clay"}, rarity = 2}, 
+			{items = {"trinium_materials:clay 3"}, rarity = 1},
+			{items = {"trinium_materials:clay"}, rarity = 2},
 			{items = {"trinium_materials:clay"}, rarity = 4},
 		},
-	},	
+	},
 })
 minetest.register_ore{
 	ore_type = "blob",
