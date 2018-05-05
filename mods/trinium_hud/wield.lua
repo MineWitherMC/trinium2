@@ -26,6 +26,7 @@ hud.register_globalstep("wield", {
 			if desc == "" then
 				desc = api.get_field(current_wield:get_name(), "description")
 			end
+			if not desc then desc = "" end
 			if desc ~= wield_descriptions[pn] then
 				wield_descriptions[pn] = desc
 				players[i]:hud_change(huds[pn], "text", desc:split"\n"[1] or "")
