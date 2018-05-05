@@ -26,7 +26,7 @@ minetest.register_node("trinium_default:lamp_frame", {
 })
 
 -- Forcillium Lamp
-minetest.register_node("trinium_default:forcirium_lamp", {
+minetest.register_node("trinium_default:forcillium_lamp", {
 	tiles = {
 		{
 			name = "(trinium_default.lamp_core.png^[colorize:#DCEF04C0)^trinium_default.lamp_frame.png",

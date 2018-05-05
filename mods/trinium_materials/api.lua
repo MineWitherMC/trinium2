@@ -36,8 +36,7 @@ function mat.add(name, def)
 	end
 
 	if not def.color_string and def.color then
-		def.color_string = ("%xB0"):format(def.color[1] * 256 * 256 + def.color[2] * 256 + def.color[3])
-		while #def.color_string < 8 do def.color_string = "0"..def.color_string end
+		def.color_string = api.process_color(def.color)
 	elseif not def.color_string and def.formula then
 		local formula1 = table.map(def.formula, function(x)
 				return {(mat.materials_reg[x[1]] or mat.elements[x[1]]).color or {0, 0, 0}, x[2]}
@@ -47,8 +46,7 @@ function mat.add(name, def)
 		g = api.weighted_avg(table.map(formula1, function(x) return {x[1][2], x[2]} end))
 		b = api.weighted_avg(table.map(formula1, function(x) return {x[1][3], x[2]} end))
 
-		def.color_string = ("%xB0"):format(math.floor(r + 0.5) * 256 * 256 + math.floor(g + 0.5) * 256 + math.floor(b + 0.5))
-		while #def.color_string < 8 do def.color_string = "0"..def.color_string end
+		def.color_string = api.process_color{r, g, b}
 	end
 
 	local def2 = {

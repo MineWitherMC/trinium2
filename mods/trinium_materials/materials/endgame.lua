@@ -23,7 +23,7 @@ M.xpcatalyst = materials.add("experience_catalyst", {
 	description = S"Experience Catalyst",
 })
 
-M.forcirium = materials.add("forcirium", {
+M.forcillium = materials.add("forcillium", {
 	formula = {{"iron", 1}, {"extrium", 1}, {"caesium", 2}, {"fluorine", 1}},
 	types = {"ingot", "gem", "dust"},
 	color = {220, 239, 4},
@@ -31,8 +31,8 @@ M.forcirium = materials.add("forcirium", {
 	data = {melting_point = 2963, water_mix_velocity = 750},
 }):generate_interactions()
 
-M.forcirium2 = materials.add("imbued_forcirium", {
-	formula = {{"forcirium_induced_ion", 4}, {"naquadah", 1}},
+M.imbued_forcillium = materials.add("imbued_forcillium", {
+	formula = {{"forcillium_induced_ion", 4}, {"naquadah", 1}},
 	types = {"ingot", "gem", "dust"},
 	color = {220, 155, 0},
 	description = S"Imbued Forcillium",
@@ -48,7 +48,7 @@ M.endium = materials.add("endium", {
 }):generate_interactions()
 
 M.pulsating_alloy = materials.add("pulsating_alloy", {
-	formula = {{"silver_alloy", 5}, {"forcirium", 6}, {"platinum", 3}, {"iron", 2}},
+	formula = {{"silver_alloy", 5}, {"forcillium", 6}, {"platinum", 3}, {"iron", 2}},
 	types = {"ingot", "dust", "plate", "rod"},
 	description = S"Pulsating Alloy",
 }):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")

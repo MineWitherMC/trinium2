@@ -11,31 +11,31 @@ do
 	V.hydrogen = materials.add_element("hydrogen", {
 		formula = "H",
 		melting_point = 14,
-		color = {0, 0, 150},	
+		color = {0, 0, 150},
 	})
 
 	V.carbon = materials.add_element("carbon", {
 		formula = "C",
 		melting_point = -1,
-		color = {16, 16, 16},	
+		color = {16, 16, 16},
 	})
 
 	V.nitrogen = materials.add_element("nitrogen", {
 		formula = "N",
 		melting_point = -1,
-		color = {185, 240, 240},	
+		color = {185, 240, 240},
 	})
 
 	V.oxygen = materials.add_element("oxygen", {
 		formula = "O",
 		melting_point = 55,
-		color = {185, 185, 240},	
+		color = {185, 185, 240},
 	})
 
 	V.fluorine = materials.add_element("fluorine", {
 		formula = "F",
 		melting_point = 53,
-		color = {0, 60, 120},	
+		color = {0, 60, 120},
 	})
 
 	V.sodium = materials.add_element("sodium", {
@@ -59,25 +59,25 @@ do
 	V.phosphorus = materials.add_element("phosphorus", {
 		formula = "P",
 		melting_point = 317,
-		color = {250, 250, 235},	
+		color = {250, 250, 235},
 	})
 
 	V.sulfur = materials.add_element("sulfur", {
 		formula = "S",
 		melting_point = 386,
-		color = {250, 250, 110},	
+		color = {250, 250, 110},
 	})
 
 	V.chlorine = materials.add_element("chlorine", {
 		formula = "Cl",
 		melting_point = 172,
-		color = {0, 120, 145},	
+		color = {0, 120, 145},
 	})
 
 	V.potassium = materials.add_element("potassium", {
 		formula = "K",
 		melting_point = 336,
-		color = {225, 225, 225},	
+		color = {225, 225, 225},
 	})
 
 	V.titanium = materials.add_element("titanium", {
@@ -119,31 +119,31 @@ do
 	V.rubidium = materials.add_element("rubidium", {
 		formula = "Rb",
 		melting_point = 312,
-		color = {90, 55, 40},	
+		color = {90, 55, 40},
 	})
 
 	V.iodine = materials.add_element("iodine", {
 		formula = "I",
 		melting_point = -1,
-		color = {150, 60, 170},	
+		color = {150, 60, 170},
 	})
 
 	V.silver = materials.add_element("silver", {
 		formula = "Ag",
 		melting_point = 1234,
-		color = {220, 220, 255},	
+		color = {220, 220, 255},
 	})
 
 	V.tin = materials.add_element("tin", {
 		formula = "Sn",
 		melting_point = 504,
-		color = {220, 220, 220},	
+		color = {220, 220, 220},
 	})
 
 	V.caesium = materials.add_element("caesium", {
 		formula = "Cs",
 		melting_point = 301,
-		color = {150, 240, 235},	
+		color = {150, 240, 235},
 	})
 
 	V.rhenium = materials.add_element("rhenium", {
@@ -161,13 +161,13 @@ do
 	V.naquadah = materials.add_element("naquadah", {
 		formula = "Nq",
 		melting_point = 6553,
-		color = {16, 45, 16},	
+		color = {16, 45, 16},
 	})
 
 	V.extrium = materials.add_element("extrium", {
 		formula = "X",
 		melting_point = 4200,
-		color = {90, 90, 80},	
+		color = {90, 90, 80},
 	})
 end
 
@@ -183,7 +183,7 @@ do
 		types = {},
 	})
 
-	materials.add("forcirium_induced_ion", {
+	materials.add("forcillium_induced_ion", {
 		formula = {{"iron", 1}, {"extrium", 1}, {"caesium", 2}, {"rubidium", 1}},
 		types = {},
 	})
@@ -258,39 +258,39 @@ do
 	M.ink = materials.add("ink", {
 		types = {"cell"},
 		color = {0, 0, 0},
-		description = S"Ink", 
+		description = S"Ink",
 	})
 
 	M.oil = materials.add("oil_raw", {
 		types = {"cell"},
 		color = {24, 24, 12},
-		description = S"Raw Oil", 
+		description = S"Raw Oil",
 	})
 
 	M.desulf = materials.add("oil_desulfurized", {
 		types = {"cell"},
 		color = {12, 12, 12},
-		description = S"Desulfurized Oil", 
+		description = S"Desulfurized Oil",
 	})
-	
+
 	M.gas = materials.add("fraction_gas", {
 		types = {"cell"},
 		color = {240, 250, 250},
 		description = S"Refinery Gas",
 	})
-	
+
 	M.naphtha = materials.add("fraction_naphtha", {
 		types = {"cell"},
 		color = {250, 250, 80},
 		description = S"Naphtha",
 	})
-	
+
 	M.kerosene = materials.add("fraction_kerosene", {
 		types = {"cell"},
 		color = {250, 250, 140},
 		description = S"Natural Kerosene",
 	})
-	
+
 	M.diesel = materials.add("fraction_diesel", {
 		types = {"cell"},
 		color = {128, 128, 64},

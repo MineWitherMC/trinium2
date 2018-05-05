@@ -26,7 +26,7 @@ local enlightener_formspec = ([=[
 	image[8,1;1,1;%s]
 	image[8,2;1,1;%s]
 ]=]):format(api.get_fs_texture(M.parchment:get"sheet", "trinium_materials:stardust",
-		M.pyrocatalyst:get"dust", M.bifrost:get"dust", M.xpcatalyst:get"dust", M.forcirium2:get"dust", M.endium:get"dust"))
+		M.pyrocatalyst:get"dust", M.bifrost:get"dust", M.xpcatalyst:get"dust", M.imbued_forcillium:get"dust", M.endium:get"dust"))
 
 minetest.register_node("trinium_research:enlightener", {
 	stack_max = 1,
@@ -51,7 +51,7 @@ minetest.register_node("trinium_research:enlightener", {
 		}
 	},
 	sounds = trinium.sounds.default_stone,
-	
+
 	after_place_node = function(pos, player)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -70,7 +70,7 @@ minetest.register_node("trinium_research:enlightener", {
 				(index == 2 and name == M.pyrocatalyst:get"dust") or
 				(index == 3 and name == M.bifrost:get"dust") or
 				(index == 4 and name == M.xpcatalyst:get"dust") or
-				(index == 5 and name == M.forcirium2:get"dust") or
+				(index == 5 and name == M.imbued_forcillium:get"dust") or
 				(index == 6 and name == M.endium:get"dust"))
 			)) and size or 0
 	end,
@@ -171,7 +171,7 @@ local enlightener_mb = {
 		{x = -2, y = -1, z = 4, name = "trinium_research:casing"},
 		{x = 2, y = -1, z = 4, name = "trinium_research:casing"},
 
-		{x = 0, y = 0, z = 2, name = "trinium_default:forcirium_lamp"},
+		{x = 0, y = 0, z = 2, name = "trinium_default:forcillium_lamp"},
 		{x = 0, y = 0, z = 1, name = "trinium_default:reflector_glass"},
 		{x = 1, y = 0, z = 1, name = "trinium_research:casing"},
 		{x = 1, y = 0, z = 2, name = "trinium_default:reflector_glass"},
@@ -197,13 +197,13 @@ local enlightener_mb = {
 		{x = 2, y = 0, z = 4, name = "trinium_research:casing"},
 
 		{x = 0, y = 1, z = 2, name = "trinium_default:reflector_glass"},
-		{x = 0, y = 1, z = 1, name = "trinium_default:forcirium_lamp"},
+		{x = 0, y = 1, z = 1, name = "trinium_default:forcillium_lamp"},
 		{x = 1, y = 1, z = 1, name = "trinium_research:chassis"},
-		{x = 1, y = 1, z = 2, name = "trinium_default:forcirium_lamp"},
+		{x = 1, y = 1, z = 2, name = "trinium_default:forcillium_lamp"},
 		{x = 1, y = 1, z = 3, name = "trinium_research:chassis"},
-		{x = 0, y = 1, z = 3, name = "trinium_default:forcirium_lamp"},
+		{x = 0, y = 1, z = 3, name = "trinium_default:forcillium_lamp"},
 		{x = -1, y = 1, z = 3, name = "trinium_research:chassis"},
-		{x = -1, y = 1, z = 2, name = "trinium_default:forcirium_lamp"},
+		{x = -1, y = 1, z = 2, name = "trinium_default:forcillium_lamp"},
 		{x = -1, y = 1, z = 1, name = "trinium_research:chassis"},
 		{x = -1, y = 1, z = 0, name = "trinium_research:wall"},
 		{x = 0, y = 1, z = 0, name = "trinium_research:wall"},

@@ -61,3 +61,15 @@ function DataMesh:push(val)
 	table.insert(self._data, val)
 	return self
 end
+
+function DataMesh:unique()
+	local cache = {}
+	for k,v in pairs(self._data) do
+		if cache[v] then
+			self._data[k] = nil
+		else
+			cache[v] = true
+		end
+	end
+	return self
+end

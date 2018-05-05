@@ -92,6 +92,7 @@ end
 
 function api.set_defaults(tbl, reserved_tbl)
 	tbl = tbl or {}
+	if not reserved_tbl then return tbl end
 	for k,v in pairs(reserved_tbl) do
 		if not tbl[k] then
 			tbl[k] = v
@@ -160,16 +161,19 @@ end
 function api.weighted_avg(t)
 	local t1 = table.map(t, function(v) return v[1] * v[2] end)
 	local t2 = table.map(t, function(v) return v[2] end)
-	return table.sum(t1) / table.sum(t2)
+	return math.floor(table.sum(t1) / table.sum(t2))
 end
 
-function api.validate(array, def)
-	for k,v in pairs(def) do
-		if type(array[k]) ~= v then
-			return nil, "Invalid type for "..k..": "..v.." expected, "..type(array[k]).." given"
-		end
+function api.count_stacks(inv, list, disallow_multistacks)
+	local dm = DataMesh:new():data(inv:get_list(list)):filter(function(v)
+		return not v:is_empty()
+	end)
+	if not disallow_multistacks then
+		dm = dm:map(function(v)
+			return v:get_name()
+		end):unique()
 	end
-	return array
+	return dm:count()
 end
 
 function api.weighted_random(mas, func)
@@ -182,6 +186,12 @@ function api.weighted_random(mas, func)
 		i = i + 1
 	end
 	return i
+end
+
+function api.geometrical_avg(tbl)
+	local sum = 0
+	table.walk(tbl, function(r) sum = sum + math.log(r) end)
+	return 2.718 ^ (sum / #tbl)
 end
 
 function api.iterator(callback)
@@ -208,6 +218,21 @@ function api.get_field(item, fn)
 	local item = minetest.registered_items[item]
 	if not item then return nil end
 	return item[fn]
+end
+
+function api.process_color(color)
+	if type(color) == "string" then return color end
+	color = ("%xB0"):format(color[1] * 256 * 256 + color[2] * 256 + color[3])
+	color = ("0"):rep(8 - #color)..color
+	return color
+end
+
+function api.cstring(color)
+	return api.process_color(color):sub(1, 6)
+end
+
+function api.table_multiply(tbl, n)
+	return table.map(tbl, function(r) return r * n end)
 end
 
 api.functions = {} -- table of functions
