@@ -198,7 +198,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local ksplit = k:split"~" -- Module, action, parameters
 		local a = ksplit[1]
 		if a == "view_recipe" then
-			local fs = get_formspec(pn, ksplit[3] or 1, ksplit[2], sfinv.contexts[pn].neimode)
+			local fs = get_formspec(pn, ksplit[3] or 1, ksplit[2], betterinv.contexts[pn]["trinium:itempanel"].neimode)
 			if not fs then return end
 			minetest.show_formspec(pn, "trinium:nei:recipe_view", fs)
 		end

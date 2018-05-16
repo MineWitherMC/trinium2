@@ -25,6 +25,7 @@ end
 -- Crafting
 sfinv.register_page("trinium:default", {
 	title = S"Crafting",
+	default = true,
 	get = function(self, player, context)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]

@@ -59,9 +59,9 @@ function tinker.add_tool(name, def)
 		after_use = function(itemstack, player, node, digparams)
 			local meta = itemstack:get_meta()
 			local durability = meta:get_int"current_durability"
-			table.walk(meta:get_string"modifiers":data() or {}, function(v)
-				if tinker.modifiers[v] and tinker.modifiers[v].after_use then
-					tinker.modifiers[v].after_use(itemstack)
+			table.walk(meta:get_string"modifiers":data() or {}, function(v, k)
+				if tinker.modifiers[k] and tinker.modifiers[k].after_use then
+					tinker.modifiers[k].after_use(itemstack, v)
 				end
 			end)
 			if durability == 0 then

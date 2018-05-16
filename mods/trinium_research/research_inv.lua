@@ -207,13 +207,13 @@ end
 
 local function get_book_bg(pn)
 	local w = research.dp1[pn]
-	return ("bgcolor[#080808BB;true]background[0,0;1,1;trinium_research_gui.background_%s.png;true]")
+	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]")
 		:format(w.CognFission and 4 or w.CognVoid and 3 or w.CognWarp and 2 or 1)
 end
 
 local function get_book_chapter_bg(chapterid)
 	local w = research.chapters[chapterid]
-	return ("bgcolor[#080808BB;true]background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
+	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
 end
 
 local book = {title = S"Research Book"}
