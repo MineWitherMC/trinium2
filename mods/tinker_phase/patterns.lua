@@ -11,6 +11,11 @@ A("axe_head", {
 	cost = 3,
 	type = 1,
 })
+A("shovel_head", {
+	description = "@1 Shovel Head",
+	cost = 2,
+	type = 1,
+})
 A("tool_rod", {
 	description = "@1 Tool Rod",
 	cost = 2,

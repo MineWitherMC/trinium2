@@ -23,7 +23,7 @@ local function recalculate(pos)
 		local stack = ItemStack("tinker_phase:tool_"..k)
 		local meta2 = stack:get_meta()
 
-		local durability, level, times, color = 0, 0, {}, "FFFFFF"
+		local durability, level, times, color, traits = 0, 0, {}, "FFFFFF", {}
 		table.walk(c, function(c1)
 			if c1.type == 1 then
 				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
@@ -33,6 +33,10 @@ local function recalculate(pos)
 				if level < data.level then
 					level = data.level
 				end
+				for k,v in pairs(data.traits) do
+					traits[k] = math.max(traits[k] or 0, v)
+				end
+
 				table.insert(times, data.base_speed)
 				color = data.color
 
@@ -44,8 +48,20 @@ local function recalculate(pos)
 			if c1.type == 2 then
 				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
 				inv:add_item("inputs", x)
-				durability = durability * x:get_meta():get_string("material_data"):data().rod_durability
+				local data = x:get_meta():get_string("material_data"):data()
+				durability = durability * data.rod_durability
+				for k,v in pairs(data.traits) do
+					traits[k] = math.max(traits[k] or 0, v)
+				end
 			end
+		end)
+
+		traits = table.filter(traits, function(v, k)
+			if tinker.modifiers[k] and tinker.modifiers[k].incompat then
+				local x = tinker.modifiers[k].incompat
+				return table.every(x, function(v1) return not traits[v1] end)
+			end
+			return true
 		end)
 		times = api.geometrical_avg(times)
 		local times2 = table.map(v.times, function(v1, k1)
@@ -64,6 +80,15 @@ local function recalculate(pos)
 			max_drop_level = level,
 			groupcaps = times2,
 		}
+		meta2:set_int("modifiers_left", 3)
+		meta2:set_string("modifiers", minetest.serialize(traits))
+
+		for k,v in pairs(traits) do
+			if tinker.modifiers[k] and tinker.modifiers[k].after_create then
+				tinker.modifiers[k].after_create(k, v, meta2)
+			end
+		end
+
 		meta2:set_string("description", v.update_description(stack))
 
 		inv:set_stack("output", 1, stack)
@@ -96,7 +121,7 @@ minetest.register_node("tinker_phase:tool_station", {
 			and stack:get_count() or 0
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		return to_list ~= "output" and count or 0
+		return from_list == "inputs" and to_list == "inputs" and count or 0
 	end,
 
 	on_metadata_inventory_move = recalculate,

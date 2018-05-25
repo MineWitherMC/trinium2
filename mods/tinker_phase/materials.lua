@@ -7,7 +7,7 @@ A(M.iron, {
 	base_speed = 6,
 	level = 2,
 	rod_durability = 1.25,
-	traits = {magnetic = 1, diminishing = 2},
+	traits = {magnetic = 1}, -- ???
 	description = S"Iron",
 })
 
@@ -16,7 +16,7 @@ A(M.bronze, {
 	base_speed = 5.5,
 	level = 1,
 	rod_durability = 1.4,
-	traits = {dense = 1, diminishing = 2},
+	traits = {dense = 1},
 	description = S"Bronze",
 })
 
@@ -25,7 +25,7 @@ A(M.titanium, {
 	base_speed = 9.6,
 	level = 3,
 	rod_durability = 1.85,
-	traits = {active = 1, reinforced = 1, diminishing = 2},
+	traits = {active = 1, reinforced = 1},
 	description = S"Titanium",
 })
 
@@ -34,7 +34,7 @@ A(M.rhenium_alloy, {
 	base_speed = 7.6,
 	level = 2,
 	rod_durability = 0.45,
-	traits = {dense = 2, reinforced = 1, diminishing = 1},
+	traits = {reinforced = 1},
 	description = S"Rhenium Alloy",
 })
 

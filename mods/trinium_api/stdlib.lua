@@ -129,6 +129,7 @@ local mt_register_item_old = minetest.register_item
 function minetest.register_item(name, def, ...)
 	assert(not def.max_stack, name.." uses max_stack instead of stack_max")
 	def.stack_max = def.stack_max or 72
+	def.wield_scale = def.wield_scale or {x = 1.25, y = 1.25, z = 1.25}
 	if def.drop and def.drop ~= "" then
 		trinium.recipes.add("drop", {name},
 			type(def.drop) == "table" and def.drop.items or {def.drop},

@@ -2,7 +2,7 @@ local api = trinium.api
 local secret_api = ...
 
 local datas = {}
-function api.get_data_pointer(player, file)
+--[[function api.get_data_pointer(player, file)
 	local x = {}
 	datas[player] = datas[player] or {}
 	datas[player][file] = x
@@ -33,6 +33,21 @@ function api.get_data_pointer(player, file)
 
 	setmetatable(x, {__newindex = function(t,k,v) t._strings[k] = v end, __index = x._strings})
 	return x
+end]]--
+local storage = minetest.get_mod_storage()
+function api.get_data_pointer(player, file)
+	if not datas[player] then datas[player] = {} end
+	datas[player][file] = {}
+	local x = datas[player][file]
+	x._key = ("playerdata:%s:%s"):format(player, file)
+	x._strings = storage:get_string(x._key):data() or {}
+
+	function x:save()
+		storage:set_string(self._key, minetest.serialize(self._strings))
+	end
+
+	setmetatable(x, {__newindex = function(t,k,v) t._strings[k] = v end, __index = x._strings})
+	return x
 end
 
 function api.get_data_pointers(id)
@@ -45,14 +60,15 @@ function api.get_data_pointers(id)
 end
 
 minetest.register_on_leaveplayer(function(player)
-	if datas[player] then
-		for k,v in pairs(datas[player]) do
+	local pn = player:get_player_name()
+	if datas[pn] then
+		for k,v in pairs(datas[pn]) do
 			v:save()
 		end
 	end
 end)
 
-minetest.register_on_shutdown(function() 
+minetest.register_on_shutdown(function()
 	for k,v in pairs(datas) do
 		for k2,v2 in pairs(v) do
 			v2:save()

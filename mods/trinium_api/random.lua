@@ -235,6 +235,11 @@ function api.table_multiply(tbl, n)
 	return table.map(tbl, function(r) return r * n end)
 end
 
+function api.adder()
+	local x = {}
+	return x, function(name, def) x[name] = def end
+end
+
 api.functions = {} -- table of functions
 local func = api.functions
 

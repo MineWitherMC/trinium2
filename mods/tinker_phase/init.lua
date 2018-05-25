@@ -49,6 +49,9 @@ end
 dofile(path.."/patterns.lua")
 dofile(path.."/part_builder.lua")
 
+tinker.modifiers, tinker.add_modifier = api.adder()
+dofile(path.."/modifiers.lua")
+
 tinker.tools = {}
 function tinker.add_tool(name, def)
 	tinker.tools[name] = def
@@ -58,16 +61,16 @@ function tinker.add_tool(name, def)
 		groups = {hidden_from_irp = 1, _tinkerphase_tool = 1},
 		after_use = function(itemstack, player, node, digparams)
 			local meta = itemstack:get_meta()
-			local durability = meta:get_int"current_durability"
 			table.walk(meta:get_string"modifiers":data() or {}, function(v, k)
 				if tinker.modifiers[k] and tinker.modifiers[k].after_use then
 					tinker.modifiers[k].after_use(itemstack, v)
 				end
 			end)
+			local durability = meta:get_int"current_durability"
+			meta:set_int("current_durability", durability - 1)
 			if durability == 0 then
 				return ""
 			else
-				meta:set_int("current_durability", durability - 1)
 				meta:set_string("description", def.update_description(itemstack))
 			end
 		end,
@@ -104,13 +107,14 @@ function tinker.wrap_description(version, def)
 	description = description.."\n"..minetest.colorize(tinker.get_color(def.current_durability / def.max_durability),
 			S("Durability: @1/@2", def.current_durability, def.max_durability))
 	local modifiers = def.modifiers or {}
-	modifiers = table.map(modifiers, function(v)
-		if tinker.modifiers[v] then
-			return "\n"..tinker.modifiers[v].description
+	table.walk(modifiers, function(k, v)
+		local num = k == 1 and "" or " "..api.roman_number(k)
+		if tinker.modifiers[v] and tinker.modifiers[v].description then
+			description = description.."\n"..tinker.modifiers[v].description..num
+		else
+			description = description.."\n"..api.string_superseparation(v)..num
 		end
-		return "\n"..trinium.string_superseparation(v)
 	end)
-	description = description..table.concat(modifiers)
 	-- END API v1
 
 	if version == 1 then return description end
