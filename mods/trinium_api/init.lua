@@ -10,17 +10,8 @@ end)
 trinium = {}
 trinium.api = {}
 
-local secret_api = assert(minetest.request_insecure_environment(), "Add trinium_api to trusted mods")
 local path = minetest.get_modpath"trinium_api"
 trinium.api.S = minetest.get_translator"trinium_api"
-
-function secret_api.mkdir(name)
-	if not io.open(name) then
-		secret_api.os.execute("mkdir \""..name.."\"")
-	end
-end
-
-assert(loadfile(path.."/data_pointers.lua"))(secret_api)
 
 dofile(path.."/data_mesh.lua")
 dofile(path.."/random.lua")
