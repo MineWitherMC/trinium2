@@ -21,6 +21,3 @@ dofile(path.."/stdlib.lua")
 dofile(path.."/multiblock.lua")
 dofile(path.."/sounds.lua")
 dofile(path.."/fluids.lua")
-
-
-trinium.api.dump(trinium.api)
