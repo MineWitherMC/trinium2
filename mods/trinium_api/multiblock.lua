@@ -42,7 +42,8 @@ function api.register_multiblock(name, def)
 				end
 			end
 			end
-			recipes.add(("multiblock_%s_%s"):format(def.width * 2 + 1, def.depth_b + def.depth_f + 1), map1, {def.controller}, {h = i})
+			recipes.add(("multiblock_%s_%s"):format(
+					def.width * 2 + 1, def.depth_b + def.depth_f + 1), map1, {def.controller}, {h = i})
 		end
 	end
 
@@ -68,11 +69,9 @@ function api.register_multiblock(name, def)
 			for z = z_min, z_max do
 				local crd = vector.add(pos, {x = x, y = y, z = z})
 				local nn = minetest.get_node(crd).name
-				if nn ~= "air" then
-					local depth, rshift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
-					table.insert(rg.region, {x = rshift, y = y, z = depth, name = nn, actual_pos = crd})
-					rg.counts[nn] = (rg.counts[nn] or 0) + 1
-				end
+				local depth, rshift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
+				table.insert(rg.region, {x = rshift, y = y, z = depth, name = nn, actual_pos = crd})
+				rg.counts[nn] = (rg.counts[nn] or 0) + 1
 			end
 			end
 			end

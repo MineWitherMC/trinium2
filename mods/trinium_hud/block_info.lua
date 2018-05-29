@@ -73,7 +73,8 @@ local function generate_inv_cube(node)
 		end
 		if overlay_tiles then
 			tiles = table.map(tiles, function(v, k)
-				return "("..v..")^("..overlay_tiles[k]..")"
+				local q = overlay_tiles[k]
+				return "("..(type(v) == "table" and v.name or v)..")^("..(type(q) == "table" and q.name or q)..")"
 			end)
 		end
 	end

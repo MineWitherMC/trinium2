@@ -91,8 +91,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local id = tonumber(fields.betterinv_tabs)
 		good = betterinv.selections[pn] ~= betterinv.tablist[id]
 		if good then
-			player:set_inventory_formspec(betterinv.tabs[betterinv.tablist[id]].getter(player, betterinv.contexts[pn][selection]))
 			betterinv.selections[pn] = betterinv.tablist[id]
+			player:set_inventory_formspec(betterinv.tabs[betterinv.tablist[id]].getter(player, betterinv.contexts[pn][selection]))
 		end
 	else
 		for k,v in pairs(fields) do
@@ -110,7 +110,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-if not sfinv then
+if not minetest.get_modpath"sfinv" then
 	sfinv = {}
 	function sfinv.register_page(name, def)
 		def.getter = function(...)

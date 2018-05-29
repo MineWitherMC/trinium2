@@ -32,7 +32,7 @@ function table.every(array, callable)
 end
 
 function table.walk(array, callable, cond)
-	cond = cond or function() return end
+	cond = cond or api.functions.const(false)
 	for k,v in pairs(array) do
 		callable(v,k)
 		if cond() then break end
@@ -98,16 +98,12 @@ function table.mtail(t, mult)
 end
 
 function table.random(tbl)
-	api.dump("Table", tbl)
 	local k = table.keys(tbl)
-	api.dump("Keys", k)
 	local el = math.random(1, #k)
-	api.dump("Element", el)
 	return tbl[k[el]], k[el], el
 end
 
 function table.random_map(tbl)
-	api.dump("Map", tbl)
 	return table.random(table.keys(tbl))
 end
 

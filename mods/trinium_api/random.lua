@@ -44,6 +44,18 @@ function api.initialize_inventory(inv, def)
 	end
 end
 
+function api.initializer(def0)
+	return function(pos)
+		local def = table.copy(def0)
+		local meta = minetest.get_meta(pos)
+		if def.formspec then
+			meta:set_string("formspec", def.formspec)
+			def.formspec = nil
+		end
+		api.initialize_inventory(meta:get_inventory(), def)
+	end
+end
+
 -- Palettes
 function api.recolor_facedir(pos, n) -- n from 0 to 7
 	local node = minetest.get_node(pos)
@@ -155,6 +167,11 @@ function api.sort_by_param(param)
 	return function(a, b)
 		return a[param] < b[param]
 	end
+end
+
+function api.exposed_var()
+	local tbl = {good = true}
+	return tbl, function() return not tbl.good end
 end
 
 -- {{amount1, weight1}, {amount2, weight2}, ...}
