@@ -62,7 +62,7 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 	on_timer = function(pos, elapsed)
 		local meta, timer = minetest.get_meta(pos), minetest.get_node_timer(pos)
 		local hatches = meta:get_string"hatches":data()
-		if not hatches or not hatches["input.item"] then return end
+		if not hatches or not hatches["input.item"][1] then return end
 
 		local output = meta:get_string"output"
 		if output ~= "" then

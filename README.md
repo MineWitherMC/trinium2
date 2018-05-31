@@ -8,9 +8,9 @@ Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 
 This mod is not finished
 ------------------------
-- Don't expect it to work as well as finished one will;
-- Don't expect it to not break compatibility in next update;
-- This mod is also very complex, so please report any bugs (debug.txt is
+* Don't expect it to work as well as finished one will;
+* Don't expect it to not break compatibility in next update, including API one;
+* This mod is also very complex, so please report any bugs (debug.txt is
 sometimes useful).
 
 Compatibility
