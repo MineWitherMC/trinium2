@@ -44,6 +44,11 @@ M.platinum = V.platinum:register_material({
 	types = {"ingot", "dust", "catalyst"},
 })
 
+M.osmium = V.osmium:register_material({
+	description = S"Osmium",
+	types = {"ingot", "dust", "catalyst"},
+})
+
 --[[ Compounds ]]--
 -- Rhenium Alloy
 M.rhenium_alloy = materials.add("rhenium_alloy", {

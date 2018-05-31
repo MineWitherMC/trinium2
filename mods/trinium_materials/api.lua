@@ -42,9 +42,9 @@ function mat.add(name, def)
 				return {(mat.materials_reg[x[1]] or mat.elements[x[1]]).color or {0, 0, 0}, x[2]}
 			end)
 		local r, g, b
-		r = api.weighted_avg(table.map(formula1, function(x) return {x[1][1], x[2]} end))
-		g = api.weighted_avg(table.map(formula1, function(x) return {x[1][2], x[2]} end))
-		b = api.weighted_avg(table.map(formula1, function(x) return {x[1][3], x[2]} end))
+		r = math.weighted_avg(table.map(formula1, function(x) return {x[1][1], x[2]} end))
+		g = math.weighted_avg(table.map(formula1, function(x) return {x[1][2], x[2]} end))
+		b = math.weighted_avg(table.map(formula1, function(x) return {x[1][3], x[2]} end))
 
 		def.color_string = api.process_color{r, g, b}
 	end

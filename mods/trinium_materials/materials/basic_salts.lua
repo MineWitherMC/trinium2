@@ -52,9 +52,3 @@ M.cr2o3fe2o3 = materials.add("chromium_iron_oxide", {
 	types = {"ingot", "catalyst"},
 	description = S"Chromia with Ferric Oxide",
 }):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")
-
-M.fe7k2oal2o3 = materials.add("ipa_compound", {
-	formula = {{"iron", 7}, {"potassium_oxide", 1}, {"aluminium_trioxide", 1}},
-	types = {"ingot", "catalyst"},
-	description = S"IPA Compound",
-}):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")

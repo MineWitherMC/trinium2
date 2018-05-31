@@ -1,5 +1,5 @@
 local research = trinium.research
-core.register_privilege("researchgrant", {
+minetest.register_privilege("researchgrant", {
 	description = "Can use /research and /research_me commands",
 	give_to_singleplayer = false,
 })

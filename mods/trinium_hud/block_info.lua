@@ -9,9 +9,17 @@ minetest.register_on_joinplayer(function(player)
 	huds[pn].bg = player:hud_add{
 		hud_elem_type = "image",
 		text = "",
-		scale = {x = -25, y = -15},
+		scale = {x = -30, y = -15},
 		alignment = {x = 0, y = 0.5},
 		position = {x = 0.5, y = 0.1},
+	}
+
+	huds[pn].bg_info = player:hud_add{
+		hud_elem_type = "image",
+		text = "",
+		scale = {x = -15, y = -30},
+		alignment = {x = 0, y = 0},
+		position = {x = 0.1, y = 0.5},
 	}
 
 	huds[pn].node = player:hud_add{
@@ -19,8 +27,16 @@ minetest.register_on_joinplayer(function(player)
         text = "",
         number = 0xffffff,
         alignment = {x = 1, y = 0},
-        position = {x = 0.5, y = 0.125},
-        offset = {x = -15, y = 0},
+        position = {x = 0.35, y = 0.125},
+        offset = {x = 48, y = 0},
+    }
+
+	huds[pn].rich = player:hud_add{
+        hud_elem_type = "text",
+        text = "",
+        number = 0xffffff,
+        alignment = {x = 0, y = 0},
+        position = {x = 0.1, y = 0.5},
     }
 
     huds[pn].mod = player:hud_add{
@@ -28,8 +44,8 @@ minetest.register_on_joinplayer(function(player)
         text = "",
         number = 0x003267,
         alignment = {x = 1, y = 0},
-        position = {x = 0.5, y = 0.15},
-        offset = {x = -15, y = 0},
+        position = {x = 0.35, y = 0.15},
+        offset = {x = 48, y = 0},
     }
 
 	huds[pn].image = player:hud_add{
@@ -37,8 +53,8 @@ minetest.register_on_joinplayer(function(player)
         text = "",
         scale = {x = 1, y = 1},
         alignment = 0,
-        position = {x = 0.5, y = 0.1375},
-        offset = {x = -75, y = 0},
+        position = {x = 0.65, y = 0.1375},
+        offset = {x = -56, y = 0},
     }
 
 	block_descriptions[pn] = ""
@@ -51,7 +67,7 @@ local prohibited = {
 	nodebox = 1, mesh = 1,
 }
 local function generate_inv_cube(node)
-	if  prohibited[node.drawtype] then return "" end
+	if prohibited[node.drawtype] then return "" end
 
     local tiles = node.tiles
     local overlay_tiles = node.overlay_tiles
@@ -104,28 +120,39 @@ local function get_pointed_node(player)
 end
 
 hud.register_globalstep("block_info", {
-	period = 0.05,
+	period = 0.1,
 	consistent = true,
 	callback = function()
 		local players = minetest.get_connected_players()
 		for i = 1, #players do
-			local pn, pos = players[i]:get_player_name(), get_pointed_node(players[i])
+			local player = players[i]
+			local pn, pos = player:get_player_name(), get_pointed_node(player)
 			if pos then
 				local def = minetest.registered_items[minetest.get_node(pos).name] or {}
-				if def.description ~= block_descriptions[pn] then
+				if def.description ~= block_descriptions[pn] or def.groups.rich_info == 1 then
 					if block_descriptions[pn] == "" then
-						players[i]:hud_change(huds[pn].bg, "text", "trinium_hud.background.png")
+						player:hud_change(huds[pn].bg, "text", "trinium_hud.background.png")
 					end
 					block_descriptions[pn] = def.description
-					players[i]:hud_change(huds[pn].node, "text", (def.description or "???"):split"\n"[1])
-					players[i]:hud_change(huds[pn].mod, "text", api.string_superseparation(def.mod_origin or "???"))
-					players[i]:hud_change(huds[pn].image, "text", generate_inv_cube(def))
+					player:hud_change(huds[pn].node, "text", (def.description or "???"):split"\n"[1])
+					player:hud_change(huds[pn].mod, "text", api.string_superseparation(def.mod_origin or "???"))
+					player:hud_change(huds[pn].image, "text", generate_inv_cube(def))
+
+					if def.groups.rich_info == 1 then
+						player:hud_change(huds[pn].bg_info, "text", "trinium_hud.background.png")
+						player:hud_change(huds[pn].rich, "text", def.get_rich_info(pos, player))
+					else
+						player:hud_change(huds[pn].bg_info, "text", "")
+						player:hud_change(huds[pn].rich, "text", "")
+					end
 				end
 			else
-				players[i]:hud_change(huds[pn].bg, "text", "")
-				players[i]:hud_change(huds[pn].node, "text", "")
-				players[i]:hud_change(huds[pn].mod, "text", "")
-				players[i]:hud_change(huds[pn].image, "text", "")
+				player:hud_change(huds[pn].bg, "text", "")
+				player:hud_change(huds[pn].node, "text", "")
+				player:hud_change(huds[pn].mod, "text", "")
+				player:hud_change(huds[pn].image, "text", "")
+				player:hud_change(huds[pn].bg_info, "text", "")
+				player:hud_change(huds[pn].rich, "text", "")
 				block_descriptions[pn] = ""
 			end
 		end

@@ -14,7 +14,7 @@ function recipes.stringify(size, inputs)
 	for i = 1, size do
 		inputs[i] = inputs[i] or ""
 	end
-	return table.concat(inputs, ":")
+	return table.concat(inputs, ";")
 end
 
 function recipes.add(method, inputs, outputs, data)
@@ -83,11 +83,25 @@ function recipes.add_method(method, tbl)
 		outputs = func.returner,
 		data = func.returner,
 		formspec_begin = func.const"",
-		test = func.const(true),
 		can_perform = func.const(true),
 	})
 
 	trinium.recipes.recipes_by_method[method] = {}
+end
+
+function recipes.get_coords(width, shiftx, shifty, n)
+	return math.modulate(n, width) + shiftx, math.ceil(n / width) + shifty
+end
+
+function recipes.check_inputs(input_map, needed_inputs)
+	return table.every(needed_inputs, function(r)
+		local k = r:split" "
+		return input_map[k[1]] and (#k == 1 or (input_map[k[1]] >= tonumber(k[2])))
+	end)
+end
+
+function recipes.remove_inputs(inventory, list, inputs)
+	for k,v in pairs(inputs) do inventory:remove_item(list, v) end
 end
 
 recipes.add_method("drop", {

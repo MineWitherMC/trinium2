@@ -85,12 +85,12 @@ minetest.register_node("trinium_research:randomizer", {
 		end)))
 
 		local gem, metal, shape, tierexp =
-			api.lograndom(research.constants.min_gems, research.constants.max_gems),
-			api.lograndom(research.constants.min_metal, research.constants.max_metal),
+			math.lograndom(research.constants.min_gems, research.constants.max_gems),
+			math.lograndom(research.constants.min_metal, research.constants.max_metal),
 			{table.random(shape)}, math.random(1, 2^(research.constants.max_tier - upg + 1) - 1)
 		shape = shape[1]
 
-		local tier = research.constants.max_tier - math.floor(0.01 + math.log(tierexp) / trinium.ln2)
+		local tier = research.constants.max_tier - math.floor(0.01 + math.log(tierexp) / math.ln2)
 		pressmeta:set_int("gem", gem)
 		pressmeta:set_int("metal", metal)
 		pressmeta:set_string("shape", shape)

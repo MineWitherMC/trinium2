@@ -1,7 +1,6 @@
 local research = trinium.research
 local S = research.S
 local M = trinium.materials.materials
-local api = trinium.api
 local recipes = trinium.recipes
 local ss = trinium.sounds
 

@@ -158,6 +158,12 @@ do
 		color = {255, 255, 200},
 	})
 
+	V.osmium = materials.add_element("osmium", {
+		formula = "Os",
+		melting_point = 3306,
+		color = {50, 50, 255},
+	})
+
 	V.naquadah = materials.add_element("naquadah", {
 		formula = "Nq",
 		melting_point = 6553,

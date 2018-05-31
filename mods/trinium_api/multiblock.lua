@@ -48,7 +48,7 @@ function api.register_multiblock(name, def)
 	end
 
 	minetest.register_abm({
-		label = def.label,
+		label = name,
 		nodenames = def.controller,
 		interval = 5,
 		chance = 1,

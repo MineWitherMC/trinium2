@@ -22,21 +22,6 @@ function api.setting_get(name, default)
 	return s
 end
 
-trinium.ln2 = math.log(2)
-function api.lograndom(a1, b1) -- more similar to normal
-	if b1 then
-		local lr, lr1 = 0, 0
-		local a, b = a1 - 1, b1 + 1
-		repeat
-			lr = (api.lograndom() + 1) / 5.7 -- this probably has values from 0...1
-			if lr < 0 then lr = 0 end; if lr > 1 then lr = 1 end
-			lr1 = math.floor(a + (b - a) * lr)
-		until lr1 > a and lr1 < b
-		return lr1
-	end
-	return 2 + 0.33 * math.log(1 / math.random() - 1) / trinium.ln2
-end
-
 -- Inventory
 function api.initialize_inventory(inv, def)
 	for k,v in pairs(def) do
@@ -56,15 +41,16 @@ function api.initializer(def0)
 	end
 end
 
--- Palettes
-function api.recolor_facedir(pos, n) -- n from 0 to 7
-	local node = minetest.get_node(pos)
-	node.param2 = (node.param2 % 32) + (n * 32)
-	minetest.set_node(pos, node)
-end
-function api.get_color_facedir(pos) -- n from 0 to 7
-	local node = minetest.get_node(pos)
-	return math.floor(node.param2 / 32)
+function api.inv_to_itemmap(...)
+	local map, inv = {}, {...}
+	for k,v in pairs(inv) do
+		for k1,v1 in pairs(v) do
+			local name, count = v1:get_name(), v1:get_count()
+			if not map[name] then map[name] = 0 end
+			map[name] = map[name] + count
+		end
+	end
+	return map
 end
 
 -- BFS
@@ -111,19 +97,6 @@ function api.set_defaults(tbl, reserved_tbl)
 		end
 	end
 	return tbl
-end
-
-function api.roman_number(a)
-	local one = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
-	local ten = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
-	local hun = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
-	local k = a % 1000
-	local str = ("M"):rep(math.floor(a / 1000))
-
-	str = str..hun[(k - k % 100)/100 + 1]
-	str = str..ten[(k % 100 - k % 10)/10 + 1]
-	str = str..one[k % 10 + 1]
-	return str
 end
 
 function api.string_capitalization(str)
@@ -174,13 +147,6 @@ function api.exposed_var()
 	return tbl, function() return not tbl.good end
 end
 
--- {{amount1, weight1}, {amount2, weight2}, ...}
-function api.weighted_avg(t)
-	local t1 = table.map(t, function(v) return v[1] * v[2] end)
-	local t2 = table.map(t, function(v) return v[2] end)
-	return math.floor(table.sum(t1) / table.sum(t2))
-end
-
 function api.count_stacks(inv, list, disallow_multistacks)
 	local dm = DataMesh:new():data(inv:get_list(list)):filter(function(v)
 		return not v:is_empty()
@@ -193,24 +159,6 @@ function api.count_stacks(inv, list, disallow_multistacks)
 	return dm:count()
 end
 
-function api.weighted_random(mas, func)
-	func = func or math.random
-	local j = table.sum(mas)
-	local k = func(1, j)
-	local i = 1
-	while k > mas[i] do
-		k = k - mas[i]
-		i = i + 1
-	end
-	return i
-end
-
-function api.geometrical_avg(tbl)
-	local sum = 0
-	table.walk(tbl, function(r) sum = sum + math.log(r) end)
-	return 2.718 ^ (sum / #tbl)
-end
-
 function api.iterator(callback)
 	return function(max, current)
 		if max == current then return end
@@ -219,8 +167,14 @@ function api.iterator(callback)
 	end
 end
 
+function api.get_field(item, fn)
+	local item = minetest.registered_items[item]
+	if not item then return nil end
+	return item[fn]
+end
+
 function api.get_texture(item)
-	return minetest.registered_items[item].inventory_image
+	return api.get_field(item, "inventory_image")
 end
 
 function api.get_fs_texture(...)
@@ -229,12 +183,6 @@ function api.get_fs_texture(...)
 		table.insert(textures, table.concat{"(", api.get_texture(v), ")^[brighten"})
 	end
 	return (table.unpack or unpack)(textures)
-end
-
-function api.get_field(item, fn)
-	local item = minetest.registered_items[item]
-	if not item then return nil end
-	return item[fn]
 end
 
 function api.process_color(color)
@@ -248,13 +196,20 @@ function api.cstring(color)
 	return api.process_color(color):sub(1, 6)
 end
 
-function api.table_multiply(tbl, n)
-	return table.map(tbl, function(r) return r * n end)
-end
-
 function api.adder()
 	local x = {}
 	return x, function(name, def) x[name] = def end
+end
+
+function api.recolor_facedir(pos, n) -- n from 0 to 7
+	local node = minetest.get_node(pos)
+	node.param2 = (node.param2 % 32) + (n * 32)
+	minetest.set_node(pos, node)
+end
+
+function api.get_color_facedir(pos) -- n from 0 to 7
+	local node = minetest.get_node(pos)
+	return math.floor(node.param2 / 32)
 end
 
 api.functions = {} -- table of functions

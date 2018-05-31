@@ -39,6 +39,14 @@ function table.walk(array, callable, cond)
 	end
 end
 
+function table.iwalk(array, callable, cond)
+	cond = cond or api.functions.const(false)
+	for k,v in ipairs(array) do
+		callable(v,k)
+		if cond() then break end
+	end
+end
+
 function table.map(array, callable)
 	local array = table.copy(array)
 	for k,v in pairs(array) do
@@ -83,7 +91,7 @@ function table.fconcat(t, x)
 	x = x or ""
 	local str = ""
 	table.walk(t, function(v) str = str..x..v end)
-	return str:sub(x:len())
+	return str:sub(x:len() + 1)
 end
 
 function table.tail(t)
@@ -114,11 +122,6 @@ end
 function vector.destringify(v)
 	local s = v:split","
 	return {x = s[1], y = s[2], z = s[3]}
-end
-
-function math.modulate(num, max)
-	while num < 1 do num = num + max end
-	return (num - 1) % max + 1
 end
 
 local mt_register_item_old = minetest.register_item
