@@ -50,6 +50,15 @@ minetest.register_node("trinium_machines:hatch_pressureinput", {
 	place_param2 = 175,
 	paramtype2 = "color",
 	color = "#646464",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_int("pressure", 1000)
+	end,
+
 	ghatch_id = "input.pressure",
 	ghatch_max = 1,
+	get_rich_info = function(pos, player)
+		local meta = minetest.get_meta(pos)
+		return ("Pressure: %s Bar"):format(meta:get_int"pressure" / 1000)
+	end,
 })
