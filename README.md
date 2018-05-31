@@ -20,7 +20,7 @@ Requires Minetest 0.5 with Gettext.
 Technical information: currently used Minetest 0.5 features:
 * Valleys/Carpathian
 * Clientside Translations
-* Palettes/Overlays (will be used in upcoming release)
+* Palettes/Overlays
 * Restricted mapgens (because no one should use v6/v5 or even v7)
 * `on_rightclick` triggering when `formspec` is set
 * Prepends

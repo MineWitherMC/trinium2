@@ -66,7 +66,7 @@ local function recalculate(pos)
 		times = math.geometrical_avg(times)
 		local times2 = table.map(v.times, function(v1, k1)
 			return {
-				times = math.table_multiply(tinker.base[k1], v1 / times),
+				times = api.table_multiply(tinker.base[k1], v1 / times),
 				uses = 0,
 				maxlevel = level,
 			}
