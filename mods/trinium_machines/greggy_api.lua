@@ -1,11 +1,15 @@
 local machines = trinium.machines
 local api = trinium.api
 local equal = api.functions.equal
+local recipes = trinium.recipes
+local S = machines.S
 
 function machines.parse_multiblock(def0)
 	-- size is {down = 1, up = 1, sides = 1, back = 2, front = 0}
 	local function find(x, y, z)
-		return table.exists(def0.air_positions, function(r) return r.x == x and r.y == y and r.z == z end)
+		local key = table.exists(def0.addon_map, function(r) return r.x == x and r.y == y and r.z == z end)
+		if not key then return false end
+		return def0.addon_map[key].name
 	end
 
 	local def = {controller = def0.controller,
@@ -27,17 +31,19 @@ function machines.parse_multiblock(def0)
 				local type = api.get_field(r.name, "ghatch_id")
 				if not vars.counts[type] then vars.counts[type] = 0 end
 				vars.counts[type] = vars.counts[type] + 1
-				vars.good = table.exists(def0.hatches, equal(type)) and vars.counts[type] <= maxcount and not find(r.x, r.y, r.z)
+				vars.good = table.exists(def0.hatches, equal(type)) and
+						vars.counts[type] <= maxcount and
+						not find(r.x, r.y, r.z)
 				return
 			end
-			if r.name ~= "air" then vars.good = false return end
-			vars.good = find(r.x, r.y, r.z)
+			vars.good = find(r.x, r.y, r.z) == r.name
 		end, func)
 		return vars.good and region.counts[def0.casing] >= def0.min_casings
 	end
 
 	local function unparse(region)
 		table.walk(region.region, function(r)
+			if r.name ~= minetest.get_node(r.actual_pos).name then return end
 			if r.name == def0.casing or minetest.get_item_group(r.name, "greggy_hatch") > 0 then
 				local color = api.get_field(r.name, "place_param2") or 0
 				minetest.swap_node(r.actual_pos, {name = r.name, param2 = color})
@@ -56,7 +62,10 @@ function machines.parse_multiblock(def0)
 		local hatches = {}
 		for i = 1, #def0.hatches do hatches[def0.hatches[i]] = {} end
 		table.walk(region.region, function(r)
-			if r.name == def0.casing then minetest.swap_node(r.actual_pos, {name = r.name, param2 = def0.color}) end
+			if r.name == def0.casing then
+				minetest.swap_node(r.actual_pos, {name = r.name, param2 = def0.color})
+			end
+
 			if minetest.get_item_group(r.name, "greggy_hatch") == 0 then return end
 			minetest.swap_node(r.actual_pos, {name = r.name, param2 = def0.color})
 			local f = api.get_field(r.name, "ghatch_id")
@@ -70,10 +79,49 @@ function machines.parse_multiblock(def0)
 		end
 	end
 
+	def.map = {}
+	for i = -def.width, def.width do
+		for j = -def.height_d, def.height_u do
+			for k = -def.depth_f, def.depth_b do
+				if (i ~= 0 or j ~= 0 or k ~= 0) and (not find(i, j, k)) then
+					table.insert(def.map, {x = i, y = j, z = k, name = def0.casing})
+				end
+			end
+		end
+	end
+	for i = 1, #def0.addon_map do
+		if def0.addon_map[i].name ~= "air" then
+			table.insert(def.map, def0.addon_map[i])
+		end
+	end
+
 	local function unparse_meta(pos)
 		unparse(minetest.get_meta(pos):get_string"region":data() or {region = {}})
 	end
 
-	-- api.register_multiblock("Greggy stuff - "..controller, def)
-	return def, unparse_meta
+	return def, unparse_meta,
+			{def0.casing}, {def0.controller}, {min_casings = def0.min_casings, hatches = def0.hatches}
 end
+
+recipes.add_method("greggy_multiblock", {
+	input_amount = 1,
+	output_amount = 1,
+	get_input_coords = function(n)
+		return 0, 1
+	end,
+	get_output_coords = function(n)
+		return 4, 1
+	end,
+	formspec_width = 5,
+	formspec_height = 5,
+	formspec_name = S"GT Multiblock",
+	formspec_begin = function(data)
+		local hatches = table.map(data.hatches, function(h)
+			local s = h:split"."
+			return api.string_superseparation(s[2]).." "..api.string_superseparation(s[1])
+		end)
+		return ("textarea[0.25,2;4.5,3;;;%s]"):format(
+			S("Minimum Casings: @1\n\nAllowed hatches:\n@2", data.min_casings, table.concat(hatches, "\n"))
+		)
+	end,
+})

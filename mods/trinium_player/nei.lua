@@ -140,7 +140,7 @@ local function get_formspec(player, id, item, mode)
 			size[%s,%s]
 			%s
 			label[0,%s;%s]
-		]=]):format(width + 0.5, height + 0.5,
+		]=]):format(width, height + 0.5,
 				formspec, height + 0.2, S("@1 @2 of @3", S1[mode], new_id, number))
 
 		if number > 1 then

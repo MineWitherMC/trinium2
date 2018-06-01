@@ -204,7 +204,7 @@ end
 function api.recolor_facedir(pos, n) -- n from 0 to 7
 	local node = minetest.get_node(pos)
 	node.param2 = (node.param2 % 32) + (n * 32)
-	minetest.set_node(pos, node)
+	minetest.swap_node(pos, node)
 end
 
 function api.get_color_facedir(pos) -- n from 0 to 7

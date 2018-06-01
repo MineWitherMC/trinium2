@@ -93,6 +93,12 @@ function recipes.get_coords(width, shiftx, shifty, n)
 	return math.modulate(n, width) + shiftx, math.ceil(n / width) + shifty
 end
 
+function recipes.coord_getter(width, dx, dy)
+	return function(n)
+		return recipes.get_coords(width, dx, dy, n)
+	end
+end
+
 function recipes.check_inputs(input_map, needed_inputs)
 	return table.every(needed_inputs, function(r)
 		local k = r:split" "

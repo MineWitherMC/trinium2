@@ -50,7 +50,7 @@ function api.register_multiblock(name, def)
 	minetest.register_abm({
 		label = name,
 		nodenames = def.controller,
-		interval = 5,
+		interval = 15,
 		chance = 1,
 		action = function(pos, node)
 			local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)

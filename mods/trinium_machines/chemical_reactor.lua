@@ -3,12 +3,14 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct = machines.parse_multiblock{
+local def, destruct, input, output, data = machines.parse_multiblock{
 	controller = "trinium_machines:controller_chemicalreactor",
 	casing = "trinium_machines:casing_chemical",
 	size = {front = 0, back = 2, up = 1, down = 1, sides = 1},
 	min_casings = 19,
-	air_positions = {{x = 0, z = 1, y = 0}},
+	addon_map = {
+		{x = 0, z = 1, y = 0, name = "air"},
+	},
 	color = 179,
 	hatches = {"input.pressure", "input.item", "output.item", "input.heat"},
 }
@@ -121,3 +123,4 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 })
 
 api.register_multiblock("chemical reactor", def)
+recipes.add("greggy_multiblock", input, output, data)

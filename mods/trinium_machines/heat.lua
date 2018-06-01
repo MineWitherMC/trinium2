@@ -19,7 +19,7 @@ minetest.register_node("trinium_machines:hatch_tempinput", {
 	ghatch_max = 1,
 	get_rich_info = function(pos, player)
 		local meta = minetest.get_meta(pos)
-		return ("Heat: %sK"):format(meta:get_int"temperature")
+		return S("Heat: @1K", meta:get_int"temperature")
 	end,
 })
 
@@ -39,7 +39,7 @@ minetest.register_node("trinium_machines:creative_heat_gen", {
 
 	get_rich_info = function(pos, player)
 		local meta = minetest.get_meta(pos)
-		return ("Heat: %sK\nTicking heat: %sK"):format(meta:get_int"temperature", meta:get_int"forced_temp")
+		return S("Heat: @1K", meta:get_int"temperature").."\n"..S("Ticking heat: @1K", meta:get_int"forced_temp")
 	end,
 
 	on_receive_fields = function(pos, formname, fields, player)
