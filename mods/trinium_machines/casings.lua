@@ -59,6 +59,6 @@ minetest.register_node("trinium_machines:hatch_pressureinput", {
 	ghatch_max = 1,
 	get_rich_info = function(pos, player)
 		local meta = minetest.get_meta(pos)
-		return S("Pressure: @1 Bar", meta:get_int"pressure" / 1000)
+		return S("Pressure: @1 kPa", meta:get_int"pressure" / 10)
 	end,
 })

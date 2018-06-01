@@ -113,8 +113,8 @@ local function get_pointed_node(player)
 	local begin = vector.add(player:get_pos(), {x = 0, y = 13/8, z = 0})
 	local rc = Raycast(begin, vector.add(begin, dir))
 	for i in rc do
-		if i.type == "node" and minetest.get_node(i.above).name ~= "air" then
-			return i.above
+		if i.type == "node" and minetest.get_node(i.under).name ~= "air" then
+			return i.under
 		end
 	end
 end
