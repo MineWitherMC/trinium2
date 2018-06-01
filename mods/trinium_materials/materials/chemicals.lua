@@ -1,6 +1,7 @@
 local materials = trinium.materials
 local M = materials.materials
 local S = materials.S
+local V = materials.vanilla_elements
 
 -- Non-organic chemicals and pure elements
 do
@@ -9,6 +10,13 @@ do
 		types = {"cell"},
 		color = {0, 0, 220},
 		description = S"Water",
+	})
+
+	M.steam = materials.add("steam", {
+		formula = {{"hydrogen", 2}, {"oxygen", 1}},
+		types = {"cell"},
+		color = {234, 234, 234},
+		description = S"Steam",
 	})
 
 	M.hydrogen = materials.add("m_hydrogen", {
@@ -29,18 +37,10 @@ do
 		description = S"Oxygen",
 	})
 
-	M.chlorine = materials.add("m_chlorine", {
-		formula = {{"chlorine", 2}},
-		types = {"cell"},
-		description = S"Chlorine",
-	})
-
-	M.hcl = materials.add("hydrogen_chloride", {
-		formula = {{"hydrogen", 1}, {"chlorine", 1}},
-		types = {"cell"},
-		color = {190, 190, 190},
-		description = S"Hydrochloric Acid",
-	})
+	M.sulfur = V.sulfur:register_material{
+		description = S"Sulfur",
+		types = {"dust"},
+	}
 
 	M.ammonia = materials.add("ammonia", {
 		formula = {{"nitrogen", 1}, {"hydrogen", 3}},
@@ -48,18 +48,11 @@ do
 		description = S"Ammonia",
 	})
 
-	M.hcn = materials.add("hydrogen_cyanide", {
-		formula = {{"hydrogen", 1}, {"carbon", 1}, {"nitrogen", 1}},
-		types = {"cell"},
-		color = {180, 100, 215},
-		description = S"Prussic Acid",
-	})
-
-	M.h2s = materials.add("hydrogen_sulfide", {
-		formula = {{"hydrogen", 2}, {"sulfur", 1}},
-		types = {"cell"},
-		color = {180, 100, 0},
-		description = S"Sulfane",
+	M.glass = materials.add("glass", {
+		formula = {{"silicon", 1}, {"oxygen", 2}},
+		types = {"plate", "dust"},
+		color = {250, 250, 250},
+		description = S"Glass",
 	})
 end
 
@@ -86,7 +79,7 @@ do
 		description = S"Propylene",
 	})
 
-	M.butene = materials.add("butane", {
+	M.butane = materials.add("butane", {
 		formula = {{"carbon", 4}, {"hydrogen", 10}},
 		types = {"cell"},
 		color = {160, 90, 0},
@@ -114,25 +107,11 @@ do
 		description = S"Octane",
 	})
 
-	M.chloroethane = materials.add("chloroethane", {
-		formula = {{"carbon", 2}, {"hydrogen", 5}, {"chlorine", 1}},
-		types = {"cell"},
-		color = {190, 235, 230},
-		description = S"Chloroethane",
-	})
-
 	M.ethylbenzene = materials.add("ethylbenzene", {
 		formula = {{"carbon", 8}, {"hydrogen", 10}},
 		types = {"cell"},
 		color = {240, 240, 240},
 		description = S"Ethylbenzene",
-	})
-
-	M.acetylene = materials.add("acetylene", {
-		formula = {{"carbon", 2}, {"hydrogen", 2}},
-		types = {"cell"},
-		color = {255, 255, 240},
-		description = S"Acetylene",
 	})
 
 	M.styrene = materials.add("styrene", {
@@ -156,24 +135,10 @@ do
 		description = S"Acrylonitrile",
 	})
 
-	M.abspc = materials.add("abs_plastic_compound", {
-		formula = {{"styrene", 8}, {"butadiene", 5}, {"acrylonitrile", 5}},
-		types = {"cell"},
-		color = {250, 230, 210},
-		description = S"ABS Plastic Mix",
-	})
-
 	M.abs = materials.add("abs_plastic", {
-		formula = {{"abs_plastic_compound", 1}},
+		formula = {{"styrene", 8}, {"butadiene", 5}, {"acrylonitrile", 5}},
 		types = {"cell", "pulp", "ingot", "plate"},
 		color = {50, 50, 50},
 		description = S"ABS Plastic",
 	}):generate_interactions()
-
-	M.glass = materials.add("glass", {
-		formula = {{"silicon", 1}, {"oxygen", 2}},
-		types = {"plate", "dust"},
-		color = {250, 250, 250},
-		description = S"Glass",
-	})
 end

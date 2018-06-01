@@ -63,7 +63,7 @@ function tinker.add_tool(name, def)
 			local meta = itemstack:get_meta()
 			table.walk(meta:get_string"modifiers":data() or {}, function(v, k)
 				if tinker.modifiers[k] and tinker.modifiers[k].after_use then
-					tinker.modifiers[k].after_use(itemstack, v)
+					tinker.modifiers[k].after_use(player, itemstack, v)
 				end
 			end)
 			local durability = meta:get_int"current_durability"

@@ -28,26 +28,23 @@ recipes.add_method("chemical_reactor", {
 	formspec_height = 5,
 	formspec_name = S"Chemical Reactor",
 	formspec_begin = function(data)
-		local catalyst
-		if not data.catalyst then
-			catalyst = S"No catalyst needed"
-		else
+		local tbl = {}
+		if data.catalyst then
 			local catalyst_item = minetest.registered_items["trinium_materials:catalyst_"..data.catalyst]
 			if not catalyst_item then
-				catalyst = "This recipe is broken, blame author of "..data.author_mod
+				table.insert(tbl, "This recipe is broken, blame author of "..data.author_mod)
 			else
-				catalyst = catalyst_item.description:split("\n")[1]
+				table.insert(tbl, catalyst_item.description:split("\n")[1])
 			end
 		end
-		local tbl = {}
 		table.insert(tbl, S("Time: @1 seconds", data.time))
-		if data.pressure then table.insert(tbl, S("Pressure: @1-@2 Bar",
-				data.pressure - data.pressure_tolerance, data.pressure + data.pressure_tolerance
+		if data.pressure then table.insert(tbl, S("Pressure: @1-@2 kPa",
+				(data.pressure - data.pressure_tolerance) * 100, (data.pressure + data.pressure_tolerance) * 100
 		)) end
 		if data.temperature then table.insert(tbl, S("Temperature: @1-@2 K",
 				data.temperature - data.temperature_tolerance, data.temperature + data.temperature_tolerance
 		)) end
-		return ("label[1,3.5;%s\n%s]"):format(catalyst, table.concat(tbl, "\n"))
+		return ("label[1,3.5;%s]"):format(table.concat(tbl, "\n"))
 	end,
 })
 

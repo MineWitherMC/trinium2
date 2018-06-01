@@ -80,6 +80,12 @@ do
 		color = {225, 225, 225},
 	})
 
+	V.calcium = materials.add_element("calcium", {
+		formula = "Ca",
+		melting_point = 1115,
+		color = {255, 245, 245},
+	})
+
 	V.titanium = materials.add_element("titanium", {
 		formula = "Ti",
 		melting_point = 1941,
@@ -122,10 +128,10 @@ do
 		color = {90, 55, 40},
 	})
 
-	V.iodine = materials.add_element("iodine", {
-		formula = "I",
-		melting_point = -1,
-		color = {150, 60, 170},
+	V.molybdenum = materials.add_element("molybdenum", {
+		formula = "Mo",
+		melting_point = 2896,
+		color = {180, 180, 220},
 	})
 
 	V.silver = materials.add_element("silver", {
@@ -138,6 +144,12 @@ do
 		formula = "Sn",
 		melting_point = 504,
 		color = {220, 220, 220},
+	})
+
+	V.iodine = materials.add_element("iodine", {
+		formula = "I",
+		melting_point = -1,
+		color = {150, 60, 170},
 	})
 
 	V.caesium = materials.add_element("caesium", {
@@ -164,6 +176,12 @@ do
 		color = {50, 50, 255},
 	})
 
+	V.bismuth = materials.add_element("bismuth", {
+		formula = "Bi",
+		melting_point = 545,
+		color = {100, 160, 160},
+	})
+
 	V.naquadah = materials.add_element("naquadah", {
 		formula = "Nq",
 		melting_point = 6553,
@@ -181,6 +199,11 @@ end
 do
 	materials.add("iodine_acid_ion", {
 		formula = {{"iodine", 1}, {"oxygen", 6}},
+		types = {},
+	})
+
+	materials.add("hydroxide_ion", {
+		formula = {{"oxygen", 1}, {"hydrogen", 1}},
 		types = {},
 	})
 
