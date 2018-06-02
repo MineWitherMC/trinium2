@@ -115,7 +115,7 @@ do
 	})
 
 	M.styrene = materials.add("styrene", {
-		formula = {{"carbon", 6}, {"hydrogen", 5}, {"carbon", 1}, {"hydrogen", 1}, {"carbon", 1}, {"hydrogen", 2}},
+		formula = {{"carbon", 8}, {"hydrogen", 8}},
 		types = {"cell"},
 		color = {250, 230, 240},
 		description = S"Styrene",

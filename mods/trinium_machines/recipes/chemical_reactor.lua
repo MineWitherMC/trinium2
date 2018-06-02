@@ -18,7 +18,7 @@ A("chemical_reactor",
 A("chemical_reactor",
 	{M.butane:get"cell", M.steam:get"cell"},
 	{M.butadiene:get"cell", M.hydrogen:get("cell", 2)},
-	{time = 0.5, temperature = 1125, temperature_tolerance = 10})
+	{time = 0.5, temperature = 1225, temperature_tolerance = 10})
 
 -- C7H8 + H2 -> C6H6 + CH4^
 A("chemical_reactor",

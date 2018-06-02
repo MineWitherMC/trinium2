@@ -98,6 +98,11 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 			if not recipes.check_inputs(input_map, rec.inputs) then return end
 			local data = rec.data
 			local time_div = 1
+
+			if data.catalyst and not recipes.check_inputs(input_map, {"trinium_materials:catalyst_"..data.catalyst}) then
+				return
+			end
+
 			if data.temperature then
 				if temp == -1 then return end
 				time_div = time_div * math.harmonic_distribution(data.temperature, data.temperature_tolerance, temp)
