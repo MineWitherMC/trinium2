@@ -238,7 +238,7 @@ Multiblock definition is a table with following keys:
 	* `dx` is an integer and represents sideward shift.
 	* `dx` is negative if node is at the left of controller.
 	* `dy` is an integer and represents vertical shift.
-	* `dy` is negative if node is higher than controller.
+	* `dy` is negative if node is below the controller.
 	* `dz` is an integer and represents front-back shift.
 	* `dz` is negative if node is in front of controller.
 	* `name` is needed node name.
@@ -261,8 +261,8 @@ Recipe Method definition is a table with following keys:
 * `input_amount` - integer.
 * `output_amount` - integer.
 * `get_input_coords` - function of input slot. Should return coords in format
- `x, y`
-* `get_output_coords` - function of output slot.
+ `x, y`.
+* `get_output_coords` - function of output slot, similar to previous one.
 * `formspec_width` - float.
 * `formspec_height` - float.
 * `formspec_name` - string, inserted at the top left of formspec.
