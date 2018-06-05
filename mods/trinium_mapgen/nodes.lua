@@ -109,8 +109,8 @@ minetest.register_node("trinium_mapgen:minisnow", {
 minetest.register_abm({
 	label = "grass destruction",
 	nodenames = {"group:grass"},
-	interval = 16,
-	chance = 16,
+	interval = 1,
+	chance = 256,
 	catch_up = false,
 	action = function(pos, node)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
@@ -127,8 +127,9 @@ minetest.register_abm({
 minetest.register_abm({
 	label = "grass spread",
 	nodenames = {"trinium_mapgen:dirt"},
-	interval = 32,
-	chance = 32,
+	neighbors = {"air"},
+	interval = 4,
+	chance = 256,
 	catch_up = false,
 	action = function(pos, node)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}

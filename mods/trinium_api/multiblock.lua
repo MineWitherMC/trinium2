@@ -6,16 +6,14 @@ for i = 3, 13, 2 do
 		recipes.add_method(("multiblock_%s_%s"):format(i,j), {
 			input_amount = i * j,
 			output_amount = 1,
-			get_input_coords = function(n)
-				return math.modulate(n, i) - 1, math.ceil(n / i)
-			end,
+			get_input_coords = recipes.coord_getter(i, -1, 0),
 			get_output_coords = function(n)
 				return i + 1, (j + 1) / 2
 			end,
 			formspec_width = i + 2,
 			formspec_height = j + 2,
 			formspec_name = "Multiblock",
-			formspec_begin = function(data)
+			formspec_begin = function(data, inputs, outputs)
 				return ("label[0,%s;Current Height: %s]"):format(j + 1, data.h)
 			end,
 		})
@@ -27,23 +25,29 @@ function api.register_multiblock(name, def)
 		def.activator = function(reg) return reg(def.map) end
 	end
 
-	if def.map and def.width < 7 and def.width > 0 and def.depth_b + def.depth_f < 13 and def.depth_b + def.depth_f > 1 then
-		for i = -def.height_d, def.height_u do
+	if def.map and def.width < 7 and
+			def.width > 0 and
+			def.depth_b + def.depth_f < 13 and
+			def.depth_b + def.depth_f > 1 then
+		for i = (def.height_d == 0 and 0 or -def.height_d), def.height_u do
 			local newmap = table.filter(def.map, function(x) return x.y == i end)
 			if i == 0 then
 				table.insert(newmap, {x = 0, y = 0, z = 0, name = def.controller})
 			end
-			local map1 = {}
+			local map1, tooltips = {}, {}
 			for k = -def.depth_f, def.depth_b do
 			for j = -def.width, def.width do
 				local res = table.exists(newmap, function(a) return a.x == j and a.z == k end)
 				if res then
 					map1[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = newmap[res].name
+					if newmap[res].desc then
+						tooltips[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = newmap[res].desc
+					end
 				end
 			end
 			end
-			recipes.add(("multiblock_%s_%s"):format(
-					def.width * 2 + 1, def.depth_b + def.depth_f + 1), map1, {def.controller}, {h = i})
+			recipes.add(("multiblock_%s_%s"):format(def.width * 2 + 1, def.depth_b + def.depth_f + 1),
+					map1, {def.controller}, {h = i, input_tooltips = tooltips})
 		end
 	end
 

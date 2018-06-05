@@ -4,6 +4,8 @@ local equal = api.functions.equal
 local recipes = trinium.recipes
 local S = machines.S
 
+machines.default_hatches, machines.set_default_hatch = api.adder()
+
 function machines.parse_multiblock(def0)
 	-- size is {down = 1, up = 1, sides = 1, back = 2, front = 0}
 	local function find(x, y, z)
@@ -31,9 +33,13 @@ function machines.parse_multiblock(def0)
 				local type = api.get_field(r.name, "ghatch_id")
 				if not vars.counts[type] then vars.counts[type] = 0 end
 				vars.counts[type] = vars.counts[type] + 1
-				vars.good = table.exists(def0.hatches, equal(type)) and
-						vars.counts[type] <= maxcount and
-						not find(r.x, r.y, r.z)
+				local finder = find(r.x, r.y, r.z)
+				if not finder then
+					vars.good = table.exists(def0.hatches, equal(type)) and
+							vars.counts[type] <= maxcount
+				else
+					vars.good = finder:split":"[1] == "hatch" and finder:split":"[2] == type
+				end
 				return
 			end
 			vars.good = find(r.x, r.y, r.z) == r.name
@@ -61,6 +67,7 @@ function machines.parse_multiblock(def0)
 		end
 		local hatches = {}
 		for i = 1, #def0.hatches do hatches[def0.hatches[i]] = {} end
+		if def0.fake_hatches then for i = 1, #def0.fake_hatches do hatches[def0.fake_hatches[i]] = {} end end
 		table.walk(region.region, function(r)
 			if r.name == def0.casing then
 				minetest.swap_node(r.actual_pos, {name = r.name, param2 = def0.color})
@@ -91,7 +98,16 @@ function machines.parse_multiblock(def0)
 	end
 	for i = 1, #def0.addon_map do
 		if def0.addon_map[i].name ~= "air" then
-			table.insert(def.map, def0.addon_map[i])
+			local item = def0.addon_map[i]
+			local isplit = item.name:split":"
+			if isplit[1] ~= "hatch" then
+				table.insert(def.map, item)
+			else
+				local s = isplit[2]:split"."
+				local desc = api.string_superseparation(s[2]).." "..api.string_superseparation(s[1])
+				table.insert(def.map, {x = item.x, y = item.y, z = item.z,
+						name = machines.default_hatches[isplit[2]], desc = S("Any Hatch - @1", desc)})
+			end
 		end
 	end
 

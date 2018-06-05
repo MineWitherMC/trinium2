@@ -18,12 +18,8 @@ local def, destruct, input, output, data = machines.parse_multiblock{
 recipes.add_method("chemical_reactor", {
 	input_amount = 4,
 	output_amount = 4,
-	get_input_coords = function(n)
-		return recipes.get_coords(2, 0, 0, n)
-	end,
-	get_output_coords = function(n)
-		return recipes.get_coords(2, 3, 0, n)
-	end,
+	get_input_coords = recipes.coord_getter(2, 0, 0),
+	get_output_coords = recipes.coord_getter(2, 3, 0),
 	formspec_width = 7,
 	formspec_height = 5,
 	formspec_name = S"Chemical Reactor",
@@ -31,11 +27,7 @@ recipes.add_method("chemical_reactor", {
 		local tbl = {}
 		if data.catalyst then
 			local catalyst_item = minetest.registered_items["trinium_materials:catalyst_"..data.catalyst]
-			if not catalyst_item then
-				table.insert(tbl, "This recipe is broken, blame author of "..data.author_mod)
-			else
-				table.insert(tbl, catalyst_item.description:split("\n")[1])
-			end
+			table.insert(tbl, catalyst_item.description:split("\n")[1])
 		end
 		table.insert(tbl, S("Time: @1 seconds", data.time))
 		if data.pressure then table.insert(tbl, S("Pressure: @1-@2 kPa",
@@ -44,7 +36,10 @@ recipes.add_method("chemical_reactor", {
 		if data.temperature then table.insert(tbl, S("Temperature: @1-@2 K",
 				data.temperature - data.temperature_tolerance, data.temperature + data.temperature_tolerance
 		)) end
-		return ("label[1,3.5;%s]"):format(table.concat(tbl, "\n"))
+		return ("textarea[1,3.5;6,1.5;;;%s]"):format(table.concat(tbl, "\n"))
+	end,
+	recipe_correct = function(data)
+		return not data.catalyst or minetest.registered_items["trinium_materials:catalyst_"..data.catalyst]
 	end,
 })
 

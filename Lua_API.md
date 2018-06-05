@@ -272,15 +272,17 @@ Recipe Method definition is a table with following keys:
 	* Otherwise the recipe is processed further.
 	* Should **never** create an infinite loop.
 	* No redirects by default.
-* `inputs` - function of `inputs`.
-	* Should process inputs.
-	* If this returns `-1`, recipe is not created.
-	* Returns `inputs` as-is by default.
-* `outputs` - function of `outputs`, similar to `inputs`.
-* `data` - function of `data`, similar to `inputs`.
+* `process` - function of `inputs`, `outputs` and `data`.
+	* Should return processed `inputs`, `outputs` and `data`.
+	* If this returns `-1` as any of return values, recipe is not created.
+	* Returns given variables as-is by default.
 * `formspec_begin` - function of `data`.
 	* Should return formspec elements to add to recipe.
 	* Returns empty string by default.
 * `can_perform` - function of `player` and `data`.
 	* Should return whether player can perform the recipe.
+	* Always true by default.
+* `recipe_correct` - function of `data`.
+	* Should return whether recipe is correctly composed.
+	* If this function returns `false`, minetest instance is terminated.
 	* Always true by default.

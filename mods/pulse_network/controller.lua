@@ -44,6 +44,8 @@ function pulse.import_to_controller(pos)
 
 		meta:set_string("inventory", minetest.serialize(items))
 	end
+
+	pulse.trigger_update(pos)
 end
 
 minetest.register_node("pulse_network:controller", {

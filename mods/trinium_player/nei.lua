@@ -86,6 +86,8 @@ function nei.absolute_draw_recipe(lrecipes, rec_id)
 	local method = recipes.methods[recipe.type]
 
 	local formspec = ("%slabel[0,0;%s]"):format(method.formspec_begin(recipe.data), method.formspec_name)
+	api.dump(recipe.data)
+	local it, ot = recipe.data.input_tooltips, recipe.data.output_tooltips
 	local itemname, amount, x, y, arr, chance
 	for i = 1, method.input_amount do
 		amount = nil
@@ -96,9 +98,14 @@ function nei.absolute_draw_recipe(lrecipes, rec_id)
 			itemname = ""
 		end
 		x, y = method.get_input_coords(i)
-		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s;%s]"):format(x, y,
-				itemname, itemname, amount ~= 1 and amount ~= "1" and amount or "" or "")
+		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s~i%s;%s]box[%s,%s;0.925,0.95;#0000FF]")
+				:format(x, y, itemname, itemname, i, amount ~= "1" and amount or "", x - 1/20, y - 1/20)
+
+		if it and it[i] then
+			formspec = formspec..("tooltip[view_recipe~%s~i%s;%s]"):format(itemname, i, it[i])
+		end
 	end
+
 	for i = 1, method.output_amount do
 		chance, amount = nil, nil
 		if recipe.outputs[i] then
@@ -108,8 +115,13 @@ function nei.absolute_draw_recipe(lrecipes, rec_id)
 			itemname = ""
 		end
 		x, y = method.get_output_coords(i)
-		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s;%s]"):format(x, y, itemname, itemname,
-				table.fconcat({amount ~= 1 and amount ~= "1" and amount or nil, chance and chance.." %" or nil}, "\n"))
+		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s~o%s;%s]box[%s,%s;0.925,0.95;#FFA500]")
+			:format(x, y, itemname, itemname, i, table.fconcat(
+					{amount ~= "1" and amount or nil, chance and chance.." %"}, "\n"), x - 1/20, y - 1/20)
+
+		if ot and ot[i] then
+			formspec = formspec..("tooltip[view_recipe~%s~o%s;%s]"):format(itemname, i, ot[i])
+		end
 	end
 
 	return formspec, method.formspec_width, method.formspec_height, max, id

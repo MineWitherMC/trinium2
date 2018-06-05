@@ -302,10 +302,16 @@ do
 		description = S"Desulfurized Oil",
 	})
 
-	M.gas = materials.add("fraction_gas", {
+	M.frac_ether = materials.add("fraction_ether", {
 		types = {"cell"},
 		color = {240, 250, 250},
-		description = S"Refinery Gas",
+		description = S"Petroleum Ether",
+	})
+
+	M.gasoline = materials.add("fraction_gasoline", {
+		types = {"cell"},
+		color = {80, 100, 25},
+		description = S"Natural Gasoline",
 	})
 
 	M.naphtha = materials.add("fraction_naphtha", {
@@ -324,5 +330,11 @@ do
 		types = {"cell"},
 		color = {128, 128, 64},
 		description = S"Natural Diesel",
+	})
+
+	M.mazut = materials.add("fraction_mazut", {
+		types = {"cell"},
+		color = {35, 30, 5},
+		description = S"Mazut",
 	})
 end

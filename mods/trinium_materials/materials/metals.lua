@@ -46,7 +46,7 @@ M.rhenium = V.rhenium:register_material{
 
 M.platinum = V.platinum:register_material{
 	description = S"Platinum",
-	types = {"ingot", "dust", "catalyst"},
+	types = {"ingot", "dust"},
 }
 
 M.osmium = V.osmium:register_material{

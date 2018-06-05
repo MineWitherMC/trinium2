@@ -71,7 +71,7 @@ minetest.register_node("trinium_research:lens_curver", {
 		elseif list == "press" then
 			return stack:get_name() == "trinium_research:press" and 1 or 0
 		elseif list == "upgrade" then
-			return minetest.get_item_group(stack:get_name(), "lens_upgrade") ~= 0 and 1 or 0
+			return minetest.get_item_group(stack:get_name(), "lens_upgrade") ~= 0 and stack:get_count() or 0
 		else
 			return 0
 		end
@@ -154,7 +154,8 @@ minetest.register_node("trinium_research:lens_curver", {
 				S("Research Lens@nGem Material: @1@nMetal Material: @2@nShape: @3@nTier: @4",
 						item_gem1, item_metal1,
 						S(api.string_capitalization(shape)), actual_tier))
-		inv:set_stack("upgrade", 1, "")
+		upgrade:take_item()
+		inv:set_stack("upgrade", 1, upgrade)
 		inv:set_stack("lens", 1, lens)
 	end,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)

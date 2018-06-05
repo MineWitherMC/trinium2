@@ -22,9 +22,7 @@ function recipes.add(method, inputs, outputs, data)
 	data = data or {}
 
 	-- Processing inputs (e.g., MC method of creating workbench recipes)
-	inputs = method_table.inputs(inputs)
-	outputs = method_table.outputs(outputs)
-	data = method_table.data(data)
+	inputs, outputs, data = method_table.process(inputs, outputs, data)
 	if inputs == -1 or outputs == -1 or data == -1 then return end
 
 	-- Redoing all the redirects
@@ -36,6 +34,10 @@ function recipes.add(method, inputs, outputs, data)
 		redirects[method] = 1
 	end
 	data.author_mod = minetest.get_current_modname() or "???"
+
+	assert(method_table.recipe_correct(data),
+			"Invalid recipe: "..recipes.stringify(method_table.input_amount, inputs)..
+			" for "..method.." by "..data.author_mod)
 
 	-- Registering recipe
 	local new_amount = #recipes.recipe_registry + 1
@@ -79,11 +81,12 @@ end
 function recipes.add_method(method, tbl)
 	trinium.recipes.methods[method] = api.set_defaults(tbl, {
 		callback = func.const(true),
-		inputs = func.returner,
-		outputs = func.returner,
-		data = func.returner,
+		process = function(a, b, c)
+			return a, b, c
+		end,
 		formspec_begin = func.const"",
 		can_perform = func.const(true),
+		recipe_correct = func.const(true),
 	})
 
 	trinium.recipes.recipes_by_method[method] = {}
@@ -126,8 +129,8 @@ recipes.add_method("drop", {
 		return ("label[0,4.7;%s]"):format(api.S("Max Drop: @1", data.max_items))
 	end,
 
-	outputs = function(outputs)
-		if type(outputs[1]) == "string" then return outputs end
+	process = function(a, outputs, b)
+		if type(outputs[1]) == "string" then return a, outputs, b end
 		local outputs1 = {}
 
 		table.walk(outputs, function(v, k)
@@ -141,6 +144,6 @@ recipes.add_method("drop", {
 			end
 		end)
 
-		return #outputs1 > 9 and -1 or outputs1
+		return a, #outputs1 > 9 and -1 or outputs1, b
 	end,
 })
