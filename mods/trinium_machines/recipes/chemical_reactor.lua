@@ -12,11 +12,11 @@ A("chemical_reactor",
 A("chemical_reactor",
 	{M.propene:get("cell", 2), M.ammonia:get("cell", 2), M.oxygen:get("cell", 3), "trinium_materials:cell_empty"},
 	{M.acrylonitrile:get("cell", 2), M.water:get("cell", 6)},
-	{time = 8, temperature = 586, temperature_tolerance = 15, catalyst = "bismuth_molybdenum"})
+	{time = 8, temperature = 587, temperature_tolerance = 16, catalyst = "bismuth_molybdenum"})
 
--- C4H10 + Steam -> C4H6^ + 2H2^
+-- C4H10 Steam-Cracking -> C4H6^ + 2H2^
 A("chemical_reactor",
-	{M.butane:get"cell", M.steam:get"cell"},
+	{M.butane:get"cell", M.steam:get("cell", 2)},
 	{M.butadiene:get"cell", M.hydrogen:get("cell", 2)},
 	{time = 0.5, temperature = 1225, temperature_tolerance = 10})
 
@@ -30,17 +30,17 @@ A("chemical_reactor",
 -- С6H6 + C2H4 -> C8H10
 A("chemical_reactor",
 	{M.benzene:get"cell", M.ethene:get"cell"},
-	{M.ethylbenzene:get"cell"},
+	{M.ethylbenzene:get"cell", "trinium_materials:cell_empty"},
 	{time = 55})
 
 -- C8H10 -> C8H8 + H2^
 A("chemical_reactor",
-	{M.ethylbenzene:get"cell"},
+	{M.ethylbenzene:get"cell", "trinium_materials:cell_empty"},
 	{M.styrene:get"cell", M.hydrogen:get"cell"},
 	{time = 55, catalyst = "iron_trioxide", temperature = 785, temperature_tolerance = 10})
 
--- 14 Oil + O2 -> 2S + 2H2O + 14 Desulf
+-- 2H2S + O2 -> 2S + 2H2O turned into Oil Desulfurization
 A("chemical_reactor",
-	{M.oil:get("cell", 14), M.oxygen:get"cell"},
+	{M.oil:get("cell", 14), M.oxygen:get"cell", "trinium_materials:cell_empty"},
 	{M.sulfur:get("dust", 2), M.water:get("cell", 2), M.desulf:get("cell", 14)},
 	{time = 80, temperature = 370, temperature_tolerance = 10})
