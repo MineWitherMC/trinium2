@@ -1,5 +1,6 @@
 Trinium
 =======
+![Screenshot](screenshot.png)
 
 Work-in-Progress technological and magical modpack for
 [Minetest](https://github.com/minetest/minetest).
@@ -15,7 +16,7 @@ sometimes useful).
 
 Compatibility
 -------------
-Requires Minetest 0.5 with Gettext.
+Requires Minetest 0.5, gettext build recommended.
 
 Technical information: currently used Minetest 0.5 features:
 * Valleys/Carpathian

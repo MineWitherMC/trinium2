@@ -10,7 +10,7 @@ function research.add_chapter(name, def)
 	research.researches_by_chapter[name] = {}
 end
 function research.add_chapter_req(chapter, parent)
-	research.chapters[chapter][parent] = 1
+	research.chapters[chapter].requirements[parent] = 1
 end
 
 research.researches = {} -- unordered map
@@ -20,7 +20,7 @@ function research.add(name, def)
 	research.researches_by_chapter[def.chapter][name] = def
 end
 function research.add_req(child, parent)
-	research.researches[child][parent] = 1
+	research.researches[child].requirements[parent] = 1
 end
 
 research.dp1 = api.get_data_pointers"researches" -- unordered set
@@ -72,22 +72,10 @@ function research.add_aspect(name, def)
 	})
 end
 
-research.lens_data = {
-	gems = {},   -- unordered map
-	metals = {}, -- unordered map
-	shapes = {}, -- unordered map
-}
-function research.register_lens_gem(id, item)
-	research.lens_data.gems[id] = item
-end
-
-function research.register_lens_metal(id, item)
-	research.lens_data.metals[id] = item
-end
-
-function research.register_lens_shape(id, mintier)
-	research.lens_data.shapes[id] = mintier
-end
+research.lens_data = {}
+research.lens_data.gems, research.register_lens_gem = api.adder()
+research.lens_data.metals, research.register_lens_metal = api.adder()
+research.lens_data.shapes, research.register_lens_shape = api.adder()
 
 research.constants = {
 	press_cost = 8,

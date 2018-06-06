@@ -75,14 +75,14 @@ A("chemical_reactor",
 A("chemical_reactor",
 	{M.frac_gas:get("cell", 12), M.steam:get"cell"},
 	{M.methane:get("cell", 7), M.ethene:get("cell", 3), M.propene:get("cell", 2), "trinium_materials:cell_empty"},
-	{time = 0.5, temperature = 1150, temperature_tolerance = 20})
+	{time = 0.5, temperature = 1150, temperature_tolerance = 10})
 
 A("chemical_reactor",
 	{M.frac_ether:get("cell", 12), M.steam:get"cell"},
 	{M.ethene:get("cell", 7), M.propene:get("cell", 4), M.butadiene:get"cell", "trinium_materials:cell_empty"},
-	{time = 0.5, temperature = 1250, temperature_tolerance = 20})
+	{time = 0.5, temperature = 1250, temperature_tolerance = 10})
 
 A("chemical_reactor",
 	{M.naphtha:get("cell", 12), M.steam:get"cell"},
 	{M.toluene:get("cell", 9), M.isoprene:get("cell", 2), M.butadiene:get"cell", "trinium_materials:cell_empty"},
-	{time = 0.5, temperature = 1325, temperature_tolerance = 20})
+	{time = 0.5, temperature = 1325, temperature_tolerance = 10})

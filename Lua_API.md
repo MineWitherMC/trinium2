@@ -202,9 +202,49 @@ All of these functions are in `trinium.recipes` table.
 * `vector.destringify(v)`
 	* Opposite to previous function.
 
+## Research System
+These require `trinium_research` as dependency.
+
+### Constants
+* `research.lens_data` - table with following keys:
+	* `gems` - table with keys being material IDs and values being itemstrings.
+	* `metals` - similar to previous one.
+	* `shapes` - table with keys being material IDs and values being minimum
+	 required upgrade tier for Randomizer to create them.
+* `research.constants`
+	* `press_cost` - amount of Rhenium Alloy Randomizer needs per one press.
+	* `min_gems` - minimum amount of Gems press can require.
+	* `max_gems`
+	* `min_metal`
+	* `max_metal`
+	* `max_tier` - maximum lens tier, unrelated to upgrades!
+
+### Methods
+All of these functions are in `trinium.research` table.
+* `add_chapter(name, def)`
+	* Adds research chapter. See **Chapter Definition** for more information.
+* `add(name, def)`
+	* Adds research. See **Research Definition** for more information.
+* `add_chapter_req(name, parent)`
+* `add_req(name, parent)`
+* `check(pn, name)`
+	* Returns `true` if and only if player has unlocked requested research.
+* `get_tree(name)`
+	* Returns list-based `DataMesh` of requirements of given research, recursively.
+* `grant(pn, name)`
+	* Gives player requested research if its requirements are already completed.
+* `force_grant(pn, name)`
+	* Gives player requested research recursively.
+* `add_aspect(name, def)`
+	* Adds aspect. See **Aspect Definition** for more information.
+* `random_aspects(pn, num, tbl)`
+	* Gives player given number of randomized aspects from given table.
+	* Given aspects are not unique.
+
 ## Various Objects
 ### DataMesh
 DataMesh: object with chained methods. Created via `trinium.api.DataMesh:new()`.
+ Requires `trinium_api` as a dependency.
 
 Existing methods:
 * `dm:data()`
@@ -226,6 +266,7 @@ Existing methods:
 	* Only works when internal table is a list.
 * `dm:unique()`
 
+## Various Definitions
 ### Multiblock Definition
 Multiblock definition is a table with following keys:
 * `controller` - parsed node, which must have `paramtype2` of `facedir`.
@@ -286,3 +327,12 @@ Recipe Method definition is a table with following keys:
 	* Should return whether recipe is correctly composed.
 	* If this function returns `false`, minetest instance is terminated.
 	* Always true by default.
+
+### Aspect Definition
+Aspect Definition is a table with following keys:
+* `texture` - TextureString.
+* `name` - string, description of aspect item.
+	* Should contain aspect latin name on first line and translated name on second.
+* `req1` - string, ID of 1st component.
+	* Defaults to abscence of 1st component (e.g., Base Aspect).
+* `req2` - string.
