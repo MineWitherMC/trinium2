@@ -47,13 +47,6 @@ do
 		types = {"cell"},
 		description = S"Ammonia",
 	})
-
-	M.glass = materials.add("glass", {
-		formula = {{"silicon", 1}, {"oxygen", 2}},
-		types = {"plate", "dust"},
-		color = {250, 250, 250},
-		description = S"Glass",
-	})
 end
 
 -- Organics
@@ -65,18 +58,32 @@ do
 		description = S"Methane",
 	})
 
-	M.ethene = materials.add("ethylene", {
+	M.ethane = materials.add("ethane", {
+		formula = {{"carbon", 2}, {"hydrogen", 6}},
+		types = {"cell"},
+		color = {200, 200, 255},
+		description = S"Ethane",
+	})
+
+	M.ethene = materials.add("ethene", {
 		formula = {{"carbon", 2}, {"hydrogen", 4}},
 		types = {"cell"},
 		color = {190, 175, 235},
-		description = S"Ethylene",
+		description = S"Ethene",
 	})
 
-	M.propene = materials.add("propylene", {
+	M.propane = materials.add("propane", {
+		formula = {{"carbon", 3}, {"hydrogen", 8}},
+		types = {"cell"},
+		color = {250, 226, 80},
+		description = S"Propane",
+	})
+
+	M.propene = materials.add("propene", {
 		formula = {{"carbon", 3}, {"hydrogen", 6}},
 		types = {"cell"},
 		color = {235, 235, 55},
-		description = S"Propylene",
+		description = S"Propene",
 	})
 
 	M.butane = materials.add("butane", {
@@ -84,6 +91,34 @@ do
 		types = {"cell"},
 		color = {160, 90, 0},
 		description = S"Butane",
+	})
+
+	M.butadiene = materials.add("butadiene", {
+		formula = {{"carbon", 4}, {"hydrogen", 6}},
+		types = {"cell"},
+		color = {50, 40, 40},
+		description = S"Butadiene",
+	})
+
+	M.pentane = materials.add("pentane", {
+		formula = {{"carbon", 5}, {"hydrogen", 12}},
+		types = {"cell"},
+		color = {0, 90, 160},
+		description = S"Pentane",
+	})
+
+	M.isoprene = materials.add("isoprene", {
+		formula = {{"carbon", 5}, {"hydrogen", 8}},
+		types = {"cell"},
+		color = {20, 20, 20},
+		description = S"Isoprene",
+	})
+
+	M.octane = materials.add("octane", {
+		formula = {{"carbon", 8}, {"hydrogen", 18}},
+		types = {"cell"},
+		color = {255, 255, 255},
+		description = S"Octane",
 	})
 
 	M.benzene = materials.add("benzene", {
@@ -100,11 +135,11 @@ do
 		description = S"Toluene",
 	})
 
-	M.isooctane = materials.add("octane", {
-		formula = {{"carbon", 8}, {"hydrogen", 18}},
+	M.xylene = materials.add("xylene", {
+		formula = {{"carbon", 8}, {"hydrogen", 10}},
 		types = {"cell"},
 		color = {115, 85, 135},
-		description = S"Octane",
+		description = S"Xylene",
 	})
 
 	M.ethylbenzene = materials.add("ethylbenzene", {
@@ -121,15 +156,8 @@ do
 		description = S"Styrene",
 	})
 
-	M.butadiene = materials.add("butadiene", {
-		formula = {{"carbon", 4}, {"hydrogen", 6}},
-		types = {"cell"},
-		color = {50, 40, 40},
-		description = S"Divinyl",
-	})
-
 	M.acrylonitrile = materials.add("acrylonitrile", {
-		formula = {{"carbon", 1}, {"hydrogen", 2}, {"carbon", 1}, {"hydrogen", 1}, {"carbon", 1}, {"nitrogen", 1}},
+		formula = {{"carbon", 2}, {"hydrogen", 3}, {"carbon", 1}, {"nitrogen", 1}},
 		types = {"cell"},
 		color = {240, 240, 225},
 		description = S"Acrylonitrile",

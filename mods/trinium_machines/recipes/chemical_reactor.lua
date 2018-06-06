@@ -44,3 +44,45 @@ A("chemical_reactor",
 	{M.oil:get("cell", 14), M.oxygen:get"cell", "trinium_materials:cell_empty"},
 	{M.sulfur:get("dust", 2), M.water:get("cell", 2), M.desulf:get("cell", 14)},
 	{time = 80, temperature = 370, temperature_tolerance = 10})
+
+-- Various Hydro-cracking
+A("chemical_reactor",
+	{M.frac_gas:get("cell", 12), M.hydrogen:get"cell", "trinium_materials:cell_empty 5"},
+	{M.methane:get("cell", 11), M.ethane:get("cell", 7)},
+	{time = 10, temperature = 900, temperature_tolerance = 100, pressure = 100, pressure_tolerance = 20})
+
+A("chemical_reactor",
+	{M.frac_ether:get("cell", 12), M.hydrogen:get"cell", "trinium_materials:cell_empty 5"},
+	{M.ethane:get("cell", 11), M.propane:get("cell", 5), M.butane:get("cell", 2)},
+	{time = 10, temperature = 900, temperature_tolerance = 100, pressure = 100, pressure_tolerance = 20})
+
+A("chemical_reactor",
+	{M.naphtha:get("cell", 12), M.hydrogen:get"cell", "trinium_materials:cell_empty 5"},
+	{M.butane:get("cell", 9), M.benzene:get("cell", 5), M.pentane:get("cell", 4)},
+	{time = 10, temperature = 900, temperature_tolerance = 100, pressure = 100, pressure_tolerance = 20})
+
+A("chemical_reactor",
+	{M.kerosene:get("cell", 12), M.hydrogen:get"cell", "trinium_materials:cell_empty 5"},
+	{M.benzene:get("cell", 14), M.toluene:get("cell", 3), M.octane:get"cell"},
+	{time = 10, temperature = 900, temperature_tolerance = 100, pressure = 100, pressure_tolerance = 20})
+
+A("chemical_reactor",
+	{M.diesel:get("cell", 12), M.hydrogen:get"cell", "trinium_materials:cell_empty 5"},
+	{M.toluene:get("cell", 10), M.xylene:get("cell", 6), M.octane:get("cell", 2)},
+	{time = 10, temperature = 900, temperature_tolerance = 100, pressure = 100, pressure_tolerance = 20})
+
+-- Various Steam-Cracking
+A("chemical_reactor",
+	{M.frac_gas:get("cell", 12), M.steam:get"cell"},
+	{M.methane:get("cell", 7), M.ethene:get("cell", 3), M.propene:get("cell", 2), "trinium_materials:cell_empty"},
+	{time = 0.5, temperature = 1150, temperature_tolerance = 20})
+
+A("chemical_reactor",
+	{M.frac_ether:get("cell", 12), M.steam:get"cell"},
+	{M.ethene:get("cell", 7), M.propene:get("cell", 4), M.butadiene:get"cell", "trinium_materials:cell_empty"},
+	{time = 0.5, temperature = 1250, temperature_tolerance = 20})
+
+A("chemical_reactor",
+	{M.naphtha:get("cell", 12), M.steam:get"cell"},
+	{M.toluene:get("cell", 9), M.isoprene:get("cell", 2), M.butadiene:get"cell", "trinium_materials:cell_empty"},
+	{time = 0.5, temperature = 1325, temperature_tolerance = 20})

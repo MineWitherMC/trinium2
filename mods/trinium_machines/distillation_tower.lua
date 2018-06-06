@@ -50,6 +50,7 @@ recipes.add_method("distillation_tower", {
 })
 
 local distillation_random = PcgRandom(math.random() * 10^8)
+local distillation_time = 8
 minetest.register_node("trinium_machines:controller_distillationtower", {
 	description = S"Distillation Tower Controller",
 	groups = {cracky = 1},
@@ -127,7 +128,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 			end
 
 			timer:stop()
-			timer:start(20)
+			timer:start(distillation_time)
 			input:remove_item("input", rec.inputs[1])
 			input:remove_item("input", "trinium_materials:cell_empty "..(rec.data.recovery - 1))
 
@@ -142,7 +143,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 						meta:set_string("output", rec.outputs[1])
 					else
 						timers[k - 1]:stop()
-						timers[k -1]:start(19)
+						timers[k -1]:start(distillation_time - 0.5)
 						metas[k - 1]:set_string("output", rec.outputs[k])
 					end
 				end

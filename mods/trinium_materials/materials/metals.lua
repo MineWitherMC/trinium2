@@ -67,14 +67,6 @@ M.rhenium_alloy = materials.add("rhenium_alloy", {
 	description = S"Rhenium Alloy"
 }):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")
 
--- Cupronickel
-M.cupronickel = materials.add("cupronickel", {
-	formula = {{"copper", 3}, {"nickel", 2}},
-	types = {"ingot", "dust"},
-	description = S"Constantan"
-}):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")
-	:generate_recipe("trinium:crude_alloyer")
-
 -- Silver Alloy
 M.silver_alloy = materials.add("silver_alloy", {
 	formula = {{"silver", 2}, {"tennantite", 5}},
