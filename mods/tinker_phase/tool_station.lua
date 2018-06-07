@@ -23,7 +23,7 @@ local function recalculate(pos)
 		local stack = ItemStack("tinker_phase:tool_"..k)
 		local meta2 = stack:get_meta()
 
-		local durability, level, times, color, traits = 0, 0, {}, "FFFFFF", {}
+		local durability, level, times, color, traits = 0, v.level_boost, {}, "FFFFFF", {}
 		table.walk(c, function(c1)
 			if c1.type == 1 then
 				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
@@ -56,6 +56,8 @@ local function recalculate(pos)
 			end
 		end)
 
+		if level < 0 then return end
+
 		traits = table.filter(traits, function(v, k)
 			if tinker.modifiers[k] and tinker.modifiers[k].incompat then
 				local x = tinker.modifiers[k].incompat
@@ -72,8 +74,8 @@ local function recalculate(pos)
 			}
 		end)
 
-		meta2:set_int("max_durability", durability)
-		meta2:set_int("current_durability", durability)
+		meta2:set_int("max_durability", durability * math.geometrical_avg(v.durability))
+		meta2:set_int("current_durability", durability * math.geometrical_avg(v.durability))
 		meta2:set_string("color", "#"..color)
 		meta2:set_tool_capabilities{
 			full_punch_interval = 1.0,
@@ -85,7 +87,7 @@ local function recalculate(pos)
 
 		for k,v in pairs(traits) do
 			if tinker.modifiers[k] and tinker.modifiers[k].after_create then
-				tinker.modifiers[k].after_create(k, v, meta2)
+				tinker.modifiers[k].after_create(v, meta2)
 			end
 		end
 

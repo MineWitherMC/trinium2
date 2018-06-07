@@ -7,7 +7,7 @@ A(M.iron, {
 	base_speed = 6,
 	level = 2,
 	rod_durability = 1.25,
-	traits = {magnetic = 1}, -- ???
+	traits = {magnetic = 1},
 	description = S"Iron",
 })
 

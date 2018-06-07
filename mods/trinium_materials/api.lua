@@ -80,7 +80,7 @@ function mat.add(name, def)
 
 	local object = {}
 	function object:generate_recipe(id)
-		--local reg = assert(mat.recipe_generators[id], "Cannot generate recipe "..id.." for "..name)
+		--local reg = assert(mat.recipe_generators[id], name.." requested unexisting generator "..id)
 		--reg(name)
 		return self
 	end

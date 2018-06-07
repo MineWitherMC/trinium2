@@ -1,10 +1,12 @@
 # Trinium API Additions
 * More information at <https://github.com/MineWitherMC/trinium2>
 
+
 ## Introduction
 Trinium Game has a lot of mechanics and a lot of builtin helpers which allow
 modders to perform their work more efficiently. These helpers include math
 functions, table helpers, data structures, inventory helpers and so on.
+
 
 ## Generic Additions
 These require `trinium_api` as a dependency.
@@ -97,7 +99,7 @@ All of these functions are in `trinium.api` table.
 * `get_data_pointer(pn, id)`
 	* Returns mod storage table which is automatically saved on shutdown.
 * `get_data_pointers(id)`
-	* Returns a table which keys are players and values are data pointers.
+	* Returns a table formatted as `[PlayerName] => DataPointer`.
 	* Data Pointers are automatically obtained when needed.
 * `register_fluid(src_name, flow_name, src_desc, flow_desc, color, def)`
 	* A shortcut for registration of simple colored fluid nodes.
@@ -131,7 +133,7 @@ All of these functions are in `trinium.api` table.
 	* Similar to previous one, but also Makes All Words Name Case.
 * `translate_requirements(tbl)`
 	* Returns string with list of needed items.
-	* `tbl` is a table with keys being itemstrings and values being their amounts.
+	* `tbl` is a table formatted as `[ItemString] => amount`.
 * `multiblock_rename(def)`
 	* Renames multiblock controller to have needed nodes.
 	* `def` is in Multiblock Definition format.
@@ -165,7 +167,7 @@ All of these functions are in `trinium.api` table.
 	 given position. Useful for `on_construct`.
 * `inv_to_itemmap(list)`
 	* Converts inventory list obtained via `inv:get_list"listname"` to item map.
-	* Item map is a table which has itemnames as keys and their amounts as tables.
+	* Item map is a table formatted as `[ItemString] => amount`.
 	* Does not properly work with `metadata`.
 * `recolor_facedir(pos, n)`
 	* Given a node with `paramtype2 = colorfacedir`, changes its color.
@@ -202,25 +204,31 @@ All of these functions are in `trinium.recipes` table.
 * `vector.destringify(v)`
 	* Opposite to previous function.
 
+
 ## Research System
-These require `trinium_research` as dependency.
+These require `trinium_research` and are stored in `trinium.research` table.
 
 ### Constants
-* `research.lens_data` - table with following keys:
-	* `gems` - table with keys being material IDs and values being itemstrings.
+* `lens_data` - table with following elements:
+	* `gems` - table formatted as `[material ID] => ItemString`.
 	* `metals` - similar to previous one.
-	* `shapes` - table with keys being material IDs and values being minimum
-	 required upgrade tier for Randomizer to create them.
-* `research.constants`
+	* `shapes` - table formatted as `[material ID] => minTier`, where
+	 `minTier` is minimum required upgrade tier for Randomizer to create them.
+* `constants`
 	* `press_cost` - amount of Rhenium Alloy Randomizer needs per one press.
 	* `min_gems` - minimum amount of Gems press can require.
 	* `max_gems`
 	* `min_metal`
 	* `max_metal`
 	* `max_tier` - maximum lens tier, unrelated to upgrades!
+* `chapters` - table formatted as `[chapter ID] => definition`.
+* `researches` - table formatted as `[res. ID] => definition`.
+* `researches_by_chapter` - table formatted as `[chapter ID] => {[res. ID] =>
+ definition, ...}`.
+* `aspects` - table formatted as `[aspect ID] => definition`.
+* `aspect_list` - sorted list of `aspect ID` elements.
 
 ### Methods
-All of these functions are in `trinium.research` table.
 * `add_chapter(name, def)`
 	* Adds research chapter. See **Chapter Definition** for more information.
 * `add(name, def)`
@@ -239,7 +247,100 @@ All of these functions are in `trinium.research` table.
 	* Adds aspect. See **Aspect Definition** for more information.
 * `random_aspects(pn, num, tbl)`
 	* Gives player given number of randomized aspects from given table.
-	* Given aspects are not unique.
+	* Given aspects are not unique and can repeat.
+
+
+## Tinkering
+These require `tinker_phase` and are stored in `tinker` table.
+
+### Constants
+* `materials` - table formatted as `[ItemString] => definition`.
+* `patterns` - table formatted as `[pattern ID] => definition`.
+* `modifiers` - table formatted as `[trait ID] => definition`.
+* `tools` - table formatted as `[tool ID] => definition`.
+* `base` - table with following elements:
+	* `cracky` - speeds of hand-breaking cracky nodes with levels 1, 2 and 3.
+	* `crumbly`
+	* `choppy`
+	* `snappy`
+
+### Methods
+* `add_material(itemstring, def)`
+	* Adds Tool Material. See **Tool Material Definition** for more information.
+* `add_system_material(obj, def)`
+	* Similar to previous one, however, `obj` is material handle created by
+	 `trinium.materials.new`.
+	* Color is set automatically.
+* `add_pattern(name, def)`
+	* Adds Tool Pattern. See **Tool Pattern Definition** for more information.
+* `add_modifier(name, def)`
+	* Adds Tool Modifier or Trait. See **Trait Definition** for more information.
+* `add_tool(name, def)`
+	* Adds Tool Template. See **Tool Definition** for more information.
+* `get_color(num)`
+	* Returns color the durability string is colored to.
+	* `num` is between `0` and `1`.
+* `wrap_description(version, def)`
+	* Returns tool description. See **Tool Descriptions** for more informations.
+	* `version` is definition versions, so older definitions would still work.
+
+
+## Pulse Network
+These require `pulse_network` and are stored in `trinium.pulse_network` table.
+* `trigger_update(ctrlpos)`
+	* Sends reload signal to all devices connected to network.
+	* Should be called whenever items are put or taken into network, etc.
+	* Automatically called by Pulsating Combinator and `import_to_controller`.
+* `import_to_controller(ctrlpos)`
+	* Sends item from controller internal buffer to network, reloading all devices.
+* `add_storage_cell(id, texture, desc, types, items)`
+	* Adds storage cell.
+	* `types` is an integer representing type storage added to network.
+	* `items` is an integer representing item storage added to network.
+
+
+## TesterGregMachines
+These require `trinium_machines` and are stored in `trinium.machines` table.
+
+### Constants
+* `default_hatches` - table formatted as `[hatch ID] => ItemString`.
+
+### Methods
+* `set_default_hatch(hatch_id, item)`
+	* Sets default hatch.
+	* This hatch will be shown in place of `hatch:desired_hatch_type` entries in
+	 `addon_map`.
+* `machines.register_multiblock(GregDef)`
+	* Registers multiblock with dynamically-positioned hatches, casing recoloring
+	 and a lot of other nifty features.
+	* Returns `multiblock_def`, `destruct`, `i`, `o` and `data`.
+		* `multiblock_def` can be used via `trinium.api.register_multiblock(name,
+		 multiblock_def)`.
+		* `destruct` has to be set as node `on_destruct` function.
+		* Other values can be used via `trinium.recipes.add("greggy_multiblock",
+		 i, o, data)`.
+	* See **Greggy Multiblock** for more information.
+
+
+## Mapgen Module
+These require `trinium_mapgen` and are stored in `trinium.mapgen` table.
+* `register_vein(name, def)`
+	* Registers Ore vein. Map chunks generally have a single vein per chunk.
+	* See **Vein Definition** for more information.
+
+
+## Miscellanous
+* Better Inventory is fully backwards-compatible with sfinv, so no API here.
+* cmsg is fully backwards-compatible with original cmsg, so no API here.
+* ### HUD
+	These require `trinium_hud` and are stored in `trinium.hud` table.
+
+	#### Constants
+	* `steps` - table formatted as `[[globalstep ID] => definition]`.
+
+	#### Methods
+	* `register_globalstep`
+		* Globalstep wrapper. See **Globalstep Wrapper** for more information.
 
 ## Various Objects
 ### DataMesh
@@ -266,9 +367,10 @@ Existing methods:
 	* Only works when internal table is a list.
 * `dm:unique()`
 
+
 ## Various Definitions
 ### Multiblock Definition
-Multiblock definition is a table with following keys:
+Multiblock definition is a table with following elements:
 * `controller` - parsed node, which must have `paramtype2` of `facedir`.
 * `width` - integer, processed distance to the left and right from controller.
 * `depth_b` - integer, processed distance behind of controller.
@@ -291,13 +393,12 @@ Multiblock definition is a table with following keys:
 	 actual_pos = vec, name = name}`.
 		* `dx`, `dy` and `dz` have the same format as `map` ones.
 		* `actual_pos` is a vector from `{x=0, y=0, z=0}` to obtained node.
-	* `region.counts` is a table whose keys are nodenames and values are their
-	 counts in parsed region.
+	* `region.counts` is a table formatted as `[ItemString] => amount`.
 	* `region(map)` checks whether all `map` requirements are satisfied.
 * `after_construct` - function of `pos`, `region` and `is_active`. Can be abscent.
 
 ### Recipe Method Definition
-Recipe Method definition is a table with following keys:
+Recipe Method definition is a table with following elements:
 #### Required
 * `input_amount` - integer.
 * `output_amount` - integer.
@@ -328,11 +429,125 @@ Recipe Method definition is a table with following keys:
 	* If this function returns `false`, minetest instance is terminated.
 	* Always true by default.
 
-### Aspect Definition
-Aspect Definition is a table with following keys:
+### Aspect Definition (`trinium_research`)
+Aspect Definition is a table with following elements:
 * `texture` - TextureString.
 * `name` - string, description of aspect item.
-	* Should contain aspect latin name on first line and translated name on second.
+	* Should contain aspect latin name on first line and localized name on second.
 * `req1` - string, ID of 1st component.
 	* Defaults to abscence of 1st component (e.g., Base Aspect).
 * `req2` - string.
+
+### Tool Material Definition (`tinker_phase`)
+Tool Material Definition is a table with following elements:
+* `color` - ColorString, can be abscent if `add_system_material` is used.
+* `base_durability` - integer.
+* `base_speed` - float, relative to hand speed (`tinker.base`).
+* `level` - integer.
+	* Note that tinkered tools durability doesn't depend on `level`.
+* `rod_durability` - float, durability multiplier.
+* `traits` - table formatted as `[trait ID] => level`.
+	* Tool trait level is calculated as maximum of all levels with same ID.
+* `description` - localized string.
+
+### Tool Pattern Definition (`tinker_phase`)
+Tool Pattern Definition is a table with following elements:
+* `description` - string with **exactly one** `@1` translation element.
+	* This element will be substituted with material description.
+* `cost` - integer, material cost for the pattern.
+* `type` - integer, either `1` or `2`.
+	* If this is `1`, the part material `base_durability` is averaged with other
+	 parts of type 1, and this part is also used to calculate tool speed.
+	* Common examples include pickaxe/axe/whatever blades.
+	* If this is `2`, the part material `rod_durability` is averaged with other
+	 parts of type 2, and this part is not used to calculate tool speed.
+	* Common examples include tool rods.
+* Texture file must be called `tinker_phase.part.<id>.png`.
+
+### Trait Definition (`tinker_phase`)
+Trait Definition is a table with following elements:
+
+#### Required
+* `description` - localized string, probably colorized.
+* `incompat` - list of trait IDs this trait doesn't work with.
+#### Callbacks
+* `after_use` - function of `player`, `stack`, `trait_level` and `node`.
+	* Called after tool with this trait digs any block.
+* `after_create` - function of `trait_level` and `meta`.
+	* Called after tool with this trait is created.
+
+### Tool Definition (`tinker_phase`)
+Tool Definition is a table with following elements:
+* `times` - table formatted as `[group] => time`.
+	* `time` is a float, the higher it is - the slower this group nodes are dug.
+* `durability` - table formatted as `[group] => durability`.
+	* `durability` is a float, the higher it is - the more durability tool has.
+	* Due to limitations of system, only average of this table is taken into
+	 account when calculating tool durability.
+* `components` - list of elements from `tinker.patterns`.
+	* The tool is assembled when all these elements are put into table and nothing
+	 more.
+	* Should be unique.
+* `level_boost` - integer.
+	* Increases tool maximum harvest level.
+	* Can decrease it, when negative.
+	* Tool won't assemble if calculated level is below 0.
+* `update_description` - function of `stack`.
+#### Tool Descriptions
+* Whenever a tool changes it description (e.g, when its durability is changed),
+ it calls `update_description` callback from tool definition on itself.
+* Best way to get the description (unless you want something really fancy) is
+ calling `wrap_description` function.
+##### `wrap_description` definition table
+* API v1 fields:
+	* `current_durability` - integer.
+	* `max_durability` - integer.
+	* `base` - actual item description, localized string.
+	* `modifiers` - table formatted as `[trait ID] => level`.
+	* **v1 is by far the newest API version.**
+
+### Greggy Multiblock (`trinium_machines`)
+Greggy Multiblock Definition is a table with following elements:
+* `controller` - ItemString.
+	* Must be a node with `paramtype2` either `colorfacedir` or `facedir`.
+* `casing` - ItemString.
+	* Must be a node with `paramtype2` either `color` or abscent.
+* `size` - `{front = int, back = int, up = int, down = int, sides = int}`.
+* `min_casings` - integer.
+	* if selected region has less `casing` blocks than this value, multiblock is
+	 not assembled.
+* `addon_map` - table.
+	* Same format as `map` within **Multiblock Definition**, except for casings and
+	 hatches are not needed.
+	* Checked in order to complete multiblock.
+	* Forcing specific hatch at specific position can be done with `name =
+ 	 hatch:desired_hatch_type`.
+* `color` - integer.
+	* All casing and hatch `param2` in calculated regions are set to this value.
+	* Recommended to have all casings and hatches with `paramtype2 = color` and
+	 the same palette.
+* `hatches` - list of hatches possible for the machine.
+
+### Vein Definition (`trinium_mapgen`)
+Vein Definition is a table with following elements:
+* `ore_list` - list of ItemStrings.
+* `ore_chances` - list of integers.
+	* This must be of the same length as `ore_list`.
+	* Each number sets relative rarity of corresponding ore in vein.
+* `density` - integer from 0 to 100.
+	* Percentage of ore blocks per vein. 100 means no stone will be left, whereas
+	 0 means no ores will be spawned.
+* `weight` - positive integer.
+	* The more this variable is, the more common the vein is.
+	* General recommendation is 5-10 for very rare veins, 20-30 for rare, 40-60
+	 for common and 70-100 for abundant/very common.
+* `min_height` - integer.
+* `max_height` - integer.
+
+### Globalstep Wrapper (`trinium_hud`)
+Globalstep Definition is a table with following elements:
+* `period` - float, time in seconds between runs.
+* `callback` - function of `dtime`.
+* `consistent` - boolean.
+	* If `true`, new function run won't happen before old one stops.
+	* `false` by default.
