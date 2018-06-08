@@ -1,30 +1,23 @@
-Trinium
-=======
+# Trinium
 ![Screenshot](screenshot.png)
 
-Work-in-Progress technological and magical modpack for
+Work-in-Progress technological and magical (sub)game for
 [Minetest](https://github.com/minetest/minetest).
 
 Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 
-This mod is not finished
-------------------------
+## This mod is not finished
 * Don't expect it to work as well as finished one will;
-* Don't expect it to not break compatibility in next update, including API one;
-* This mod is also very complex, so please report any bugs (debug.txt is
-sometimes useful).
+* Don't expect it to not break compatibility in next update, including API one
+ (however, I'll try to avoid API breakage);
+* Please report any bugs (debug.txt is sometimes useful).
 
-Compatibility
--------------
+## Compatibility
 Requires Minetest 0.5, gettext build recommended.
 
-Technical information: currently used Minetest 0.5 features:
-* Valleys/Carpathian
-* Clientside Translations
-* Palettes/Overlays
-* Restricted mapgens (because no one should use v6/v5 or even v7)
-* `on_rightclick` triggering when `formspec` is set
-* Prepends
-* `mod.conf`
-* Mod Storage
-* `Raycast`
+## Features
+* Realistic (petro)chemistry
+* Research system
+* Pulse Network, my approach to storage systems
+* Some kind of Tinkers' Construct port
+* **Feature-Requests are always welcome, and most of them will be implemented!**

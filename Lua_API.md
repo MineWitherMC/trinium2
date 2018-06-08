@@ -212,8 +212,8 @@ These require `trinium_research` and are stored in `trinium.research` table.
 * `lens_data` - table with following elements:
 	* `gems` - table formatted as `[material ID] => ItemString`.
 	* `metals` - similar to previous one.
-	* `shapes` - table formatted as `[material ID] => minTier`, where
-	 `minTier` is minimum required upgrade tier for Randomizer to create them.
+	* `shapes` - table formatted as `[material ID] => minTier`, where `minTier` is
+	 minimum required upgrade tier for Randomizer to create them.
 * `constants`
 	* `press_cost` - amount of Rhenium Alloy Randomizer needs per one press.
 	* `min_gems` - minimum amount of Gems press can require.
@@ -309,11 +309,11 @@ These require `trinium_machines` and are stored in `trinium.machines` table.
 * `set_default_hatch(hatch_id, item)`
 	* Sets default hatch.
 	* This hatch will be shown in place of `hatch:desired_hatch_type` entries in
-	 `addon_map`.
+	 `addon_map` (however, any hatch can be used in actual multiblock).
 * `machines.register_multiblock(GregDef)`
-	* Registers multiblock with dynamically-positioned hatches, casing recoloring
+	* Registers multiblock with dynamically-positioned hatches, recolored casings
 	 and a lot of other nifty features.
-	* Returns `multiblock_def`, `destruct`, `i`, `o` and `data`.
+	* Returns a sequence of `multiblock_def`, `destruct`, `i`, `o` and `data`.
 		* `multiblock_def` can be used via `trinium.api.register_multiblock(name,
 		 multiblock_def)`.
 		* `destruct` has to be set as node `on_destruct` function.
@@ -517,7 +517,7 @@ Greggy Multiblock Definition is a table with following elements:
 	* if selected region has less `casing` blocks than this value, multiblock is
 	 not assembled.
 * `addon_map` - table.
-	* Same format as `map` within **Multiblock Definition**, except for casings and
+	* Same format as `map` within **Multiblock Definition**, however, casings and
 	 hatches are not needed.
 	* Checked in order to complete multiblock.
 	* Forcing specific hatch at specific position can be done with `name =
