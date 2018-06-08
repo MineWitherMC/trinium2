@@ -27,7 +27,7 @@ recipes.add_method("crude_blast_furnace", {
 	formspec_name = S"Crude Blast Furnace",
 })
 
-local melting_time = 20
+local melting_time = 12
 minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
 	description = S"Crude Blast Furnace Controller",
 	groups = {cracky = 1},
@@ -75,7 +75,9 @@ minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
 			if not recipes.check_inputs(input_map, rec.inputs) then return end
 
 			timer:stop()
-			timer:start(melting_time)
+			timer:start(melting_time * table.sum(table.map(rec.outputs, function(x)
+				return tonumber(x:split" "[2]) or 1
+			end)))
 			recipes.remove_inputs(input, "input", rec.inputs)
 			meta:set_string("output", rec.outputs_string)
 			api.recolor_facedir(pos, 5)
