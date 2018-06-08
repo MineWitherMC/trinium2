@@ -9,3 +9,13 @@ mapgen.register_vein("diamond", {
 	min_height = -31000,
 	max_height = -50,
 })
+
+mapgen.register_vein("polymetallic", {
+	ore_list = {"trinium_materials:ore_chalcopyrite", "trinium_materials:ore_galena",
+		"trinium_materials:ore_sphalerite"},
+	ore_chances = {3, 2, 1},
+	density = 75,
+	weight = 30,
+	min_height = -31000,
+	max_height = -50,
+})

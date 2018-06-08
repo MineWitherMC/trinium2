@@ -116,6 +116,12 @@ do
 		color = {255, 100, 0},
 	})
 
+	V.zinc = materials.add_element("zinc", {
+		formula = "Zn",
+		melting_point = 692,
+		color = {250, 230, 240},
+	})
+
 	V.arsenic = materials.add_element("arsenic", {
 		formula = "As",
 		melting_point = -1,
@@ -180,6 +186,12 @@ do
 		formula = "Bi",
 		melting_point = 545,
 		color = {100, 160, 160},
+	})
+
+	V.lead = materials.add_element("lead", {
+		formula = "Pb",
+		melting_point = 600,
+		color = {140, 100, 140},
 	})
 
 	V.naquadah = materials.add_element("naquadah", {

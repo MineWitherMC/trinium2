@@ -15,7 +15,8 @@ function mapgen.register_vein(name, params)
 	registered_veins[name].ore_chances_multiplier = table.sum(params.ore_chances)
 end
 
-local stone_cid = minetest.get_content_id"mapgen_stone"
+local stone_cid = minetest.get_content_id"trinium_mapgen:stone"
+trinium.api.dump(stone_cid)
 minetest.register_on_generated(function(minp, maxp, seed)
 	local rand = PcgRandom(seed)
 	local vb, vbs, wb = veins_by_breakpoints, vein_breakpoints_s, vein_breakpoint_w
@@ -71,17 +72,14 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local data, area, choice, x, y, w = vm:get_data(), VoxelArea:new{MinEdge=emin, MaxEdge=emax}
 
 	for i in area:iter(xc, yc, zc, xc + xs, yc + ys, zc + zs) do
-		if rand:next(1, 100) <= v.density then
+		if data[i] == stone_cid and rand:next(1, 100) <= v.density then
 			x, y, w = 0, 0, v.ore_chances_multiplier
 			choice = rand:next(1, w)
 			while x < choice and y < #v.ore_chances do
 				y = y + 1
 				x = x + v.ore_chances[y]
 			end
-
-			if data[i] == stone_cid then
-				data[i] = v.ore_list[y]
-			end
+			data[i] = v.ore_list[y]
 		end
 	end
 

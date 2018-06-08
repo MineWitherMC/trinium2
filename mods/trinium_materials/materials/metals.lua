@@ -24,6 +24,11 @@ M.copper = V.copper:register_material{
 	types = {"ingot", "dust", "rod"},
 }
 
+M.zinc = V.zinc:register_material{
+	description = S"Zinc",
+	types = {"ingot", "dust"},
+}
+
 M.molybdenum = V.molybdenum:register_material{
 	description = S"Molybdenum",
 	types = {"ingot", "dust"},
@@ -56,6 +61,11 @@ M.osmium = V.osmium:register_material{
 
 M.bismuth = V.bismuth:register_material{
 	description = S"Bismuth",
+	types = {"ingot", "dust"},
+}
+
+M.lead = V.lead:register_material{
+	description = S"Lead",
 	types = {"ingot", "dust"},
 }
 

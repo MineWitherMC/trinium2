@@ -86,7 +86,7 @@ function nei.absolute_draw_recipe(lrecipes, rec_id)
 	local method = recipes.methods[recipe.type]
 
 	local formspec = ("%slabel[0,0;%s]"):format(method.formspec_begin(recipe.data), method.formspec_name)
-	api.dump(recipe.data)
+	
 	local it, ot = recipe.data.input_tooltips, recipe.data.output_tooltips
 	local itemname, amount, x, y, arr, chance
 	for i = 1, method.input_amount do

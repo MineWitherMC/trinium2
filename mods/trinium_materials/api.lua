@@ -16,7 +16,18 @@ end
 mat.data_generators = {}
 mat.recipe_generators = {}
 function mat.add_data_generator(name, callback) mat.data_generators[name] = callback end
-function mat.add_recipe_generator(name, callback) --[[mat.recipe_generators[name] = callback]] end
+function mat.add_recipe_generator(name, callback) mat.recipe_generators[name] = callback end
+
+function mat.getter(name, kind, amount)
+	local x = ("trinium_materials:%s_%s"):format(kind, name)
+	if not minetest.registered_items[x] then return false end
+	if not amount then return x end
+	return x.." "..amount
+end
+
+function mat.fgetter(name, kind, amount)
+	return ("trinium_materials:%s_%s%s"):format(kind, name, amount and " "..amount or "")
+end
 
 function mat.add(name, def)
 	name = def.name or name
@@ -80,8 +91,8 @@ function mat.add(name, def)
 
 	local object = {}
 	function object:generate_recipe(id)
-		--local reg = assert(mat.recipe_generators[id], name.." requested unexisting generator "..id)
-		--reg(name)
+		local reg = assert(mat.recipe_generators[id], name.." requested unexisting generator "..id)
+		api.delayed_call("trinium_materials", reg, self)
 		return self
 	end
 
@@ -101,10 +112,11 @@ function mat.add(name, def)
 	end
 
 	function object:get(kind, amount)
-		return ("trinium_materials:%s_%s"):format(kind, def3.id)..(amount and " "..amount or "")
+		return mat.getter(name, kind, amount)
 	end
 
 	object.color = def.color_string
+	object.name = name
 
 	return object
 end

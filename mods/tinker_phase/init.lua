@@ -18,10 +18,8 @@ function tinker.add_system_material(data, def)
 	local item = data
 	if type(data) == "table" then
 		item = data:get"ingot"
-		if not minetest.registered_items[item] then
-			item = data:get"gem"
-		end
-		assert(minetest.registered_items[item], "The material must either have ingot or gem!")
+		if not item then item = data:get"gem" end
+		assert(item, "Material "..data.name.." must either have ingot or gem!")
 	end
 	if not def.color then
 		def.color = api.cstring(data.color)
@@ -131,3 +129,5 @@ tinker.base = {
 }
 
 dofile(path.."/tool_station.lua")
+
+api.send_init_signal()

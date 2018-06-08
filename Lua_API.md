@@ -196,6 +196,22 @@ All of these functions are in `trinium.recipes` table.
 	* In case some of fields of `arr` are nil, fills the first `len` with empty
 	 strings (leaving non-empty as they are).
 
+### Queueing
+Did you ever need to soft-depend on mod, or to create a cyclic dependency? These
+ problems are easily solved by queueing!
+
+All of these functions are inside `trinium.api` table.
+
+* `init_wrap(func, ...)`
+	* Returns a wrapper function which runs given function with given args.
+* `delayed_call(dep, func, ...)`
+	* Runs `func` with given args after `dep` has sent its init signal.
+	* Doesn't work if `dep` doesn't send init signal.
+	* Does nothing if `dep` is not installed, this can be useful e.g. for soft
+	 dependencies.
+* `send_init_signal()`
+	* Runs all functions that are queued behind mod this function is runned from.
+
 ### Miscellaneous
 * `string:data()`
 	* Deserializes the string.

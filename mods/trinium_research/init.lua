@@ -13,3 +13,5 @@ dofile(path.."/press_randomizer.lua")
 dofile(path.."/lens_compressor.lua")
 dofile(path.."/sheet_enlightener.lua")
 dofile(path.."/research_content.lua")
+
+trinium.api.send_init_signal()

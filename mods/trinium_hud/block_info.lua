@@ -80,17 +80,22 @@ local function generate_inv_cube(node)
 
 		for k,v in pairs{tiles, overlay_tiles} do
 			if v and type(v[i]) == "table" then
-				if v[i].name then
+				if v[i].name and v[i].color then
+					v[i] = ("(%s)^[multiply:%s"):format(v[i].name, v[i].color)
+				elseif v[i].name then
 					v[i] = v[i].name
-				else
-					return ""
 				end
 			end
 		end
 		if overlay_tiles then
 			tiles = table.map(tiles, function(v, k)
 				local q = overlay_tiles[k]
-				return "("..(type(v) == "table" and v.name or v)..")^("..(type(q) == "table" and q.name or q)..")"
+				if q.name and q.color then
+					q = ("(%s)^[multiply:%s"):format(q.name, q.color)
+				elseif q.name then
+					q = q.name
+				end
+				return ("(%s)^(%s)"):format(v, q)
 			end)
 		end
 	end

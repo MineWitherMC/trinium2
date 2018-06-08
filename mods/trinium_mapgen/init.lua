@@ -9,3 +9,5 @@ dofile(path.."/oregen.lua")
 dofile(path.."/ores.lua")
 dofile(path.."/trees.lua")
 dofile(path.."/rocks.lua")
+
+trinium.api.send_init_signal()

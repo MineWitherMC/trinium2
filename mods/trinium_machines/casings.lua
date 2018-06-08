@@ -21,9 +21,20 @@ minetest.register_node("trinium_machines:casing_distillation", {
 	paramtype2 = "color",
 	color = "#9a00ff",
 })
+minetest.register_node("trinium_machines:casing_heatbrick", {
+	description = S"Heat-Proof Brick Block",
+	groups = {cracky = 2},
+	tiles = {"trinium_machines.brick.png"},
+	palette = "trinium_api.palette.png",
+	place_param2 = 100,
+	paramtype2 = "color",
+	color = "#c7b671",
+})
 
 local input_bus_fs = "size[8,8.5]list[context;input;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
+local crude_input_bus_fs = "size[8,5.5]list[context;input;2.5,0;3,1]list[current_player;main;0,1.5;8,4]listring[]"
 local output_bus_fs = "size[8,8.5]list[context;output;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
+local crude_output_bus_fs = "size[8,5.5]list[context;output;2.5,0;3,1]list[current_player;main;0,1.5;8,4]listring[]"
 
 minetest.register_node("trinium_machines:hatch_inputbus", {
 	description = S"Input Bus",
@@ -40,6 +51,20 @@ minetest.register_node("trinium_machines:hatch_inputbus", {
 })
 sdh("input.item", "trinium_machines:hatch_inputbus")
 
+minetest.register_node("trinium_machines:hatch_crudeinputbus", {
+	description = S"Crude Input Bus",
+	groups = {cracky = 1, greggy_hatch = 1},
+	tiles = {"trinium_machines.brick.png"},
+	overlay_tiles = {{name = "trinium_machines.input_bus_overlay.png", color = "white"}},
+	palette = "trinium_api.palette.png",
+	place_param2 = 191,
+	paramtype2 = "color",
+	color = "#808080",
+	after_place_node = api.initializer{input = 3, formspec = crude_input_bus_fs},
+	ghatch_id = "input.item",
+	ghatch_max = 1,
+})
+
 minetest.register_node("trinium_machines:hatch_outputbus", {
 	description = S"Output Bus",
 	groups = {cracky = 1, greggy_hatch = 1},
@@ -54,6 +79,20 @@ minetest.register_node("trinium_machines:hatch_outputbus", {
 	allow_metadata_inventory_put = function() return 0 end,
 })
 sdh("output.item", "trinium_machines:hatch_outputbus")
+
+minetest.register_node("trinium_machines:hatch_crudeoutputbus", {
+	description = S"Crude Output Bus",
+	groups = {cracky = 1, greggy_hatch = 1},
+	tiles = {"trinium_machines.brick.png"},
+	overlay_tiles = {{name = "trinium_machines.output_bus_overlay.png", color = "white"}},
+	palette = "trinium_api.palette.png",
+	place_param2 = 191,
+	paramtype2 = "color",
+	color = "#808080",
+	after_place_node = api.initializer{output = 3, formspec = crude_output_bus_fs},
+	ghatch_id = "output.item",
+	allow_metadata_inventory_put = function() return 0 end,
+})
 
 minetest.register_node("trinium_machines:hatch_pressureinput", {
 	description = S"Pressure Input Hatch",

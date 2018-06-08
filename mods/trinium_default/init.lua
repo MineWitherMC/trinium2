@@ -44,3 +44,5 @@ minetest.register_node("trinium_default:forcillium_lamp", {
 	groups = {cracky = 1, level = 2},
 	sounds = ss.default_glass,
 })
+
+trinium.api.send_init_signal()

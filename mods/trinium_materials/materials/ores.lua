@@ -36,3 +36,24 @@ M.coal = materials.add("coal", {
 	color = {21, 21, 21},
 	description = S"Coal",
 }):generate_interactions()
+
+M.chalcopyrite = materials.add("chalcopyrite", {
+	formula = {{"copper", 1}, {"iron", 1}, {"sulfur", 2}},
+	types = {"dust", "gem", "ore"},
+	color = {100, 85, 10},
+	description = S"Chalcopyrite",
+}):generate_interactions():generate_recipe"crude_blast_furnace"
+
+M.galena = materials.add("galena", {
+	formula = {{"lead", 1}, {"sulfur", 1}},
+	types = {"dust", "gem", "ore"},
+	color = {30, 15, 90},
+	description = S"Galena",
+}):generate_interactions():generate_recipe"crude_blast_furnace"
+
+M.sphalerite = materials.add("sphalerite", {
+	formula = {{"zinc", 1}, {"sulfur", 1}},
+	types = {"dust", "gem", "ore"},
+	color = {230, 230, 230},
+	description = S"Sphalerite",
+}):generate_interactions():generate_recipe"crude_blast_furnace"
