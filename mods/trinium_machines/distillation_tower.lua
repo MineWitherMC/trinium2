@@ -94,7 +94,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 		table.iwalk(dtrec, function(v)
 			local rec = recipes.recipe_registry[v]
 			if not input_map[rec.inputs[1]] then return end
-			if input_map["trinium_materials:cell_empty"] < rec.data.recovery - 1 then return end
+			if (input_map["trinium_materials:cell_empty"] or 0) < rec.data.recovery - 1 then return end
 			local data = rec.data
 
 			local metas, timers = {}, {}
