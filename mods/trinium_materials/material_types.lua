@@ -6,7 +6,7 @@ local S = materials.S
 materials.add_type("plate", function(def)
 	minetest.register_craftitem(("trinium_materials:plate_%s"):format(def.id), {
 		description = S("@1 Plate", def.name)..def.formula,
-		inventory_image = "(trinium_materials.plate.png^[colorize:#"..def.color..")^trinium_materials.plate.overlay.png",
+		inventory_image = "(trinium_materials.plate.png^[multiply:#"..def.color..")^trinium_materials.plate.overlay.png",
 	})
 end)
 
@@ -14,7 +14,7 @@ end)
 materials.add_type("sheet", function(def)
 	minetest.register_craftitem(("trinium_materials:sheet_%s"):format(def.id), {
 		description = S("@1 Sheet", def.name)..def.formula,
-		inventory_image = "(trinium_materials.plate.png^[colorize:#"..def.color..")^trinium_materials.plate.overlay.png",
+		inventory_image = "(trinium_materials.plate.png^[multiply:#"..def.color..")^trinium_materials.plate.overlay.png",
 	})
 end)
 
@@ -22,7 +22,7 @@ end)
 materials.add_type("cell", function(def)
 	minetest.register_craftitem(("trinium_materials:cell_%s"):format(def.id), {
 		description = S("@1 Cell", def.name)..def.formula,
-		inventory_image = "(trinium_materials.cell.png^[colorize:#"..def.color..")^trinium_materials.cell.overlay.png",
+		inventory_image = "(trinium_materials.cell.png^[multiply:#"..def.color..")^trinium_materials.cell.overlay.png",
 	})
 end)
 
@@ -30,7 +30,7 @@ end)
 materials.add_type("ingot", function(def)
 	minetest.register_craftitem(("trinium_materials:ingot_%s"):format(def.id), {
 		description = S("@1 Ingot", def.name)..def.formula,
-		inventory_image = "(trinium_materials.ingot.png^[colorize:#"..def.color..")^trinium_materials.ingot.overlay.png",
+		inventory_image = "(trinium_materials.ingot.png^[multiply:#"..def.color..")^trinium_materials.ingot.overlay.png",
 	})
 end)
 materials.add_combination("ingot_bending", {
@@ -47,7 +47,7 @@ materials.add_combination("ingot_bending", {
 materials.add_type("gem", function(def)
 	minetest.register_craftitem(("trinium_materials:gem_%s"):format(def.id), {
 		description = S("@1", def.name)..def.formula,
-		inventory_image = "trinium_materials.gem.png^[colorize:#"..def.color,
+		inventory_image = "trinium_materials.gem.png^[multiply:#"..def.color,
 	})
 end)
 materials.add_combination("gem_ingot_transform", {
@@ -68,7 +68,7 @@ materials.add_combination("gem_ingot_transform", {
 materials.add_type("dust", function(def)
 	minetest.register_craftitem(("trinium_materials:dust_%s"):format(def.id), {
 		description = S("@1 Dust", def.name)..def.formula,
-		inventory_image = "(trinium_materials.dust.png^[colorize:#"..def.color..")^trinium_materials.dust.overlay.png",
+		inventory_image = "(trinium_materials.dust.png^[multiply:#"..def.color..")^trinium_materials.dust.overlay.png",
 	})
 end)
 materials.add_combination("dust_smelting", {
@@ -99,7 +99,7 @@ materials.add_combination("dust_implosion", {
 materials.add_type("water_cell", function(def)
 	minetest.register_craftitem(("trinium_materials:cell_%s"):format(def.id), {
 		description = S("Water-Mixed @1", def.name)..def.formula,
-		inventory_image = "(trinium_materials.cell.png^[colorize:#"..def.color..")^trinium_materials.cell.overlay.png",
+		inventory_image = "(trinium_materials.cell.png^[multiply:#"..def.color..")^trinium_materials.cell.overlay.png",
 	})
 end)
 materials.add_combination("water_mixing", {
@@ -116,7 +116,7 @@ materials.add_combination("water_mixing", {
 materials.add_type("rod", function(def)
 	minetest.register_craftitem(("trinium_materials:rod_%s"):format(def.id), {
 		description = S("@1 Rod", def.name)..def.formula,
-		inventory_image = "(trinium_materials.rod.png^[colorize:#"..def.color..")^trinium_materials.rod.overlay.png",
+		inventory_image = "(trinium_materials.rod.png^[multiply:#"..def.color..")^trinium_materials.rod.overlay.png",
 	})
 end)
 materials.add_combination("gem_lathing", {
@@ -142,7 +142,7 @@ materials.add_combination("ingot_lathing", {
 materials.add_type("ring", function(def)
 	minetest.register_craftitem(("trinium_materials:ring_%s"):format(def.id), {
 		description = S("@1 Ring", def.name)..def.formula,
-		inventory_image = "(trinium_materials.ring.png^[colorize:#"..def.color..")^trinium_materials.ring.overlay.png",
+		inventory_image = "(trinium_materials.ring.png^[multiply:#"..def.color..")^trinium_materials.ring.overlay.png",
 	})
 end)
 materials.add_combination("rod_hammering", {
@@ -159,7 +159,7 @@ materials.add_combination("rod_hammering", {
 materials.add_type("brick", function(def)
 	minetest.register_craftitem(("trinium_materials:brick_%s"):format(def.id), {
 		description = S("@1 Brick", def.name)..def.formula,
-		inventory_image = "trinium_materials.ingot.png^[colorize:#"..def.color,
+		inventory_image = "trinium_materials.ingot.png^[multiply:#"..def.color,
 	})
 end)
 materials.add_combination("brick_compression", {
@@ -179,7 +179,7 @@ materials.add_type("ore", function(def)
 	local def1 = {
 		description = S("@1 Ore", def.name),
 		groups = {cracky = def.data.hardness or 2},
-		tiles = {"trinium_mapgen.stone.png^(trinium_materials.ore.png^[colorize:#"..def.color..")"},
+		tiles = {"trinium_mapgen.stone.png^(trinium_materials.ore.png^[multiply:#"..def.color..")"},
 		sounds = trinium.sounds.default_stone,
 	}
 	if table.exists(def.types, function(x) return x == "gem" end) then
@@ -206,7 +206,7 @@ materials.add_combination("ore_grinding", {
 materials.add_type("pulp", function(def)
 	minetest.register_craftitem(("trinium_materials:pulp_%s"):format(def.id), {
 		description = S("@1 Pulp", def.name)..def.formula,
-		inventory_image = "(trinium_materials.dust.png^[colorize:#"..def.color..")^trinium_materials.dust.overlay.png",
+		inventory_image = "(trinium_materials.dust.png^[multiply:#"..def.color..")^trinium_materials.dust.overlay.png",
 	})
 end)
 
@@ -214,7 +214,7 @@ end)
 materials.add_type("catalyst", function(def)
 	minetest.register_craftitem(("trinium_materials:catalyst_%s"):format(def.id), {
 		description = S("@1-based Catalyst", def.name)..def.formula,
-		inventory_image = "trinium_materials.catalyst.png^[colorize:#"..def.color,
+		inventory_image = "trinium_materials.catalyst.png^[multiply:#"..def.color,
 		groups = {chemical_reactor_catalyst = 1},
 		stack_max = 1,
 	})
@@ -224,7 +224,7 @@ end)
 materials.add_type("foil", function(def)
 	minetest.register_craftitem(("trinium_materials:foil_%s"):format(def.id), {
 		description = S("@1 Foil", def.name)..def.formula,
-		inventory_image = "trinium_materials.foil.png^[colorize:#"..def.color:sub(0, 6).."80",
+		inventory_image = "trinium_materials.foil.png^[multiply:#"..def.color:sub(0, 6).."80",
 	})
 end)
 materials.add_combination("plate_bending", {
@@ -241,7 +241,7 @@ materials.add_combination("plate_bending", {
 materials.add_type("wire", function(def)
 	minetest.register_craftitem(("trinium_materials:wire_%s"):format(def.id), {
 		description = S("Fine @1 Wire", def.name)..def.formula,
-		inventory_image = "(trinium_materials.wire.png^[colorize:#"..def.color..")^trinium_materials.wire.overlay.png",
+		inventory_image = "(trinium_materials.wire.png^[multiply:#"..def.color..")^trinium_materials.wire.overlay.png",
 	})
 end)
 materials.add_combination("wire_extruding", {

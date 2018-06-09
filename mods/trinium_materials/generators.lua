@@ -77,6 +77,6 @@ mat.add_recipe_generator("crude_blast_furnace", function(self)
 	formula:forEach(function(v) sum = sum + v[2] end)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
-		{self:get("dust", sum), mat.fgetter("coal", "gem", 1 + math.floor(sum * 2 / 3))},
+		{self:get("dust", sum), mat.fgetter("coal", "dust", 1 + math.floor(sum * 2 / 3))},
 		formula:map(function(v) return mat.getter(v[1], "ingot") end):data())
 end)

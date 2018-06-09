@@ -29,7 +29,7 @@ do
 	V.oxygen = materials.add_element("oxygen", {
 		formula = "O",
 		melting_point = 55,
-		color = {185, 185, 240},
+		color = {135, 135, 175},
 	})
 
 	V.fluorine = materials.add_element("fluorine", {
@@ -247,17 +247,17 @@ end
 do
 	minetest.register_craftitem("trinium_materials:cell_empty", {
 		description = S"Empty Cell",
-		inventory_image = "(trinium_materials.cell.png^[colorize:#404040B0)^trinium_materials.cell.overlay.png"
+		inventory_image = "(trinium_materials.cell.png^[multiply:#808080)^trinium_materials.cell.overlay.png"
 	})
 
 	minetest.register_craftitem("trinium_materials:stardust", {
 		description = S"Stardust"..minetest.colorize("#CCC", "\nHe2X"),
-		inventory_image = "(trinium_materials.dust.png^[colorize:#AAD200B0)^trinium_materials.dust.overlay.png"
+		inventory_image = "(trinium_materials.dust.png^[multiply:#AAD200)^trinium_materials.dust.overlay.png"
 	})
 
 	minetest.register_craftitem("trinium_materials:brick", {
 		description = S"Brick",
-		inventory_image = "trinium_materials.ingot.png^[colorize:#483526B0"
+		inventory_image = "trinium_materials.ingot.png^[multiply:#483526"
 	})
 
 	minetest.register_craftitem("trinium_materials:clay", {
@@ -304,13 +304,13 @@ do
 
 	M.oil = materials.add("oil_raw", {
 		types = {"cell"},
-		color = {24, 24, 12},
+		color = {54, 54, 33},
 		description = S"Raw Oil",
 	})
 
 	M.desulf = materials.add("oil_desulfurized", {
 		types = {"cell"},
-		color = {12, 12, 12},
+		color = {41, 41, 41},
 		description = S"Desulfurized Oil",
 	})
 
@@ -322,7 +322,7 @@ do
 
 	M.frac_ether = materials.add("fraction_ether", {
 		types = {"cell"},
-		color = {185, 220, 105},
+		color = {185, 210, 165},
 		description = S"Petroleum Ether",
 	})
 

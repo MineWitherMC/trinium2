@@ -8,14 +8,14 @@ do
 	M.water = materials.add("water", {
 		formula = {{"hydrogen", 2}, {"oxygen", 1}},
 		types = {"cell"},
-		color = {0, 0, 220},
+		color = {60, 60, 205},
 		description = S"Water",
 	})
 
 	M.steam = materials.add("steam", {
 		formula = {{"hydrogen", 2}, {"oxygen", 1}},
 		types = {"cell"},
-		color = {234, 234, 234},
+		color = {224, 224, 224},
 		description = S"Steam",
 	})
 
@@ -46,6 +46,7 @@ do
 		formula = {{"nitrogen", 1}, {"hydrogen", 3}},
 		types = {"cell"},
 		description = S"Ammonia",
+		color = {180, 125, 230},
 	})
 end
 
@@ -61,15 +62,15 @@ do
 	M.ethane = materials.add("ethane", {
 		formula = {{"carbon", 2}, {"hydrogen", 6}},
 		types = {"cell"},
-		color = {200, 200, 255},
+		color = {170, 170, 235},
 		description = S"Ethane",
 	})
 
-	M.ethene = materials.add("ethene", {
+	M.ethylene = materials.add("ethylene", {
 		formula = {{"carbon", 2}, {"hydrogen", 4}},
 		types = {"cell"},
 		color = {190, 175, 235},
-		description = S"Ethene",
+		description = S"Ethylene",
 	})
 
 	M.propane = materials.add("propane", {
@@ -82,7 +83,7 @@ do
 	M.propene = materials.add("propene", {
 		formula = {{"carbon", 3}, {"hydrogen", 6}},
 		types = {"cell"},
-		color = {235, 235, 55},
+		color = {225, 235, 55},
 		description = S"Propene",
 	})
 
@@ -96,35 +97,35 @@ do
 	M.butadiene = materials.add("butadiene", {
 		formula = {{"carbon", 4}, {"hydrogen", 6}},
 		types = {"cell"},
-		color = {50, 40, 40},
+		color = {90, 75, 70},
 		description = S"Butadiene",
 	})
 
 	M.pentane = materials.add("pentane", {
 		formula = {{"carbon", 5}, {"hydrogen", 12}},
 		types = {"cell"},
-		color = {0, 90, 160},
+		color = {0, 110, 160},
 		description = S"Pentane",
 	})
 
 	M.isoprene = materials.add("isoprene", {
 		formula = {{"carbon", 5}, {"hydrogen", 8}},
 		types = {"cell"},
-		color = {20, 20, 20},
+		color = {50, 50, 50},
 		description = S"Isoprene",
 	})
 
 	M.octane = materials.add("octane", {
 		formula = {{"carbon", 8}, {"hydrogen", 18}},
 		types = {"cell"},
-		color = {255, 255, 255},
+		color = {235, 225, 255},
 		description = S"Octane",
 	})
 
 	M.benzene = materials.add("benzene", {
 		formula = {{"carbon", 6}, {"hydrogen", 6}},
 		types = {"cell"},
-		color = {40, 40, 50},
+		color = {70, 75, 90},
 		description = S"Benzene",
 	})
 
@@ -166,7 +167,7 @@ do
 	M.abs = materials.add("abs_plastic", {
 		formula = {{"styrene", 8}, {"butadiene", 5}, {"acrylonitrile", 5}},
 		types = {"cell", "pulp", "ingot", "plate"},
-		color = {50, 50, 50},
+		color = {255, 225, 180},
 		description = S"ABS Plastic",
 	}):generate_interactions()
 end

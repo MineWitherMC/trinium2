@@ -29,7 +29,7 @@ A("chemical_reactor",
 
 -- С6H6 + C2H4 -> C8H10
 A("chemical_reactor",
-	{M.benzene:get"cell", M.ethene:get"cell"},
+	{M.benzene:get"cell", M.ethylene:get"cell"},
 	{M.ethylbenzene:get"cell", "trinium_materials:cell_empty"},
 	{time = 55})
 
@@ -74,12 +74,12 @@ A("chemical_reactor",
 -- Various Steam-Cracking
 A("chemical_reactor",
 	{M.frac_gas:get("cell", 12), M.steam:get"cell"},
-	{M.methane:get("cell", 7), M.ethene:get("cell", 3), M.propene:get("cell", 2), "trinium_materials:cell_empty"},
+	{M.methane:get("cell", 7), M.ethylene:get("cell", 3), M.propene:get("cell", 2), "trinium_materials:cell_empty"},
 	{time = 0.5, temperature = 1150, temperature_tolerance = 10})
 
 A("chemical_reactor",
 	{M.frac_ether:get("cell", 12), M.steam:get"cell"},
-	{M.ethene:get("cell", 7), M.propene:get("cell", 4), M.butadiene:get"cell", "trinium_materials:cell_empty"},
+	{M.ethylene:get("cell", 7), M.propene:get("cell", 4), M.butadiene:get"cell", "trinium_materials:cell_empty"},
 	{time = 0.5, temperature = 1250, temperature_tolerance = 10})
 
 A("chemical_reactor",
