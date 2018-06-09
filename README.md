@@ -26,4 +26,6 @@ Requires Minetest 0.5, gettext build recommended.
 
 ## More Screenshots
 #### Ore Generation
-![Ore Generation](oregen.png)
+![Ore Generation](oregen.jpg)
+Note that all stone in this world is replaced with air in order to show the
+ actual vein.
