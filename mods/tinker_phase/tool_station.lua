@@ -74,8 +74,8 @@ local function recalculate(pos)
 			}
 		end)
 
-		meta2:set_int("max_durability", durability * math.geometrical_avg(v.durability))
-		meta2:set_int("current_durability", durability * math.geometrical_avg(v.durability))
+		meta2:set_int("max_durability", durability * v.durability_mult)
+		meta2:set_int("current_durability", durability * v.durability_mult)
 		meta2:set_string("color", "#"..color)
 		meta2:set_tool_capabilities{
 			full_punch_interval = 1.0,

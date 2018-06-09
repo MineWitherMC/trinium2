@@ -496,10 +496,8 @@ Trait Definition is a table with following elements:
 Tool Definition is a table with following elements:
 * `times` - table formatted as `[group] => time`.
 	* `time` is a float, the higher it is - the slower this group nodes are dug.
-* `durability` - table formatted as `[group] => durability`.
-	* `durability` is a float, the higher it is - the more durability tool has.
-	* Due to limitations of system, only average of this table is taken into
-	 account when calculating tool durability.
+* `durability_mult` - float.
+	* The final tool durability is multiplied by this value.
 * `components` - list of elements from `tinker.patterns`.
 	* The tool is assembled when all these elements are put into table and nothing
 	 more.

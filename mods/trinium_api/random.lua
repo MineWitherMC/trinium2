@@ -113,7 +113,7 @@ end
 
 function api.translate_requirements(tbl)
 	local tbl1 = {}
-	for c, k, v in table.asort(tbl, function(a, b) return a > b end) do
+	for c, k, v in table.asort(tbl, function(a, b) return tbl[a] > tbl[b] end) do
 		tbl1[#tbl1 + 1] = "\n"..minetest.colorize("#CCC", v.." "..((minetest.registered_nodes[k] or {}).description or "???"))
 	end
 	return table.concat(tbl1, "")

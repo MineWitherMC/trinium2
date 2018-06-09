@@ -4,7 +4,7 @@ local S = tinker.S
 
 A("pickaxe", {
 	times = {cracky = 1},
-	durability = {cracky = 1},
+	durability_mult = 1,
 	components = {P.pickaxe_head, P.tool_rod},
 	level_boost = 0,
 
@@ -21,7 +21,7 @@ A("pickaxe", {
 
 A("hatchet", {
 	times = {choppy = 1},
-	durability = {choppy = 1},
+	durability_mult = 1,
 	components = {P.axe_head, P.tool_rod},
 	level_boost = 0,
 
@@ -38,7 +38,7 @@ A("hatchet", {
 
 A("spade", {
 	times = {crumbly = 1},
-	durability = {crumbly = 1},
+	durability_mult = 1,
 	components = {P.shovel_head, P.tool_rod},
 	level_boost = 0,
 

@@ -76,7 +76,7 @@ end
 function table.asort(t, callable)
 	callable = callable or function(a, b) return a < b end
 	local k = table.keys(t)
-	table.sort(k, function(a, b) return callable(t[a], t[b]) end)
+	table.sort(k, function(a, b) return callable(a, b) end)
 
 	return api.iterator(function(current) return current, k[current], t[k[current]] end), #k, 0
 end
