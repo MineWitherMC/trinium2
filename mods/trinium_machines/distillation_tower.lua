@@ -113,7 +113,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 					return
 				end
 				local h = hatches2["input.heat"][1]
-				if not hatches2 then
+				if not h then
 					api.recolor_facedir(pos2, 3)
 					return
 				end

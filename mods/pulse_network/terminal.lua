@@ -9,7 +9,7 @@ local function generate_buttons(ctrlpos, index, search)
 	local inv = meta:get_string"inventory":data()
 	local inv_list = meta:get_string"inventory_list":data()
 	local acquired = 0
-	api.dump(inv)
+	
 	for c, k, v in table.asort(inv, function(a, b) return inv[a] > inv[b] or (inv[a] == inv[b] and a > b) end) do
 		-- k is item, v is amount
 		if c > index + 40 then break end
