@@ -7,13 +7,13 @@ for i = 3, 13, 2 do
 			input_amount = i * j,
 			output_amount = 1,
 			get_input_coords = recipes.coord_getter(i, -1, 0),
-			get_output_coords = function(n)
+			get_output_coords = function()
 				return i + 1, (j + 1) / 2
 			end,
 			formspec_width = i + 2,
 			formspec_height = j + 2,
 			formspec_name = "Multiblock",
-			formspec_begin = function(data, inputs, outputs)
+			formspec_begin = function(data)
 				return ("label[0,%s;Current Height: %s]"):format(j + 1, data.h)
 			end,
 		})
@@ -82,7 +82,7 @@ function api.register_multiblock(name, def)
 
 			setmetatable(rg, {__call = function(reg, def1)
 				return table.every(def1, function(d)
-					return table.exists(rg.region, function(x)
+					return table.exists(reg.region, function(x)
 						return x.x == d.x and x.y == d.y and x.z == d.z and x.name == d.name
 					end)
 				end)

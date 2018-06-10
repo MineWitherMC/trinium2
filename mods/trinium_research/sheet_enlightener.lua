@@ -52,15 +52,15 @@ minetest.register_node("trinium_research:enlightener", {
 	},
 	sounds = trinium.sounds.default_stone,
 
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {catalysts = 6, parchment = 1, lens = 1, chapter_core = 1, output = 1})
 	end,
-	allow_metadata_inventory_move = function(pos, list1, index1, list2, index2, stacksize, player)
+	allow_metadata_inventory_move = function()
 		return 0
 	end,
-	allow_metadata_inventory_put = function(pos, list, index, stack, player)
+	allow_metadata_inventory_put = function(_, list, index, stack)
 		local name,size = stack:get_name(), stack:get_count()
 		return ((list == "parchment" and name == M.parchment:get"sheet") or
 			(list == "chapter_core" and name == "trinium_research:notes_3") or
@@ -75,12 +75,12 @@ minetest.register_node("trinium_research:enlightener", {
 			)) and size or 0
 	end,
 
-	on_receive_fields = function(pos, formname, fields, player)
+	on_receive_fields = function(pos, _, fields, player)
 		if not fields.infuse_map then return end
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 
-		-- Crutch for fast checking emptiness of slots
+		-- Crutch for fast checking of emptiness of slots
 		if inv:room_for_item("catalysts", "trinium_research:casing") then
 			cmsg.push_message_player(player, S"Insufficient Catalysts!")
 			return

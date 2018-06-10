@@ -69,7 +69,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 		until node ~= "trinium_machines:controller_distillationlayer"
 	end,
 
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos)
 		local meta, timer = minetest.get_meta(pos), minetest.get_node_timer(pos)
 		local hatches = meta:get_string"hatches":data()
 		if not hatches or not hatches["input.item"][1] then return end
@@ -95,7 +95,6 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 			local rec = recipes.recipe_registry[v]
 			if not input_map[rec.inputs[1]] then return end
 			if (input_map["trinium_materials:cell_empty"] or 0) < rec.data.recovery - 1 then return end
-			local data = rec.data
 
 			local metas, timers = {}, {}
 			for i = 2, #rec.outputs do

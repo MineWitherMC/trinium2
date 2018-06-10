@@ -70,7 +70,7 @@ local function generate_inv_cube(node)
 	if prohibited[node.drawtype] then return "" end
 
     local tiles = node.tiles
-    local overlay_tiles = node.overlay_tiles
+	local overlay_tiles = node.overlay_tiles
 	if not tiles then return "" end
 	if #tiles == 0 then return "" end
 
@@ -78,7 +78,7 @@ local function generate_inv_cube(node)
 		if not tiles[i] then tiles[i] = tiles[i - 1] end
 		if overlay_tiles and not overlay_tiles[i] then overlay_tiles[i] = overlay_tiles[i - 1] end
 
-		for k,v in pairs{tiles, overlay_tiles} do
+		for _,v in pairs{tiles, overlay_tiles} do
 			if v and type(v[i]) == "table" then
 				if v[i].name and v[i].color then
 					v[i] = ("(%s)^[multiply:%s"):format(v[i].name, v[i].color)

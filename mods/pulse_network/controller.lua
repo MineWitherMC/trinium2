@@ -1,6 +1,5 @@
 local pulse = trinium.pulse_network
 local S = pulse.S
-local M = trinium.materials.materials
 local api = trinium.api
 
 function pulse.trigger_update(controller_pos)
@@ -55,7 +54,7 @@ minetest.register_node("pulse_network:controller", {
 	description = S"Pulse Network Controller",
 	groups = {cracky = 1, pulsenet_linker = 1},
 	paramtype2 = "facedir",
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_int("capacity_types", 0)
 		meta:set_int("used_types", 0)
@@ -70,7 +69,7 @@ minetest.register_node("pulse_network:controller", {
 	on_metadata_inventory_put = pulse.import_to_controller,
 	allow_metadata_inventory_take = function() return 0 end,
 
-	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+	on_rightclick = function(pos, _, clicker, itemstack)
 		if itemstack:is_empty() then
 			local meta = minetest.get_meta(pos)
 			cmsg.push_message_player(clicker,
@@ -79,7 +78,7 @@ minetest.register_node("pulse_network:controller", {
 		end
 	end,
 
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(_, _, oldmetadata)
 		local connected = oldmetadata.fields.connected_devices:data()
 		table.walk(connected, function(r) minetest.dig_node(r) end)
 	end,

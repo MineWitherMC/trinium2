@@ -82,5 +82,6 @@ mat.add_recipe_generator("crude_blast_furnace", function(self)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
 		{self:get("dust", sum), mat.fgetter("coal", "dust", 1 + math.floor(sum * 2 / 3))},
-		formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data())
+		formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data(),
+		{divisible = true})
 end)

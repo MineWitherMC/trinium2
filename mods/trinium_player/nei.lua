@@ -42,7 +42,7 @@ local function get_formspec_array(searchstring, mode)
 		tbl[#tbl+1] = iter
 	end
 	table.sort(tbl, api.sort_by_param"name")
-	for k,v in ipairs(tbl) do
+	for _,v in ipairs(tbl) do
 		if v.type ~= "none" then
 			x = i % 8
 			y = (i - x) / 8
@@ -71,9 +71,9 @@ minetest.register_on_joinplayer(function(player)
 	nei.player_stuff[pn].formspecs_array, nei.player_stuff[pn].page_amount = get_formspec_array("", 1)
 end)
 
-local itempanel = {title = S"NeverEnoughItems"}
+local itempanel = {description = S"NeverEnoughItems"}
 
-function itempanel:get(player, context)
+function itempanel.getter(player, context)
 	local pn = player:get_player_name()
 	return sfinv.make_formspec(player, context, nei.player_stuff[pn].formspecs_array[nei.player_stuff[pn].page], false)
 end
@@ -172,14 +172,14 @@ local function get_formspec(player, id, item, mode)
 	end
 end
 
-function itempanel:on_player_receive_fields(player, context, fields)
+function itempanel.processor(player, context, fields)
 	if fields.quit then return end
 	if fields.key_enter then
 		fields.search_use = 1
 	end
 	context.neimode = context.neimode or 1
 	local pn = player:get_player_name()
-	for k,v in pairs(fields) do
+	for k in pairs(fields) do
 		local ksplit = k:split("~") -- Module, action, parameters
 		local a = ksplit[1]
 		if a == "search_use" then
@@ -206,7 +206,7 @@ end
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" then return end
 	local pn = player:get_player_name()
-	for k,v in pairs(fields) do
+	for k in pairs(fields) do
 		local ksplit = k:split"~" -- Module, action, parameters
 		local a = ksplit[1]
 		if a == "view_recipe" then
@@ -217,4 +217,4 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-sfinv.register_page("trinium:itempanel", itempanel)
+betterinv.register_tab("trinium:itempanel", itempanel)

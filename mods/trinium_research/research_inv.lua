@@ -173,12 +173,8 @@ local function get_book_research_fs(pn, context)
 				research.dp1[pn].aspects[k] = 0
 			end
 			local ammount = research.dp1[pn].aspects[k]
-			if ammount >= v then
-				color = "#00CC00"
-			else
-				color = "#CC0000"
-				good = false
-			end
+			local color = amount >= v and "#00CC00" or "#CC0000"
+			if amount < v then good = false end
 
 			return minetest.colorize(color,
 					S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, ammount))
@@ -216,8 +212,8 @@ local function get_book_chapter_bg(chapterid)
 	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
 end
 
-local book = {title = S"Research Book"}
-function book:get(player, context)
+local book = {description = S"Research Book"}
+function book.getter(player, context)
 	local pn = player:get_player_name()
 	context.book = context.book or "defaultbg"
 	context.book_x = context.book_x or 0
@@ -234,7 +230,7 @@ function book:get(player, context)
 	end
 end
 
-function book:on_player_receive_fields(player, context, fields)
+function book.processor(player, context, fields)
 	if fields.quit then return end
 	local pn = player:get_player_name()
 	for k,v in pairs(fields) do
@@ -326,4 +322,4 @@ function book:on_player_receive_fields(player, context, fields)
 	end
 end
 
-sfinv.register_page("trinium:researchbook", book)
+betterinv.register_tab("trinium:researchbook", book)

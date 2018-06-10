@@ -46,7 +46,7 @@ local function recalculate(pos)
 	end
 end
 
-local function allow_put(pos, listname, index, stack, player)
+local function allow_put(pos, listname, index, stack)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 
@@ -62,7 +62,7 @@ local function allow_put(pos, listname, index, stack, player)
 	end
 end
 
-local function on_take(pos, listname, index, stack, player)
+local function on_take(pos, listname)
 	if listname == "output" then
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
@@ -99,14 +99,14 @@ minetest.register_node("tinker_phase:part_builder", {
 		}
 	},
 	groups = {choppy = 2},
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {pattern = 1, inputs = 2, output = 1})
 		meta:set_string("formspec", part_builder_formspec_basic)
 	end,
 	allow_metadata_inventory_put = allow_put,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(_, from_list, _, to_list, _, count)
 		return from_list == to_list and count or 0
 	end,
 
@@ -132,14 +132,14 @@ minetest.register_node("tinker_phase:part_builder_with_chest", {
 		}
 	},
 	groups = {choppy = 2},
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {pattern = 31, inputs = 2, output = 1})
 		meta:set_string("formspec", part_builder_formspec_chest)
 	end,
 	allow_metadata_inventory_put = allow_put,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		return (from_list == to_list or minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinkerphase_pattern") > 0)

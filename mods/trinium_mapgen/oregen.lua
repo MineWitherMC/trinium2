@@ -16,8 +16,10 @@ function mapgen.register_vein(name, params)
 end
 
 local stone_cid = minetest.get_content_id(trinium.DEBUG_MODE and "air" or "trinium_mapgen:stone")
-
 assert(stone_cid ~= 127)
+
+local data = {}
+local perlin_map = {}
 minetest.register_on_generated(function(minp, _, seed)
 	local rand = PcgRandom(seed)
 	local vb, vbs, wb = veins_by_breakpoints, vein_breakpoints_s, vein_breakpoint_w
@@ -71,7 +73,8 @@ minetest.register_on_generated(function(minp, _, seed)
 	local v = registered_veins[vein]
 
 	local vm, emin, emax = minetest.get_mapgen_object"voxelmanip"
-	local data, area = vm:get_data(), VoxelArea:new{MinEdge=emin, MaxEdge=emax}
+	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax }
+	vm:get_data(data)
 	local choice, x, y, w
 	local noise_params = {
 		offset = 5/6 * (v.density - 50),
@@ -83,7 +86,7 @@ minetest.register_on_generated(function(minp, _, seed)
 	}
 	local vec, corner = vector.new(xs, ys, zs), vector.new(xc, yc, zc)
 
-	local perlin_map = PerlinNoiseMap(noise_params, vec):get3dMap_flat(corner)
+	PerlinNoiseMap(noise_params, vec):get3dMap_flat(corner, perlin_map)
 
 	local pkey = 1
 	local count = 0

@@ -14,12 +14,13 @@ function betterinv.register_tab(name, def)
 	if def.default then betterinv.default = name end
 end
 
-function betterinv.generate_buttons(size, tabs, filter, selected)
+function betterinv.generate_buttons(size, filter, selected)
 	local str = ""
 	if betterinv.tab_position == 4 then str = "tabheader[0,0;betterinv_tabs;" end
 	local select = false
 	local i = 0
-	for j, k in ipairs(betterinv.tablist) do
+	for j = 1, #betterinv.tablist do
+		local k = betterinv.tablist[j]
 		local v = betterinv.tabs[k]
 		if filter(v) then
 			i = i + 1
@@ -63,7 +64,7 @@ function betterinv.generate_formspec(player, fs, size, bg, inv)
 	fs1 = fs1..fs
 	if inv then fs1 = fs1..theme_inv end
 	fs1 = fs1.."container_end[]"
-	fs1 = fs1..betterinv.generate_buttons(size, betterinv.tabs, function(tab)
+	fs1 = fs1..betterinv.generate_buttons(size, function(tab)
 		return not tab.available or tab.available(player)
 	end, betterinv.selections[player:get_player_name()])
 	return fs1
@@ -72,7 +73,7 @@ end
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	betterinv.contexts[pn] = {}
-	for k,v in pairs(betterinv.tabs) do betterinv.contexts[pn][k] = {} end
+	for k in pairs(betterinv.tabs) do betterinv.contexts[pn][k] = {} end
 	betterinv.selections[pn] = betterinv.default
 	if betterinv.default then
 		player:set_inventory_formspec(betterinv.tabs[betterinv.default].getter(player, betterinv.contexts[pn]))
@@ -95,7 +96,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			player:set_inventory_formspec(betterinv.tabs[betterinv.tablist[id]].getter(player, betterinv.contexts[pn][selection]))
 		end
 	else
-		for k,v in pairs(fields) do
+		for k in pairs(fields) do
 			local ksplit = k:split"~"
 			if ksplit[1] == "betterinv" then
 				good = true
@@ -110,7 +111,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
-if not minetest.get_modpath"sfinv" then
+if not minetest.get_modpath"sfinv" then -- todo: cleanup this
 	sfinv = {}
 	function sfinv.register_page(name, def)
 		def.getter = function(...)
@@ -124,7 +125,7 @@ if not minetest.get_modpath"sfinv" then
 		def.description = def.title
 		betterinv.register_tab(name, def)
 	end
-	function sfinv.make_formspec(player, context, fs, inv, size, bg)
+	function sfinv.make_formspec(player, _, fs, inv, size, bg)
 		if not size then size = "size[8,8.6]" end
 		size = size:split"["[2]
 		size = size:split"]"[1]

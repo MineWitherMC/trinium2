@@ -41,23 +41,23 @@ minetest.register_node("trinium_research:randomizer", {
 	},
 	sounds = trinium.sounds.default_stone,
 
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {rhenium_alloy = 1, upgrade = 1, press = 1})
 	end,
 
-	allow_metadata_inventory_move = function(pos, list1, index1, list2, index2, stacksize, player)
+	allow_metadata_inventory_move = function()
 		return 0
 	end,
 
-	allow_metadata_inventory_put = function(pos, list, index, stack, player)
+	allow_metadata_inventory_put = function(_, list, _, stack)
 		local name,size = stack:get_name(), stack:get_count()
 		return ((list == "rhenium_alloy" and name == M.rhenium_alloy:get"ingot") or
 				(list == "upgrade" and minetest.get_item_group(name, "lens_upgrade") ~= 0)) and size or 0
 	end,
 
-	on_receive_fields = function(pos, formname, fields, player)
+	on_receive_fields = function(pos, _, fields, player)
 		if not fields["assemble_press"] then return end
 
 		local meta = minetest.get_meta(pos)
@@ -106,7 +106,7 @@ minetest.register_node("trinium_research:randomizer", {
 		inv:set_stack("upgrade", 1, upgrade)
 	end,
 
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(pos, _, player)
 		if minetest.get_meta(pos):get_int("assembled") == 0 then
 			cmsg.push_message_player(player, S"Multiblock not assembled!")
 		end

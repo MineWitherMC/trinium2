@@ -8,6 +8,7 @@ trinium.recipes = {
 local recipes = trinium.recipes
 local api = trinium.api
 local func = api.functions
+local dm = api.DataMesh
 
 function recipes.stringify(size, inputs)
 	inputs = table.copy(inputs)
@@ -15,6 +16,21 @@ function recipes.stringify(size, inputs)
 		inputs[i] = inputs[i] or ""
 	end
 	return table.concat(inputs, ";")
+end
+
+local split = function(k) return k:split" " end
+local concat = function(k) return table.concat(k, " ") end
+function recipes.divide(a, b)
+	a = dm:new():data(a):map(split):map(function(x) return {x[1], tonumber(x[2])} end)
+	b = dm:new():data(b):map(split):map(function(x) return {x[1], tonumber(x[2])} end)
+	local gcd = 0
+	if not gcd then return a:map(concat):data(), b:map(concat):data() end
+	a:forEach(function(r) gcd = math.gcd(r[2], gcd) end)
+	b:forEach(function(r) gcd = math.gcd(r[2], gcd) end)
+	if not gcd then return a:map(concat):data(), b:map(concat):data() end
+	a = a:map(function(x) return {x[1], x[2] / gcd} end):map(concat):data()
+	b = b:map(function(x) return {x[1], x[2] / gcd} end):map(concat):data()
+	return a, b
 end
 
 function recipes.add(method, inputs, outputs, data)
@@ -26,9 +42,8 @@ function recipes.add(method, inputs, outputs, data)
 	if inputs == -1 or outputs == -1 or data == -1 then return end
 
 	-- Redoing all the redirects
-	local redirects, method_string = {method = 1}
+	local redirects = {method = 1}
 	while type(method_table.callback(inputs, outputs, data)) == "string" do
-		method_string = method
 		method = method_table.callback(inputs, outputs, data)
 		assert(not redirects[method], "Infinite loop detected!")
 		redirects[method] = 1
@@ -45,6 +60,11 @@ function recipes.add(method, inputs, outputs, data)
 	if table.every(outputs, function(k) return type(k) == "string" end) then
 		outputs_string = recipes.stringify(method_table.output_amount, outputs)
 	end
+
+	if data.divisible then
+		inputs, outputs = recipes.divide(inputs, outputs)
+	end
+
 	recipes.recipe_registry[new_amount] = {
 		["type"] = method,
 		inputs = inputs,
@@ -57,7 +77,7 @@ function recipes.add(method, inputs, outputs, data)
 	local k
 	local cache = {}
 	if not data.secret_recipe and method_table.callback(inputs, outputs, data) then
-		for i,v in pairs(inputs) do
+		for _,v in pairs(inputs) do
 			k = v:split" "[1]
 			if not cache[k] then
 				cache[k] = 1
@@ -66,7 +86,7 @@ function recipes.add(method, inputs, outputs, data)
 			end
 		end
 		cache = {}
-		for i,v in pairs(outputs) do
+		for _,v in pairs(outputs) do
 			k = v:split" "[1]
 			if not cache[k] then
 				cache[k] = 1
@@ -110,13 +130,13 @@ function recipes.check_inputs(input_map, needed_inputs)
 end
 
 function recipes.remove_inputs(inventory, list, inputs)
-	for k,v in pairs(inputs) do inventory:remove_item(list, v) end
+	for _,v in pairs(inputs) do inventory:remove_item(list, v) end
 end
 
 recipes.add_method("drop", {
 	input_amount = 1,
 	output_amount = 9,
-	get_input_coords = function(n)
+	get_input_coords = function()
 		return 1, 2
 	end,
 	get_output_coords = function(n)
@@ -133,7 +153,7 @@ recipes.add_method("drop", {
 		if type(outputs[1]) == "string" then return a, outputs, b end
 		local outputs1 = {}
 
-		table.walk(outputs, function(v, k)
+		table.walk(outputs, function(v)
 			if type(v) == "string" then
 				table.insert(outputs1, v)
 			else

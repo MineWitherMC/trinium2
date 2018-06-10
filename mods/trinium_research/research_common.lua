@@ -1,7 +1,5 @@
 local research = trinium.research
 local S = research.S
-local M = trinium.materials.materials
-local recipes = trinium.recipes
 local ss = trinium.sounds
 
 -- Multiblock components
@@ -66,13 +64,13 @@ minetest.register_craftitem("trinium_research:notes_1", {
 	description = S"Invalid Discovery",
 	stack_max = 1,
 	groups = {hidden_from_irp = 1},
-	on_place = function(item, player, pointed_thing)
+	on_place = function(item, player)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()
 		research.dp1[pn][meta:get_string"research_id"] = 1
 		return ""
 	end,
-	on_secondary_use = function(item, player, pointed_thing)
+	on_secondary_use = function(item, player)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()
 		research.dp1[pn][meta:get_string"research_id"] = 1
@@ -111,7 +109,16 @@ minetest.register_craftitem("trinium_research:knowledge_crystal", {
 	inventory_image = "trinium_research.knowledge_crystal.png",
 	description = S"Knowledge Crystal",
 	stack_max = 16,
-	on_place = function(item, player, pointed_thing)
+	on_place = function(item, player)
+		item = ItemStack(item)
+		local meta = item:get_meta()
+		local pn = player:get_player_name()
+		meta:set_string("player", pn)
+		meta:set_string("description", S"Knowledge Crystal".."\n"..S("Bound to @1", pn))
+		cmsg.push_message_player(player, S("Successfully bound to @1", pn))
+		return item
+	end,
+	on_secondary_use = function(item, player)
 		item = ItemStack(item)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()

@@ -29,15 +29,15 @@ end
 minetest.register_on_leaveplayer(function(player)
 	local pn = player:get_player_name()
 	if datas[pn] then
-		for k,v in pairs(datas[pn]) do
+		for _,v in pairs(datas[pn]) do
 			v:save()
 		end
 	end
 end)
 
 minetest.register_on_shutdown(function()
-	for k,v in pairs(datas) do
-		for k2,v2 in pairs(v) do
+	for _,v in pairs(datas) do
+		for _,v2 in pairs(v) do
 			v2:save()
 		end
 	end

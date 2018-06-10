@@ -23,7 +23,8 @@ local function recalculate(pos)
 		local stack = ItemStack("tinker_phase:tool_"..k)
 		local meta2 = stack:get_meta()
 
-		local durability, level, times, color, traits = 0, v.level_boost, {}, "FFFFFF", {}
+		local durability, level, times, traits = 0, v.level_boost, {}, {}
+		local color
 		table.walk(c, function(c1)
 			if c1.type == 1 then
 				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
@@ -58,7 +59,7 @@ local function recalculate(pos)
 
 		if level < 0 then return end
 
-		traits = table.filter(traits, function(v, k)
+		traits = table.filter(traits, function(_, k)
 			if tinker.modifiers[k] and tinker.modifiers[k].incompat then
 				local x = tinker.modifiers[k].incompat
 				return table.every(x, function(v1) return not traits[v1] end)
@@ -112,23 +113,23 @@ minetest.register_node("tinker_phase:tool_station", {
 		}
 	},
 	groups = {choppy = 2},
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {inputs = 6, output = 1})
 		meta:set_string("formspec", tool_station_formspec)
 	end,
-	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	allow_metadata_inventory_put = function(_, listname, _, stack)
 		return listname == "inputs" and minetest.get_item_group(stack:get_name(), "_tinkerphase_part") ~= 0
 			and stack:get_count() or 0
 	end,
-	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	allow_metadata_inventory_move = function(_, from_list, _, to_list, _, count)
 		return from_list == "inputs" and to_list == "inputs" and count or 0
 	end,
 
 	on_metadata_inventory_move = recalculate,
 	on_metadata_inventory_put = recalculate,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, listname)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		if listname == "output" then

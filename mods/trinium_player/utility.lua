@@ -6,15 +6,15 @@ minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	local dp = api.get_data_pointer(pn, "bound_inventories")
 	bi[pn] = minetest.create_detached_inventory("bound~"..pn, {
-		allow_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+		allow_move = function(_, from_list, _, to_list, _, count)
 			return to_list == "crafting" and from_list ~= "trash" and count or 0
 		end,
 
-		allow_take = function(inv, listname, index, stack, player)
-			return stack:get_count() -- this might change
+		allow_take = function(_, _, _, stack)
+			return stack:get_count()
 		end,
 
-		on_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+		on_move = function(inv, from_list, from_index, to_list, to_index, _, player)
 			if not dp[from_list] then dp[from_list] = {} end
 			if not dp[to_list] then dp[to_list] = {} end
 			dp[from_list][from_index] = inv:get_stack(from_list, from_index):to_string()
@@ -23,7 +23,7 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 
-		on_put = function(inv, listname, index, stack, player)
+		on_put = function(inv, listname, index, _, player)
 			if not dp[listname] then dp[listname] = {} end
 			dp[listname][index] = inv:get_stack(listname, index):to_string()
 			if listname == "trash" then
@@ -33,7 +33,7 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 
-		on_take = function(inv, listname, index, stack, player)
+		on_take = function(inv, listname, index, _, player)
 			if not dp[listname] then dp[listname] = {} end
 			dp[listname][index] = inv:get_stack(listname, index):to_string()
 			if listname == "crafting" then api.try_craft(player)
@@ -49,9 +49,9 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 -- Utility
-sfinv.register_page("trinium:utility", {
-	title = S"Utility",
-	get = function(self, player, context)
+betterinv.register_tab("trinium:utility", {
+	description = S"Utility",
+	getter = function(player, context)
 		local pn = player:get_player_name()
 		return sfinv.make_formspec(player, context, ([[
 				list[detached:bound~%s;trash;0.5,0.5;1,1]

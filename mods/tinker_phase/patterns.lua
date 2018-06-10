@@ -1,5 +1,4 @@
 local A = tinker.add_pattern
-local S = tinker.S
 
 A("pickaxe_head", {
 	description = "@1 Pickaxe Head",

@@ -24,10 +24,10 @@ function api.try_craft(player)
 end
 
 -- Crafting
-sfinv.register_page("trinium:default", {
-	title = S"Crafting",
+betterinv.register_tab("trinium:default", {
+	description = S"Crafting",
 	default = true,
-	get = function(self, player, context)
+	getter = function(player, context)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
 		local str = inv2 and inv2:get_stack("output", 1):to_string() or ""
@@ -46,11 +46,11 @@ sfinv.register_page("trinium:default", {
 				listring[current_player;main]listring[detached:bound~%s;crafting]
 			]]):format(pn, str, pn), true)
 	end,
-	on_player_receive_fields = function(self, player, context, fields)
+	processor = function(player, _, fields)
 		if fields.quit then return end
 		local pn = player:get_player_name()
 		local inv1, inv2 = player:get_inventory(), bi[pn]
-		for k,v in pairs(fields) do
+		for k in pairs(fields) do
 			local ksplit = k:split"~" -- Module, action, parameters
 			if ksplit[1] == "inventory" then
 				local a = ksplit[2]

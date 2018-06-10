@@ -53,7 +53,7 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 	color = "white",
 	on_destruct = destruct,
 
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos)
 		local meta, timer = minetest.get_meta(pos), minetest.get_node_timer(pos)
 		local hatches = meta:get_string"hatches":data()
 		if not hatches or not hatches["input.item"][1] then return end

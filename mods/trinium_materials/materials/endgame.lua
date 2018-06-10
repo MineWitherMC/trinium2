@@ -5,7 +5,7 @@ local S = materials.S
 M.pyrocatalyst = materials.add("pyrocatalyst", {
 	formula = {{"carbon", 2}, {"naquadah", 1}, {"extrium", 1}},
 	types = {"dust"},
-	color = {255, 134, 0},
+	color = {255, 110, 35},
 	description = S"Pyrolysis Catalyst",
 })
 
@@ -34,7 +34,7 @@ M.forcillium = materials.add("forcillium", {
 M.imbued_forcillium = materials.add("imbued_forcillium", {
 	formula = {{"forcillium_induced_ion", 4}, {"naquadah", 1}},
 	types = {"ingot", "gem", "dust"},
-	color = {220, 155, 0},
+	color = {240, 175, 0},
 	description = S"Imbued Forcillium",
 	data = {melting_point = 4107},
 }):generate_interactions()
@@ -42,7 +42,7 @@ M.imbued_forcillium = materials.add("imbued_forcillium", {
 M.endium = materials.add("endium", {
 	formula = {{"extrium", 4}, {"naquadah", 3}},
 	types = {"ingot", "dust", "plate"},
-	color = {0, 155, 220},
+	color = {40, 185, 250},
 	description = S"Endium",
 	data = {melting_point = 2884},
 }):generate_interactions()

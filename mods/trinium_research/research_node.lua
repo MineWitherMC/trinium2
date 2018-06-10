@@ -10,7 +10,7 @@ minetest.register_node("trinium_research:node_controller", {
 	groups = {cracky = 1},
 	paramtype2 = "facedir",
 	sounds = trinium.sounds.default_stone,
-	on_rightclick = function(pos, node, player, itemstack, pt_th)
+	on_rightclick = function(pos, _, player, itemstack)
 		local meta = minetest.get_meta(pos)
 		if meta:get_int"assembled" == 0 then
 			cmsg.push_message_player(player, S"Multiblock not assembled!")
@@ -22,16 +22,16 @@ minetest.register_node("trinium_research:node_controller", {
 					S("Research Node@nPaper: @1@nInk: @2", research.dp2[pn].paper, research.dp2[pn].ink))
 		else
 			local item = itemstack:get_name()
-			if item == "trinium_materials:sheet_paper" then
+			if item == M.paper:get"sheet" then
 				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count()
 				itemstack:take_item(99)
-			elseif item == "trinium_materials:sheet_carton" then
+			elseif item == M.carton:get"sheet" then
 				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 4
 				itemstack:take_item(99)
-			elseif item == "trinium_materials:sheet_parchment" then
+			elseif item == M.parchment:get"sheet" then
 				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 16
 				itemstack:take_item(99)
-			elseif item == "trinium_materials:cell_ink" then
+			elseif item == M.ink:get"cell" then
 				research.dp2[pn].ink = research.dp2[pn].ink + itemstack:get_count() * 100
 				itemstack:take_item(99)
 			elseif item == "trinium_research:charm1" then

@@ -49,6 +49,6 @@ local old_handle_node_drops = minetest.handle_node_drops
 function minetest.handle_node_drops(pos, drops, digger)
 	return digger and digger:is_player() and (trinium.creative_mode or old_handle_node_drops(pos, drops, digger))
 end
-minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack)
+minetest.register_on_placenode(function()
 	return trinium.creative_mode
 end)

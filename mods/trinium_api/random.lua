@@ -183,7 +183,7 @@ function api.get_fs_texture(...)
 	for _,v in pairs{...} do
 		table.insert(textures, table.concat{"(", api.get_texture(v), ")^[brighten"})
 	end
-	return (table.unpack or unpack)(textures)
+	return unpack(textures)
 end
 
 function api.process_color(color)

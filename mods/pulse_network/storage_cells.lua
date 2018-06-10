@@ -1,6 +1,5 @@
 local pulse = trinium.pulse_network
 local S = pulse.S
-local M = trinium.materials.materials
 
 function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 	minetest.register_node(id, {
@@ -9,7 +8,7 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 		description = desc,
 		groups = {cracky = 1, pulsenet_slave = 1},
 		paramtype2 = "facedir",
-		on_pulsenet_connection = function(pos, ctrlpos)
+		on_pulsenet_connection = function(_, ctrlpos)
 			local meta = minetest.get_meta(ctrlpos)
 			local cs = meta:get_int"capacity_types"
 			local items = meta:get_int"capacity_items"
@@ -17,7 +16,7 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 			meta:set_int("capacity_items", items + add_items)
 		end,
 
-		can_dig = function(pos, player)
+		can_dig = function(pos)
 			local meta = minetest.get_meta(pos)
 			local ctrlpos = minetest.deserialize(meta:get_string"controller_pos")
 			if not ctrlpos or minetest.get_node(ctrlpos).name ~= "pulse_network:controller" then return true end
@@ -26,7 +25,7 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 				ctrlmeta:get_int"capacity_items" - add_items >= ctrlmeta:get_int"used_items"
 		end,
 
-		after_dig_node = function(pos, oldnode, oldmeta, digger)
+		after_dig_node = function(_, _, oldmeta)
 			local ctrlpos = oldmeta.fields.controller_pos
 			if not ctrlpos then return end
 			ctrlpos = ctrlpos:data()

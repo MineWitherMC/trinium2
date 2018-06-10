@@ -58,3 +58,15 @@ end
 function api.table_multiply(tbl, n)
 	return table.map(tbl, function(r) return r * n end)
 end
+
+function math.gcd(a, b)
+	if not a or not b then return end
+	while a > 0 and b > 0 do
+		if a > b then
+			a = a % b
+		else
+			b = b % a
+		end
+	end
+	return a + b
+end

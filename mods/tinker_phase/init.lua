@@ -57,7 +57,7 @@ function tinker.add_tool(name, def)
 		inventory_image = "tinker_phase.colorer."..name..".png",
 		inventory_overlay = "tinker_phase.base."..name..".png",
 		groups = {hidden_from_irp = 1, _tinkerphase_tool = 1},
-		after_use = function(itemstack, player, node, digparams)
+		after_use = function(itemstack, player, node) -- todo: wait until they expose position and rewrite this
 			local meta = itemstack:get_meta()
 			table.walk(meta:get_string"modifiers":data() or {}, function(v, k)
 				if tinker.modifiers[k] and tinker.modifiers[k].after_use then

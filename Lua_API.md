@@ -45,9 +45,6 @@ All of these functions are in `table` table.
 * `map(arr, func)`
 * `remap(arr)`
 	* Fixes `arr` numerical keys so `#arr` and similar functions would work.
-* `intersect_key_rev(arr1, arr2)`
-	* Returns all such elements from `arr1` that element with same key isn't
-	 in `arr2`. Still don't remember why do I need this.
 * `keys(arr)`
 * `asort(arr, func)`
 	* Returns iterator of `arr` items sorted by keys.
@@ -87,6 +84,9 @@ All of these functions are in `math` table.
 	* `arr` is an array of pairs `{number, weight}`.
 * `geometrical_avg(arr)`
 	* Returns geometric mean of `arr` elements.
+* `gcd(a, b)`
+    * Returns greatest common divisor of given numbers.
+    * Returns `nil` in case one of given inputs (or both) is not number.
 
 ### Random functions
 All of these functions are in `trinium.api` table.
@@ -191,10 +191,16 @@ All of these functions are in `trinium.recipes` table.
 	* Also see `inv_to_itemmap`.
 * `remove_inputs(inv, list, inputs)`
 	* Removes a lot of items from inventory in one run.
-* `recipes.stringify(len, arr)`
+* `stringify(len, arr)`
 	* Returns a string composed of `arr`'s elements separated by colons.
 	* In case some of fields of `arr` are nil, fills the first `len` with empty
 	 strings (leaving non-empty as they are).
+* `divide(inputs, outputs)`
+    * Returns a sequence of `inputs_fixed, outputs_fixed`.
+    * These are tables obtained via dividing all item amounts in given tables by
+     their greatest common divisor.
+    * Example: `divide({"item1 2", "item2 6"}, {"item3 4"})` returns
+     `{"item1 1", "item2 3"}, {"item3 2"}`
 
 ### Queueing
 Did you ever need to soft-depend on mod, or to create a cyclic dependency? These
@@ -209,6 +215,7 @@ All of these functions are inside `trinium.api` table.
 	* Doesn't work if `dep` doesn't send init signal.
 	* Does nothing if `dep` is not installed, this can be useful e.g. for soft
 	 dependencies.
+	* Function is launched instantly if given mod has already sent its signal.
 * `send_init_signal()`
 	* Runs all functions that are queued behind mod this function is runned from.
 
@@ -345,7 +352,7 @@ These require `trinium_mapgen` and are stored in `trinium.mapgen` table.
 	* See **Vein Definition** for more information.
 
 
-## Miscellanous
+## Miscellaneous
 * Better Inventory is fully backwards-compatible with sfinv, so no API here.
 * cmsg is fully backwards-compatible with original cmsg, so no API here.
 * ### HUD

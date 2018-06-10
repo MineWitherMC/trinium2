@@ -40,20 +40,21 @@ minetest.register_node("trinium_research:lens_curver", {
 	},
 	sounds = trinium.sounds.default_stone,
 
-	after_place_node = function(pos, player)
+	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		api.initialize_inventory(inv, {lens = 1, gem = 4, metal = 4, press = 1, upgrade = 1})
 	end,
 
-	allow_metadata_inventory_move = function(pos, list1, index1, list2, index2, stacksize, player)
+	allow_metadata_inventory_move = function(_, list1, _, list2, _, stacksize)
 		return list1 == list2 and stacksize or 0
 	end,
 
-	allow_metadata_inventory_put = function(pos, list, index, stack, player)
+	allow_metadata_inventory_put = function(pos, list, _, stack)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local n,m = stack:get_name()
+		local n = stack:get_name()
+		local m
 		if list == "metal" then
 			if not table.exists(research.lens_data.metals, function(x) return x == n end) then return 0 end
 			for i = 1,4 do
@@ -77,7 +78,7 @@ minetest.register_node("trinium_research:lens_curver", {
 		end
 	end,
 
-	on_receive_fields = function(pos, formname, fields, player)
+	on_receive_fields = function(pos, _, fields, player)
 		if not fields.assemble_lens then return end
 
 		local meta = minetest.get_meta(pos)
@@ -158,9 +159,9 @@ minetest.register_node("trinium_research:lens_curver", {
 		inv:set_stack("upgrade", 1, upgrade)
 		inv:set_stack("lens", 1, lens)
 	end,
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+	on_rightclick = function(pos, _, player)
 		if minetest.get_meta(pos):get_int("assembled") == 0 then
-			cmsg.push_message_player(player, S"Multiblock not assembled!")
+			cmsg.push_message_player(player, S"Multiblock is not assembled!")
 		end
 	end,
 })

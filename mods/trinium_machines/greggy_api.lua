@@ -122,10 +122,10 @@ end
 recipes.add_method("greggy_multiblock", {
 	input_amount = 1,
 	output_amount = 1,
-	get_input_coords = function(n)
+	get_input_coords = function()
 		return 0, 1
 	end,
-	get_output_coords = function(n)
+	get_output_coords = function()
 		return 4, 1
 	end,
 	formspec_width = 5,

@@ -14,11 +14,6 @@ M.iron = V.iron:register_material{
 	types = {"ingot", "dust"},
 }
 
-M.nickel = V.nickel:register_material{
-	description = S"Nickel",
-	types = {"ingot", "dust"},
-}
-
 M.copper = V.copper:register_material{
 	description = S"Copper",
 	types = {"ingot", "dust", "rod"},

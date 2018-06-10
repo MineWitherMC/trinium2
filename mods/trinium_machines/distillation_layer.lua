@@ -25,7 +25,7 @@ minetest.register_node("trinium_machines:controller_distillationlayer", {
 	color = "white",
 	on_destruct = destruct,
 
-	on_timer = function(pos, elapsed)
+	on_timer = function(pos)
 		local meta = minetest.get_meta(pos)
 
 		local hatches = meta:get_string"hatches":data()

@@ -1,6 +1,5 @@
 local pulse = trinium.pulse_network
 local S = pulse.S
-local M = trinium.materials.materials
 local api = trinium.api
 
 local function generate_buttons(ctrlpos, index, search)
@@ -95,7 +94,7 @@ minetest.register_node("pulse_network:terminal", {
 		meta:set_string("formspec", get_terminal_formspec(ctrlpos, meta:get_int"index", meta:get_string"search"))
 	end,
 
-	on_receive_fields = function(pos, formname, fields, player)
+	on_receive_fields = function(pos, _, fields, player)
 		if fields.quit then return end
 		if fields.key_enter then
 			fields.send_search = 1
@@ -103,7 +102,7 @@ minetest.register_node("pulse_network:terminal", {
 		local meta = minetest.get_meta(pos)
 		local ctrlpos = minetest.deserialize(meta:get_string"controller_pos")
 		local ctrlmeta = minetest.get_meta(ctrlpos)
-		for k,v in pairs(fields) do
+		for k in pairs(fields) do
 			local ksplit = k:split"~"
 			local a = ksplit[1]
 			if a == "down" then

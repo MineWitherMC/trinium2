@@ -2,14 +2,14 @@ local api = trinium.api
 
 function table.count(array)
 	local a = 0
-	for k,v in pairs(array) do
+	for _ in pairs(array) do
 		a = a + 1
 	end
 	return a
 end
 
 function table.filter(array, callable)
-	local array, j = table.copy(array)
+	local array = table.copy(array)
 	for k,v in pairs(array) do
 		if not callable(v,k) then
 			array[k] = nil
@@ -57,14 +57,10 @@ end
 
 function table.remap(array)
 	local array2 = {}
-	for k,v in ipairs(array) do
+	for _,v in ipairs(array) do
 		table.insert(array2, v)
 	end
 	return array2
-end
-
-function table.intersect_key_rev(arr1, arr2)
-	return table.filter(arr1, function(v, k) return not arr2[k] end)
 end
 
 function table.keys(t)
@@ -95,8 +91,8 @@ function table.fconcat(t, x)
 end
 
 function table.tail(t)
-	local function helper(head, ...) return #{...} > 0 and {...} or nil end
-	return helper((table.unpack or unpack)(t)) or {}
+	local function helper(_, ...) return #{...} > 0 and {...} or nil end
+	return helper(unpack(t)) or {}
 end
 
 function table.mtail(t, mult)
