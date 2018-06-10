@@ -15,9 +15,11 @@ mat.add_recipe_generator("alloysmelting_tower", function(self)
 		end
 		if not x then
 			x = mat.getter(formula[i][1], "dust", formula[i][2])
+			count = count - (formula[i][2] + 1)
 		end
 
 		inputs[#inputs + 1] = x
+		count = count + (formula[i][2] + 1)
 
 		if mat.materials_reg[formula[i][1]].data.melting_point and
 				mat.materials_reg[formula[i][1]].data.melting_point > melting then
@@ -54,10 +56,12 @@ mat.add_recipe_generator("crude_alloyer", function(self)
 		end
 		if not x then
 			x = mat.getter(formula[i][1], "dust", formula[i][2])
+			count = count - (formula[i][2] + 1)
 		end
 		if formula[i][2] > 1 then
 			x = x.." "..formula[i][2]
 		end
+		count = count + (formula[i][2] + 1)
 		inputs[#inputs + 1] = x
 	end
 
@@ -78,5 +82,5 @@ mat.add_recipe_generator("crude_blast_furnace", function(self)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
 		{self:get("dust", sum), mat.fgetter("coal", "dust", 1 + math.floor(sum * 2 / 3))},
-		formula:map(function(v) return mat.getter(v[1], "ingot") end):data())
+		formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data())
 end)

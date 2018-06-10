@@ -17,7 +17,12 @@ minetest.register_node("trinium_mapgen:stone", {
 	drop = "trinium_mapgen:cobble",
 	sounds = ss.default_stone,
 })
-minetest.register_alias("mapgen_stone", "trinium_mapgen:stone")
+
+if trinium.DEBUG_MODE then
+	minetest.register_alias("mapgen_stone", "air")
+else
+	minetest.register_alias("mapgen_stone", "trinium_mapgen:stone")
+end
 
 -- Dirt
 minetest.register_node("trinium_mapgen:dirt", {
@@ -112,7 +117,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 256,
 	catch_up = false,
-	action = function(pos, node)
+	action = function(pos)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 		local name = minetest.get_node(above).name
 		local nodedef = minetest.registered_nodes[name]
@@ -131,7 +136,7 @@ minetest.register_abm({
 	interval = 4,
 	chance = 256,
 	catch_up = false,
-	action = function(pos, node)
+	action = function(pos)
 		local above = {x = pos.x, y = pos.y + 1, z = pos.z}
 		if (minetest.get_node_light(above) or 0) < 12 then return end
 		local name = minetest.get_node(above).name
@@ -169,7 +174,10 @@ api.register_fluid("trinium_mapgen:water_source", "trinium_mapgen:water_flowing"
 		alpha = 160,
 		liquid_viscosity = 1,
 	})
-minetest.register_alias("mapgen_water_source", "trinium_mapgen:water_source")
+
+if not trinium.DEBUG_MODE then
+	minetest.register_alias("mapgen_water_source", "trinium_mapgen:water_source")
+end
 
 -- River Water
 api.register_fluid("trinium_mapgen:river_water_source", "trinium_mapgen:river_water_flowing",
@@ -179,7 +187,10 @@ api.register_fluid("trinium_mapgen:river_water_source", "trinium_mapgen:river_wa
 		liquid_viscosity = 1,
 		liquid_range = 3,
 	})
-minetest.register_alias("mapgen_river_water_source", "trinium_mapgen:river_water_source")
+
+if not trinium.DEBUG_MODE then
+	minetest.register_alias("mapgen_river_water_source", "trinium_mapgen:river_water_source")
+end
 
 -- Clay
 minetest.register_node("trinium_mapgen:clay", {

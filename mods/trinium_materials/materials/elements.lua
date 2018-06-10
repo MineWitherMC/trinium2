@@ -152,6 +152,12 @@ do
 		color = {220, 220, 220},
 	})
 
+	V.antimony = materials.add_element("antimony", {
+		formula = "Sb",
+		melting_point = 904,
+		color = {220, 220, 240},
+	})
+
 	V.iodine = materials.add_element("iodine", {
 		formula = "I",
 		melting_point = -1,

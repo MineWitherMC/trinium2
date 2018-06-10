@@ -17,11 +17,25 @@ M.graphite = materials.add("graphite", {
 }):generate_interactions()
 
 M.tennantite = materials.add("tennantite", {
-	formula = {{"copper", 12}, {"arsenic", 4}, {"sulfur", 13}},
+	formula = {{"copper", 3}, {"arsenic", 1}, {"sulfur", 3}},
 	types = {"dust", "ore"},
 	color = {55, 55, 94},
 	description = S"Tennantite",
-}):generate_interactions()
+}):generate_interactions():generate_recipe"crude_blast_furnace"
+
+M.tetrahedrite = materials.add("tetrahedrite", {
+	formula = {{"copper", 3}, {"antimony", 1}, {"sulfur", 3}},
+	types = {"dust", "ore"},
+	color = {200, 32, 0},
+	description = S"Tetrahedrite",
+}):generate_interactions():generate_recipe"crude_blast_furnace"
+
+M.freibergite = materials.add("freibergite", {
+	formula = {{"silver", 2}, {"copper", 1}, {"antimony", 1}, {"sulfur", 3}},
+	types = {"dust", "ore"},
+	color = {45, 55, 65},
+	description = S"Freibergite",
+}):generate_interactions():generate_recipe"crude_blast_furnace"
 
 M.diamond = materials.add("diamond", {
 	formula = {{"graphite", 8}},

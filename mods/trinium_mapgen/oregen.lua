@@ -15,12 +15,10 @@ function mapgen.register_vein(name, params)
 	registered_veins[name].ore_chances_multiplier = table.sum(params.ore_chances)
 end
 
-local stone_cid = minetest.get_content_id"trinium_mapgen:stone"
+local stone_cid = minetest.get_content_id(trinium.DEBUG_MODE and "air" or "trinium_mapgen:stone")
 
 assert(stone_cid ~= 127)
-minetest.register_on_generated(function(minp, maxp, seed)
-	local s = maxp.x - minp.x
-
+minetest.register_on_generated(function(minp, _, seed)
 	local rand = PcgRandom(seed)
 	local vb, vbs, wb = veins_by_breakpoints, vein_breakpoints_s, vein_breakpoint_w
 	if not vb or not vbs or not wb then
@@ -49,8 +47,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	if rand:next(1, 1000000) / 1000000 > 0.92 then return end
 
 	local xs, ys, zs = rand:next(34, 66), rand:next(9, 12), rand:next(34, 66)
-	if xs > s or ys > s or zs > s then return end
-	local dx, dy, dz = rand:next(0, s - xs), rand:next(0, s - ys), rand:next(0, s - zs)
+	local dx, dy, dz = rand:next(0, 80 - xs), rand:next(0, 80 - ys), rand:next(0, 80 - zs)
 	local xc, yc, zc = minp.x + dx, minp.y + dy, minp.z + dz
 	local j, veinname, weight, vein
 
@@ -74,23 +71,25 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	local v = registered_veins[vein]
 
 	local vm, emin, emax = minetest.get_mapgen_object"voxelmanip"
-	local data, area, choice, x, y, w = vm:get_data(), VoxelArea:new{MinEdge=emin, MaxEdge=emax}
-
+	local data, area = vm:get_data(), VoxelArea:new{MinEdge=emin, MaxEdge=emax}
+	local choice, x, y, w
 	local noise_params = {
-		offset = 0.054,
-		scale = 1,
-		spread = {x = math.floor(xs / 2), y = math.floor(ys / 2) + 2, z = math.floor(zs / 2)},
+		offset = 5/6 * (v.density - 50),
+		scale = 50,
+		spread = {x = 1, y = 1.2, z = 1},
 		seed = seed + 232,
-		octaves = 5,
-		persist = 0.85,
+		octaves = 1,
+		persist = 0.5,
 	}
 	local vec, corner = vector.new(xs, ys, zs), vector.new(xc, yc, zc)
 
 	local perlin_map = PerlinNoiseMap(noise_params, vec):get3dMap_flat(corner)
 
 	local pkey = 1
+	local count = 0
 	for i in area:iter(xc, yc, zc, xc + xs - 1, yc + ys - 1, zc + zs - 1) do
-		if data[i] == stone_cid and (perlin_map[pkey] + 1) * 50 <= v.density then
+		if data[i] == stone_cid and perlin_map[pkey] > 0 then
+			count = count + 1
 			x, y, w = 0, 0, v.ore_chances_multiplier
 			choice = rand:next(1, w)
 			while x < choice and y < #v.ore_chances do
@@ -100,6 +99,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			data[i] = v.ore_list[y]
 		end
 		pkey = pkey + 1
+	end
+
+	if trinium.DEBUG_MODE then
+		trinium.api.dump("Generated", vein, "vein with density =", count / (xs * ys * zs))
 	end
 
 	vm:set_data(data)

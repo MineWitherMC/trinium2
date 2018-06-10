@@ -1,10 +1,8 @@
-trinium.materials.material_types = {}
-trinium.materials.material_interactions = {}
 local mat = trinium.materials
 local api = trinium.api
 
-function mat.add_type(name, callable) mat.material_types[name] = callable end
-function mat.add_combination(name, def) --[[mat.material_interactions[name] = def]] end
+mat.material_types, mat.add_type = api.adder()
+mat.material_interactions, mat.add_combination = api.adder()
 
 mat.elements = {}
 mat.materials_reg = {}
@@ -21,12 +19,12 @@ function mat.add_recipe_generator(name, callback) mat.recipe_generators[name] = 
 function mat.getter(name, kind, amount)
 	local x = ("trinium_materials:%s_%s"):format(kind, name)
 	if not minetest.registered_items[x] then return false end
-	if not amount then return x end
+	if not amount or amount == 1 then return x end
 	return x.." "..amount
 end
 
 function mat.fgetter(name, kind, amount)
-	return ("trinium_materials:%s_%s%s"):format(kind, name, amount and " "..amount or "")
+	return ("trinium_materials:%s_%s%s"):format(kind, name, amount and amount ~= 1 and " "..amount or "")
 end
 
 function mat.add(name, def)
@@ -36,7 +34,7 @@ function mat.add(name, def)
 		for i = 1, #def.formula do
 			local n = mat.materials_reg[def.formula[i][1]]
 			if not n then n = mat.elements[def.formula[i][1]] end
-			assert(n, "Could not find component of "..name)
+			api.assert(n, name, "component", def.formula[i][1])
 			local add = n.formula_string or n.formula or ""
 			if def.formula[i][2] > 1 and is_complex(n.formula) then
 				add = "("..add..")"
@@ -85,27 +83,28 @@ function mat.add(name, def)
 
 	if #def.types > 0 then
 		for i = 1, #def.types do
-			mat.material_types[def.types[i]](def3)
+			local r = api.assert(mat.material_types[def.types[i]], name, "material type", def.types[i])
+			r(def3)
 		end
 	end
 
 	local object = {}
 	function object:generate_recipe(id)
-		local reg = assert(mat.recipe_generators[id], name.." requested unexisting generator "..id)
+		local reg = api.assert(mat.recipe_generators[id], name, "recipe generator", id)
 		api.delayed_call("trinium_materials", reg, self)
 		return self
 	end
 
 	function object:generate_data(id)
-		local reg = assert(mat.data_generators[id], "Cannot generate data "..id.." for "..name)
+		local reg = api.assert(mat.data_generators[id], name, "data generator", id)
 		def2.data[id] = reg(name)
 		return self
 	end
 
 	function object:generate_interactions()
-		for k,v in pairs(mat.material_interactions) do
+		for _,v in pairs(mat.material_interactions) do
 			if table.every(v.requirements, function(x) return table.exists(def.types, function(a) return a == x end) end) then
-				v.apply(name, def2.data or {})
+				-- v.apply(name, def2.data or {})
 			end
 		end
 		return self

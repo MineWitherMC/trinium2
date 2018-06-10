@@ -32,9 +32,9 @@ minetest.register_node("trinium_machines:casing_heatbrick", {
 })
 
 local input_bus_fs = "size[8,8.5]list[context;input;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
-local crude_input_bus_fs = "size[8,5.5]list[context;input;2.5,0;3,1]list[current_player;main;0,1.5;8,4]listring[]"
+local crude_input_bus_fs = "size[8,5.5]list[context;input;2.5,0;3,1]list[current_player;main;0,1.5;8,4]"
 local output_bus_fs = "size[8,8.5]list[context;output;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
-local crude_output_bus_fs = "size[8,5.5]list[context;output;2.5,0;3,1]list[current_player;main;0,1.5;8,4]listring[]"
+local crude_output_bus_fs = "size[8,5.5]list[context;output;2.5,0;3,1]list[current_player;main;0,1.5;8,4]"
 
 minetest.register_node("trinium_machines:hatch_inputbus", {
 	description = S"Input Bus",
@@ -110,7 +110,7 @@ minetest.register_node("trinium_machines:hatch_pressureinput", {
 
 	ghatch_id = "input.pressure",
 	ghatch_max = 1,
-	get_rich_info = function(pos, player)
+	get_rich_info = function(pos)
 		local meta = minetest.get_meta(pos)
 		return S("Pressure: @1 kPa", meta:get_int"pressure" / 10)
 	end,

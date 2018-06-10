@@ -28,7 +28,7 @@ M.forcillium = materials.add("forcillium", {
 	types = {"ingot", "gem", "dust"},
 	color = {220, 239, 4},
 	description = S"Forcillium",
-	data = {melting_point = 2963, water_mix_velocity = 750},
+	data = {melting_point = 2963},
 }):generate_interactions()
 
 M.imbued_forcillium = materials.add("imbued_forcillium", {
@@ -41,7 +41,7 @@ M.imbued_forcillium = materials.add("imbued_forcillium", {
 
 M.endium = materials.add("endium", {
 	formula = {{"extrium", 4}, {"naquadah", 3}},
-	types = {"ingot", "dust", "plate", "foil"},
+	types = {"ingot", "dust", "plate"},
 	color = {0, 155, 220},
 	description = S"Endium",
 	data = {melting_point = 2884},

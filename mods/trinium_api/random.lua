@@ -2,7 +2,8 @@ local api = trinium.api
 local DataMesh = api.DataMesh
 
 function api.dump(...)
-	local string, add = ""
+	local string = ""
+	local add
 	for _,x in ipairs{...} do
 		add = dump(x)
 		if type(x) == "string" then
@@ -43,8 +44,8 @@ end
 
 function api.inv_to_itemmap(...)
 	local map, inv = {}, {...}
-	for k,v in pairs(inv) do
-		for k1,v1 in pairs(v) do
+	for _,v in pairs(inv) do
+		for _,v1 in pairs(v) do
 			local name, count = v1:get_name(), v1:get_count()
 			if not map[name] then map[name] = 0 end
 			map[name] = map[name] + count
@@ -113,7 +114,7 @@ end
 
 function api.translate_requirements(tbl)
 	local tbl1 = {}
-	for c, k, v in table.asort(tbl, function(a, b) return tbl[a] > tbl[b] end) do
+	for _, k, v in table.asort(tbl, function(a, b) return tbl[a] > tbl[b] end) do
 		tbl1[#tbl1 + 1] = "\n"..minetest.colorize("#CCC", v.." "..((minetest.registered_nodes[k] or {}).description or "???"))
 	end
 	return table.concat(tbl1, "")
@@ -179,7 +180,7 @@ end
 
 function api.get_fs_texture(...)
 	local textures = {}
-	for k,v in pairs{...} do
+	for _,v in pairs{...} do
 		table.insert(textures, table.concat{"(", api.get_texture(v), ")^[brighten"})
 	end
 	return (table.unpack or unpack)(textures)
@@ -210,6 +211,11 @@ end
 function api.get_color_facedir(pos) -- n from 0 to 7
 	local node = minetest.get_node(pos)
 	return math.floor(node.param2 / 32)
+end
+
+
+function api.assert(x,y,z,t)
+	return assert(x, "\n"..y.." requested nonexistant "..z.." "..t)
 end
 
 api.functions = {} -- table of functions

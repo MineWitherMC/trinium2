@@ -44,6 +44,11 @@ M.tin = V.tin:register_material{
 	types = {"ingot", "dust"},
 }
 
+M.antimony = V.antimony:register_material{
+	description = S"Antimony",
+	types = {"ingot", "dust"},
+}
+
 M.rhenium = V.rhenium:register_material{
 	description = S"Rhenium",
 	types = {"ingot", "dust"},
@@ -80,7 +85,7 @@ M.rhenium_alloy = materials.add("rhenium_alloy", {
 -- Silver Alloy
 M.silver_alloy = materials.add("silver_alloy", {
 	formula = {{"silver", 2}, {"tennantite", 5}},
-	types = {"ingot", "dust", "wire"},
+	types = {"ingot", "dust"},
 	description = S"Conductant Silver",
 	data = {melting_point = 1563},
 }):generate_interactions():generate_recipe("alloysmelting_tower"):generate_recipe("crude_alloyer")

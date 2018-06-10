@@ -10,6 +10,8 @@ end)
 trinium = {}
 trinium.api = {}
 
+trinium.DEBUG_MODE = false
+
 local path = minetest.get_modpath"trinium_api"
 trinium.api.S = minetest.get_translator"trinium_api"
 
