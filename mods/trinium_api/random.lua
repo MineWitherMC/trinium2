@@ -60,12 +60,12 @@ function api.advanced_search(begin, serialize, vertex)
 	local dd = dm._data
 	local used = {}
 	local operation = {[begin] = 1}
-	local underoperation
+	local under_operation
 	local step = 0
 	local finished = false
 	repeat
 		finished = true
-		underoperation = {}
+		under_operation = {}
 		step = step + 1
 		for v in pairs(operation) do
 			if not used[serialize(v)] then
@@ -75,12 +75,12 @@ function api.advanced_search(begin, serialize, vertex)
 				end
 				finished = false
 				for v1 in pairs(vertex(v)) do
-					underoperation[v1] = 1
+					under_operation[v1] = 1
 				end
 			end
 		end
 
-		operation = table.copy(underoperation)
+		operation = table.copy(under_operation)
 	until finished
 	return dm
 end
@@ -120,21 +120,9 @@ function api.translate_requirements(tbl)
 	return table.concat(tbl1, "")
 end
 
-function api.multiblock_rename(def1)
-	local node, def = def1.controller, def1.map
-	local tbl = {}
-	table.walk(def, function(v)
-		if not tbl[v.name] then tbl[v.name] = 0 end
-		tbl[v.name] = tbl[v.name] + 1
-	end)
-	minetest.override_item(node, {
-		description = minetest.registered_nodes[node].description..api.translate_requirements(tbl)
-	})
-end
-
 function api.get_item_identifier(stack)
 	local s = stack:to_string():split(" ")
-	return s[1]..(s[3] and " "..table.concat(table.mtail(s, 2), " ") or "")
+	return s[1] .. (s[3] and " " .. table.concat(table.multi_tail(s, 2), " ") or "")
 end
 
 function api.sort_by_param(param)
@@ -148,11 +136,11 @@ function api.exposed_var()
 	return tbl, function() return not tbl.good end
 end
 
-function api.count_stacks(inv, list, disallow_multistacks)
+function api.count_stacks(inv, list, disallow_multi_stacks)
 	local dm = DataMesh:new():data(inv:get_list(list)):filter(function(v)
 		return not v:is_empty()
 	end)
-	if not disallow_multistacks then
+	if not disallow_multi_stacks then
 		dm = dm:map(function(v)
 			return v:get_name()
 		end):unique()
@@ -169,7 +157,7 @@ function api.iterator(callback)
 end
 
 function api.get_field(item, fn)
-	local item = minetest.registered_items[item]
+	item = minetest.registered_items[item]
 	if not item then return nil end
 	return item[fn]
 end
@@ -193,7 +181,7 @@ function api.process_color(color)
 	return color
 end
 
-function api.cstring(color)
+function api.color_string(color)
 	return api.process_color(color):sub(1, 6)
 end
 
@@ -208,14 +196,8 @@ function api.recolor_facedir(pos, n) -- n from 0 to 7
 	minetest.swap_node(pos, node)
 end
 
-function api.get_color_facedir(pos) -- n from 0 to 7
-	local node = minetest.get_node(pos)
-	return math.floor(node.param2 / 32)
-end
-
-
 function api.assert(x,y,z,t)
-	return assert(x, "\n"..y.." requested nonexistant "..z.." "..t)
+	return assert(x, "\n" .. y .. " requested nonexistent " .. z .. " " .. t)
 end
 
 api.functions = {} -- table of functions

@@ -9,7 +9,7 @@ function tinker.add_material(name, def)
 	def.multiplier = def.multiplier or 1
 	assert(minetest.registered_items[name])
 	local groups = table.copy(minetest.registered_items[name].groups)
-	groups._tinkerphase_tool_material = 1
+	groups._tinker_phase_tool_material = 1
 	tinker.materials[name] = def
 	minetest.override_item(name, {groups = groups})
 end
@@ -22,7 +22,7 @@ function tinker.add_system_material(data, def)
 		assert(item, "Material "..data.name.." must either have ingot or gem!")
 	end
 	if not def.color then
-		def.color = api.cstring(data.color)
+		def.color = api.color_string(data.color)
 	end
 	tinker.add_material(item, def)
 end
@@ -34,13 +34,13 @@ function tinker.add_pattern(name, def)
 	tinker.patterns[name].name = name
 	minetest.register_craftitem("tinker_phase:part_"..name, {
 		inventory_image = "tinker_phase.part."..name..".png",
-		groups = {hidden_from_irp = 1, _tinkerphase_part = 1},
+		groups = { hidden_from_irp = 1, _tinker_phase_part = 1 },
 	})
 	minetest.register_craftitem("tinker_phase:pattern_"..name, {
 		description = S("Pattern - @1", def.description:sub(4)).."\n"..
 				minetest.colorize("#CCC", S("Material Cost: @1", def.cost)),
 		inventory_image = "tinker_phase.pattern_base.png^(tinker_phase.part."..name..".png^[colorize:#4D3C22)",
-		groups = {_tinkerphase_pattern = 1},
+		groups = { _tinker_phase_pattern = 1 },
 		stack_max = 1,
 	})
 end
@@ -56,7 +56,7 @@ function tinker.add_tool(name, def)
 	minetest.register_tool("tinker_phase:tool_"..name, api.set_defaults({
 		inventory_image = "tinker_phase.colorer."..name..".png",
 		inventory_overlay = "tinker_phase.base."..name..".png",
-		groups = {hidden_from_irp = 1, _tinkerphase_tool = 1},
+		groups = { hidden_from_irp = 1, _tinker_phase_tool = 1 },
 		after_use = function(itemstack, player, node) -- todo: wait until they expose position and rewrite this
 			local meta = itemstack:get_meta()
 			table.walk(meta:get_string"modifiers":data() or {}, function(v, k)

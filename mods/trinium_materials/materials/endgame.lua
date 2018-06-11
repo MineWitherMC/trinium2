@@ -51,4 +51,4 @@ M.pulsating_alloy = materials.add("pulsating_alloy", {
 	formula = {{"silver_alloy", 5}, {"forcillium", 6}, {"platinum", 3}, {"iron", 2}},
 	types = {"ingot", "dust", "plate", "rod"},
 	description = S"Pulsating Alloy",
-}):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")
+})                           :generate_data("melting_point"):generate_interactions():generate_recipe("smelting_tower")

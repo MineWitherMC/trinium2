@@ -7,7 +7,7 @@ function hud.register_globalstep(name, def)
 	steps[name].counter = 0
 end
 
-local consistent = {} -- for loooong globalsteps
+local consistent = {} -- for very long globalsteps
 minetest.register_globalstep(function(dtime)
 	for k, v in pairs(steps) do
 		if not consistent[k] then

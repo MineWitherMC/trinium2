@@ -2,7 +2,7 @@ local api = trinium.api
 local S = trinium.machines.S
 local sdh = trinium.machines.set_default_hatch
 
-minetest.register_node("trinium_machines:hatch_tempinput", {
+minetest.register_node("trinium_machines:hatch_temp_input", {
 	description = S"Temperature Hatch",
 	groups = {cracky = 1, greggy_hatch = 1, heat_container = 1, rich_info = 1},
 	tiles = {"trinium_machines.casing.png"},
@@ -23,7 +23,7 @@ minetest.register_node("trinium_machines:hatch_tempinput", {
 		return S("Heat: @1K", meta:get_int"temperature")
 	end,
 })
-sdh("input.heat", "trinium_machines:hatch_tempinput")
+sdh("input.heat", "trinium_machines:hatch_temp_input")
 
 minetest.register_node("trinium_machines:cable_heat", {
 	description = S"Heat Cable",
@@ -32,7 +32,7 @@ minetest.register_node("trinium_machines:cable_heat", {
 
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "connected",
+		type = "connected",
 		fixed = {-3/16, -3/16, -3/16, 3/16, 3/16, 3/16},
 		connect_left = {-0.5, -3/16, -3/16, -3/16, 3/16, 3/16},
 		connect_right = {0.5, -3/16, -3/16, 3/16, 3/16, 3/16},

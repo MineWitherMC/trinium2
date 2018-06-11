@@ -52,7 +52,7 @@ minetest.register_node("pulse_network:controller", {
 	tiles = {"pulse_network.controller_side.png", "pulse_network.controller_side.png", "pulse_network.controller_side.png",
 			"pulse_network.controller_side.png", "pulse_network.controller_side.png", "pulse_network.controller_front.png"},
 	description = S"Pulse Network Controller",
-	groups = {cracky = 1, pulsenet_linker = 1},
+	groups = { cracky = 1, pulsenet_linker = 1, rich_info = 1 },
 	paramtype2 = "facedir",
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -69,13 +69,10 @@ minetest.register_node("pulse_network:controller", {
 	on_metadata_inventory_put = pulse.import_to_controller,
 	allow_metadata_inventory_take = function() return 0 end,
 
-	on_rightclick = function(pos, _, clicker, itemstack)
-		if itemstack:is_empty() then
-			local meta = minetest.get_meta(pos)
-			cmsg.push_message_player(clicker,
-					S("Used types: @1/@2", meta:get_int"used_types", meta:get_int"capacity_types").."\n"..
-					S("Stored items: @1/@2", meta:get_int"used_items", meta:get_int"capacity_items"))
-		end
+	get_rich_info = function(pos, player)
+		local meta = minetest.get_meta(pos)
+		return S("Used types: @1/@2", meta:get_int "used_types", meta:get_int "capacity_types") .. "\n" ..
+				S("Stored items: @1/@2", meta:get_int "used_items", meta:get_int "capacity_items")
 	end,
 
 	after_dig_node = function(_, _, oldmetadata)

@@ -3,8 +3,8 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct, input, output, data = machines.parse_multiblock{
-	controller = "trinium_machines:controller_distillationlayer",
+local def, destruct, r_input, r_output, r_data = machines.parse_multiblock {
+	controller = "trinium_machines:controller_distillation_layer",
 	casing = "trinium_machines:casing_chemical",
 	size = {front = 0, back = 2, up = 0, down = 0, sides = 1},
 	min_casings = 5,
@@ -15,7 +15,7 @@ local def, destruct, input, output, data = machines.parse_multiblock{
 	hatches = {"output.item", "input.heat"},
 }
 
-minetest.register_node("trinium_machines:controller_distillationlayer", {
+minetest.register_node("trinium_machines:controller_distillation_layer", {
 	description = S"Distillation Layer Core",
 	groups = {cracky = 1},
 	tiles = {{name = "trinium_machines.casing.png", color = "#9a00ff"}},
@@ -43,4 +43,5 @@ minetest.register_node("trinium_machines:controller_distillationlayer", {
 })
 
 api.register_multiblock("distillation layer", def)
-recipes.add("greggy_multiblock", input, output, data)
+recipes.add("greggy_multiblock", r_input, r_output, r_data)
+api.multiblock_rich_info "trinium_machines:controller_distillation_layer"

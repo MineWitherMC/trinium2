@@ -79,24 +79,26 @@ local function draw_connection(x1, y1, x2, y2)
 	end
 end
 
-local function get_book_chapter_fs(chapterid, pn, cx, cy)
+local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(S"Back")
-	if research.chapters[chapterid].create_map then
+	if research.chapters[chapter_id].create_map then
 		buttons = buttons..("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
-			:format(buttons, S"Get Chapter Map", S"This chapter uses Secret researches unlockable via Enlightener")
+				:format(buttons, S "Get Chapter Map", S "This chapter uses Secret researches discovered via Sheet Infuser")
 	end
-	if not research.researches_by_chapter[chapterid] then return end
-	local frc = table.filter(research.researches_by_chapter[chapterid], function(v)
+	if not research.researches_by_chapter[chapter_id] then
+		return
+	end
+	local frc = table.filter(research.researches_by_chapter[chapter_id], function(v)
 		return v.x - cx >= 0 and v.x - cx <= 7 and v.y - cy >= 0 and v.y - cy <= 7
 	end)
 
 	local enable
-	for k,v in pairs(research.researches_by_chapter[chapterid]) do
+	for k, v in pairs(research.researches_by_chapter[chapter_id]) do
 		enable = false
 		if research.dp1[pn][k] or v.pre_unlock then
 			-- Research available
 			for k1,v1 in pairs(v.requirements) do
-				if research.researches_by_chapter[chapterid][v1] then
+				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
 					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
 				end
@@ -113,7 +115,7 @@ local function get_book_chapter_fs(chapterid, pn, cx, cy)
 				research.dp1[pn][a] end) and not v.hidden then
 			-- Obtainable research sheet
 			for k1,v1 in pairs(v.requirements) do
-				if research.researches_by_chapter[chapterid][v1] then
+				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
 					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
 				end
@@ -172,12 +174,12 @@ local function get_book_research_fs(pn, context)
 			if not research.dp1[pn].aspects[k] then
 				research.dp1[pn].aspects[k] = 0
 			end
-			local ammount = research.dp1[pn].aspects[k]
+			local amount = research.dp1[pn].aspects[k]
 			local color = amount >= v and "#00CC00" or "#CC0000"
 			if amount < v then good = false end
 
 			return minetest.colorize(color,
-					S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, ammount))
+					S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, amount))
 		end), "\n")
 		return ([=[
 			label[0,7.6;%s]
@@ -207,19 +209,19 @@ local function get_book_bg(pn)
 		:format(w.CognFission and 4 or w.CognVoid and 3 or w.CognWarp and 2 or 1)
 end
 
-local function get_book_chapter_bg(chapterid)
-	local w = research.chapters[chapterid]
+local function get_book_chapter_bg(chapter_id)
+	local w = research.chapters[chapter_id]
 	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
 end
 
 local book = {description = S"Research Book"}
 function book.getter(player, context)
 	local pn = player:get_player_name()
-	context.book = context.book or "defaultbg"
+	context.book = context.book or "default_bg"
 	context.book_x = context.book_x or 0
 	context.book_y = context.book_y or 0
 	local split = context.book:split"~"
-	if split[1] == "defaultbg" then
+	if split[1] == "default_bg" then
 		return sfinv.make_formspec(player, context, get_book_fs(pn), false, false, get_book_bg(pn))
 	elseif split[1] == "chapter" then
 		local fs = get_book_chapter_fs(split[2], pn, context.book_x, context.book_y)
@@ -233,22 +235,24 @@ end
 function book.processor(player, context, fields)
 	if fields.quit then return end
 	local pn = player:get_player_name()
+	local inv = player:get_inventory()
+
 	for k,v in pairs(fields) do
 		if k == "key_up" then
 			context.book_y = context.book_y - 1
 		elseif k == "key_down" and context.book:split"~"[1] == "chapter" then
 			context.book_y = context.book_y + 1
 		else
-			local ksplit = k:split"~" -- Module, action, parameters
-			local a = ksplit[1]
+			local k_split = k:split "~" -- Module, action, parameters
+			local a = k_split[1]
 			if a == "open_chapter" then
-				context.book = "chapter~"..ksplit[2]
+				context.book = "chapter~" .. k_split[2]
 			elseif a == "open_book" then
-				context.book = "defaultbg"
+				context.book = "default_bg"
 				context.book_x = 0
 				context.book_y = 0
 			elseif a == "open_research" then
-				context.book = ("research~%s~1"):format(ksplit[2])
+				context.book = ("research~%s~1"):format(k_split[2])
 			elseif a == "turn_forward" then
 				local cs = context.book:split("~")
 				local res = research.researches[cs[2]]
@@ -272,11 +276,10 @@ function book.processor(player, context, fields)
 			elseif a == "get_sheet" then
 				local stack = ItemStack("trinium_research:notes_2")
 				local meta = stack:get_meta()
-				local res = research.researches[ksplit[2]]
+				local res = research.researches[k_split[2]]
 				meta:set_string("description", S("Research Notes - @1", res.name))
-				meta:set_string("research_id", ksplit[2])
+				meta:set_string("research_id", k_split[2])
 
-				local inv = player:get_inventory()
 				if inv:contains_item("main", stack, true) then
 					cmsg.push_message_player(player, S"You already have these research notes!")
 					return
@@ -307,7 +310,6 @@ function book.processor(player, context, fields)
 					return
 				end
 
-				local inv = player:get_inventory()
 				if not inv:contains_item("main", M.diamond:get("dust", 16)) then
 					cmsg.push_message_player(player, S"Insufficient Diamond Dust!")
 					return
@@ -322,4 +324,4 @@ function book.processor(player, context, fields)
 	end
 end
 
-betterinv.register_tab("trinium:researchbook", book)
+betterinv.register_tab("research_book", book)

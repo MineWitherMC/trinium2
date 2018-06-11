@@ -18,15 +18,15 @@ local compressor_formspec = ([=[
 	button[0,3.5;2,1;assemble_lens;%s]
 ]=]):format(S"Assemble Lens")
 
-minetest.register_node("trinium_research:lens_curver", {
+minetest.register_node("trinium_research:lens_carver", {
 	stack_max = 1,
 	tiles = {"trinium_research.chassis.png"},
-	description = S"Lens Curver",
+	description = S "Lens Carver",
 	groups = {cracky = 2},
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
 			{-0.5, 0.4, -0.5, 0.5, 0.5, 0.5},
@@ -46,8 +46,8 @@ minetest.register_node("trinium_research:lens_curver", {
 		api.initialize_inventory(inv, {lens = 1, gem = 4, metal = 4, press = 1, upgrade = 1})
 	end,
 
-	allow_metadata_inventory_move = function(_, list1, _, list2, _, stacksize)
-		return list1 == list2 and stacksize or 0
+	allow_metadata_inventory_move = function(_, list1, _, list2, _, stack_size)
+		return list1 == list2 and stack_size or 0
 	end,
 
 	allow_metadata_inventory_put = function(pos, list, _, stack)
@@ -83,35 +83,38 @@ minetest.register_node("trinium_research:lens_curver", {
 
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local lens, press, upgrade = inv:get_stack("lens", 1), inv:get_stack("press", 1), inv:get_stack("upgrade", 1)
-		if not lens:is_empty() then
+		local old_lens, press, upgrade = inv:get_stack("lens", 1), inv:get_stack("press", 1), inv:get_stack("upgrade", 1)
+		if not old_lens:is_empty() then
 			cmsg.push_message_player(player, S"Extract Lens to continue!")
 			return
 		end
 		if press:is_empty() then
-			cmsg.push_message_player(player, S"Press is abscent!")
+			cmsg.push_message_player(player, S "Insert Press to continue!")
 			return
 		end
-		local pressmeta = press:get_meta()
-		local base_tier = pressmeta:get_int"tier"
-		local umult = math.max(minetest.get_item_group(upgrade:get_name(), "lens_upgrade") + 1 - base_tier, 1)
+		local press_meta = press:get_meta()
+		local base_tier = press_meta:get_int "tier"
+		local material_mult = math.max(minetest.get_item_group(upgrade:get_name(), "lens_upgrade") + 1 - base_tier, 1)
 		local actual_tier = math.min(5, base_tier + minetest.get_item_group(upgrade:get_name(), "lens_upgrade"))
 
-		local req_gem, req_metal, shape =
-				pressmeta:get_int"gem" * umult,
-				pressmeta:get_int"metal" * umult,
-				pressmeta:get_string"shape"
+		local req_gem, req_metal, shape = press_meta:get_int "gem" * material_mult,
+		press_meta:get_int "metal" * material_mult,
+		press_meta:get_string "shape"
 		local stored_gem, stored_metal = 0, 0
-		local metatbl = meta:to_table().inventory
-		table.walk(metatbl.gem, function(x) stored_gem = stored_gem + ItemStack(x):get_count() end)
-		table.walk(metatbl.metal, function(x) stored_metal = stored_metal + ItemStack(x):get_count() end)
+		local meta_tbl = meta:to_table().inventory
+		table.walk(meta_tbl.gem, function(x)
+			stored_gem = stored_gem + ItemStack(x):get_count()
+		end)
+		table.walk(meta_tbl.metal, function(x)
+			stored_metal = stored_metal + ItemStack(x):get_count()
+		end)
 		if stored_gem < req_gem or stored_metal < req_metal then
 			cmsg.push_message_player(player, S"Insufficient Resources!")
 			return
 		end
 		local item_gem, item_metal
 
-		table.walk(metatbl.gem, function(x, k)
+		table.walk(meta_tbl.gem, function(x, k)
 			local st = ItemStack(x)
 			local ct = st:get_count()
 			if ct >= req_gem then item_gem = st:get_name() end
@@ -125,7 +128,7 @@ minetest.register_node("trinium_research:lens_curver", {
 			end
 		end, function() return req_gem == 0 end)
 
-		table.walk(metatbl.metal, function(x, k)
+		table.walk(meta_tbl.metal, function(x, k)
 			local st = ItemStack(x)
 			local ct = st:get_count()
 			if ct >= req_gem then item_metal = st:get_name() end
@@ -146,12 +149,12 @@ minetest.register_node("trinium_research:lens_curver", {
 		local item_metal2 = table.exists(research.lens_data.metals, function(x) return x == item_metal end)
 
 		local lens = ItemStack"trinium_research:lens"
-		local lensmeta = lens:get_meta()
-		lensmeta:set_string("gem", item_gem2)
-		lensmeta:set_string("metal", item_metal2)
-		lensmeta:set_int("tier", actual_tier)
-		lensmeta:set_string("shape", shape)
-		lensmeta:set_string("description",
+		local lens_meta = lens:get_meta()
+		lens_meta:set_string("gem", item_gem2)
+		lens_meta:set_string("metal", item_metal2)
+		lens_meta:set_int("tier", actual_tier)
+		lens_meta:set_string("shape", shape)
+		lens_meta:set_string("description",
 				S("Research Lens@nGem Material: @1@nMetal Material: @2@nShape: @3@nTier: @4",
 						item_gem1, item_metal1,
 						S(api.string_capitalization(shape)), actual_tier))
@@ -159,20 +162,15 @@ minetest.register_node("trinium_research:lens_curver", {
 		inv:set_stack("upgrade", 1, upgrade)
 		inv:set_stack("lens", 1, lens)
 	end,
-	on_rightclick = function(pos, _, player)
-		if minetest.get_meta(pos):get_int("assembled") == 0 then
-			cmsg.push_message_player(player, S"Multiblock is not assembled!")
-		end
-	end,
 })
 
-local lens_curver_mb = {
+local lens_carver_mb = {
 	width = 1,
 	height_d = 1,
 	height_u = 1,
 	depth_b = 6,
 	depth_f = 0,
-	controller = "trinium_research:lens_curver",
+	controller = "trinium_research:lens_carver",
 	map = {
 		{x = -1, z = 1, y = -1, name = "trinium_research:casing"},
 		{x = -1, z = 0, y = -1, name = "trinium_research:casing"},
@@ -202,10 +200,13 @@ local lens_curver_mb = {
 	end,
 }
 
-lens_curver_mb.activator = function(rg)
-	if not rg(lens_curver_mb.map) then return end
+lens_carver_mb.activator = function(rg)
+	if not rg(lens_carver_mb.map) then
+		return
+	end
 	local ctrl = table.exists(rg.region, function(x) return x.x == 0 and x.y == 0 and x.z == 6 end)
 	return ctrl and minetest.get_meta(rg.region[ctrl].actual_pos):get_int("assembled") == 1
 end
 
-api.register_multiblock("lens curver", lens_curver_mb)
+api.register_multiblock("lens carver", lens_carver_mb)
+api.multiblock_rich_info "trinium_research:lens_carver"

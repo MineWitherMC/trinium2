@@ -33,7 +33,7 @@ All of these functions are in `table` table.
 * `filter(arr, func(value, key))`
 * `exists(arr, func)`
 	* Examines `arr` on whether it has such element that `func` returns `true`
-	 when runned with this element key and value as arguments.
+	 when executed with this element key and value as arguments.
 	* If there is a such element, its key is returned.
 	* Otherwise, this function returns `false`.
 * `every(arr, func)`
@@ -85,8 +85,8 @@ All of these functions are in `math` table.
 * `geometrical_avg(arr)`
 	* Returns geometric mean of `arr` elements.
 * `gcd(a, b)`
-    * Returns greatest common divisor of given numbers.
-    * Returns `nil` in case one of given inputs (or both) is not number.
+	* Returns greatest common divisor of given numbers.
+	* Returns `nil` in case one of given inputs (or both) is not number.
 
 ### Random functions
 All of these functions are in `trinium.api` table.
@@ -114,12 +114,12 @@ All of these functions are in `trinium.api` table.
 	* In case it isn't present, returns `default`, also changing the file.
 * `advanced_search(init, serialize, vertex)`
 	* Runs BFS and returns `DataMesh` with search results.
-	* `init` is the first vertice added to graph.
+	* `init` is the first vertex added to graph.
 	* `vertex` is a function that should return list of vertices connected to the
 	 given one.
-	* `serialize` is a function that should return serialized version of vertice
+	* `serialize` is a function that should return serialized version of vertex
 	 (must not return a table).
-	* Returned elements have the format `{vertice, distance}`.
+	* Returned elements have the format `{vertex, distance}`.
 * `search(init, serialize, vertex)`
 	* Similar to previous function, however, returns elements in `vertice` format.
 * `set_defaults(tbl1, tbl2)`
@@ -153,11 +153,11 @@ All of these functions are in `trinium.api` table.
 * `get_texture(item)`
 	* Returns item texture if it is defined, otherwise `nil`.
 * `process_color(color)`
-	* Converts `color` to colorstring format and makes it semi-transparent.
+	* Converts `color` to ColorString format and makes it semi-transparent.
 * `cstring(color)`
 	* Same thing without transparency.
 * `adder()`
-	* Returns a table and `add` function for the table. Useful for registrators.
+	* Returns a table and `add` function for the table. Useful for registration.
 * `get_item_identifier(stack)`
 	* Similar to `stack:to_string()`, but strips the item count.
 * `initialize_inventory(inv, arr)`
@@ -172,14 +172,21 @@ All of these functions are in `trinium.api` table.
 * `recolor_facedir(pos, n)`
 	* Given a node with `paramtype2 = colorfacedir`, changes its color.
 	* `n` is integer between 0 and 7.
-* `get_color_facedir(pos)`
-	* Given a node with `paramtype2 = colorfacedir`, returns its color.
+	* Node Metadata is unchanged.
 
 ### Recipe functions
 All of these functions are in `trinium.recipes` table.
 * `add(method, inputs, outputs, data)`
 	* Adds recipe.
 	* `data` is a table which required/optional fields are defined by `method`.
+	* Some `data` values change various recipe aspects regardless of method:
+		* `divisible` - boolean.
+			* If `true` recipe is automatically divided by GCD.
+			* Also see `divide(inputs, outputs)`.
+		* `input_tooltips` - list with "holes"
+			* Each element is a string, changing corresponding input tooltip.
+			* Elements outside of `inputs` range do nothing.
+		* `output_tooltips` - similar to previous one.
 * `add_method(name, def)`
 	* Adds recipe method. See **Recipe Method Definition** for more information.
 * `get_coords(width, dx, dy, n)`
@@ -196,11 +203,11 @@ All of these functions are in `trinium.recipes` table.
 	* In case some of fields of `arr` are nil, fills the first `len` with empty
 	 strings (leaving non-empty as they are).
 * `divide(inputs, outputs)`
-    * Returns a sequence of `inputs_fixed, outputs_fixed`.
-    * These are tables obtained via dividing all item amounts in given tables by
-     their greatest common divisor.
-    * Example: `divide({"item1 2", "item2 6"}, {"item3 4"})` returns
-     `{"item1 1", "item2 3"}, {"item3 2"}`
+	* Returns a sequence of `inputs_fixed, outputs_fixed`.
+	* These are tables obtained via dividing all item amounts in given tables by
+	 their greatest common divisor.
+	* Example: `divide({"item1 2", "item2 6"}, {"item3 4"})` returns
+	 `{"item1 1", "item2 3"}, {"item3 2"}`
 
 ### Queueing
 Did you ever need to soft-depend on mod, or to create a cyclic dependency? These
@@ -217,7 +224,8 @@ All of these functions are inside `trinium.api` table.
 	 dependencies.
 	* Function is launched instantly if given mod has already sent its signal.
 * `send_init_signal()`
-	* Runs all functions that are queued behind mod this function is runned from.
+	* Runs all functions that are queued behind mod this function is executed
+	 from.
 
 ### Miscellaneous
 * `string:data()`
@@ -304,7 +312,7 @@ These require `tinker_phase` and are stored in `tinker` table.
 	* Returns color the durability string is colored to.
 	* `num` is between `0` and `1`.
 * `wrap_description(version, def)`
-	* Returns tool description. See **Tool Descriptions** for more informations.
+	* Returns tool description. See **Tool Descriptions** for more information.
 	* `version` is definition versions, so older definitions would still work.
 
 
@@ -401,7 +409,7 @@ Multiblock definition is a table with following elements:
 * `height_d` - integer, processed distance to the bottom from controller.
 * `height_u` - integer, processed distance to the top from controller.
 * `map` - parsed node list in format `{x = dx, y = dy, z = dz, name = name}`.
-	* `dx` is an integer and represents sideward shift.
+	* `dx` is an integer and represents shift to the right or left.
 	* `dx` is negative if node is at the left of controller.
 	* `dy` is an integer and represents vertical shift.
 	* `dy` is negative if node is below the controller.
@@ -418,15 +426,16 @@ Multiblock definition is a table with following elements:
 		* `actual_pos` is a vector from `{x=0, y=0, z=0}` to obtained node.
 	* `region.counts` is a table formatted as `[ItemString] => amount`.
 	* `region(map)` checks whether all `map` requirements are satisfied.
-* `after_construct` - function of `pos`, `region` and `is_active`. Can be abscent.
+* `after_construct` - function of `pos`, `region` and `is_active`. Does nothing
+ by default.
 
 ### Recipe Method Definition
 Recipe Method definition is a table with following elements:
 #### Required
 * `input_amount` - integer.
 * `output_amount` - integer.
-* `get_input_coords` - function of input slot. Should return coords in format
- `x, y`.
+* `get_input_coords` - function of input slot. Should return coordinates in
+ format `x, y`.
 * `get_output_coords` - function of output slot, similar to previous one.
 * `formspec_width` - float.
 * `formspec_height` - float.
@@ -458,12 +467,11 @@ Aspect Definition is a table with following elements:
 * `name` - string, description of aspect item.
 	* Should contain aspect latin name on first line and localized name on second.
 * `req1` - string, ID of 1st component.
-	* Defaults to abscence of 1st component (e.g., Base Aspect).
 * `req2` - string.
 
 ### Tool Material Definition (`tinker_phase`)
 Tool Material Definition is a table with following elements:
-* `color` - ColorString, can be abscent if `add_system_material` is used.
+* `color` - ColorString, can be `nil` if `add_system_material` is used.
 * `base_durability` - integer.
 * `base_speed` - float, relative to hand speed (`tinker.base`).
 * `level` - integer.
@@ -532,7 +540,7 @@ Greggy Multiblock Definition is a table with following elements:
 * `controller` - ItemString.
 	* Must be a node with `paramtype2` either `colorfacedir` or `facedir`.
 * `casing` - ItemString.
-	* Must be a node with `paramtype2` either `color` or abscent.
+	* Must be a node with `paramtype2` either `color` or default.
 * `size` - `{front = int, back = int, up = int, down = int, sides = int}`.
 * `min_casings` - integer.
 	* if selected region has less `casing` blocks than this value, multiblock is

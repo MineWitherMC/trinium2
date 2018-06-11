@@ -1,8 +1,6 @@
 local research = trinium.research
 local S = research.S
 local api = trinium.api
-local M = trinium.materials.materials
-local recipes = trinium.recipes
 
 local function get_table_formspec(mode, pn, real_research, aspect_key)
 	aspect_key = aspect_key or 0
@@ -59,12 +57,11 @@ end
 
 local function recalculate_aspects(pn, inv)
 	for i = 1, #research.aspect_list do
-		local nonitem = research.aspect_list[i]
-		local cur_ammount, name = research.dp2[pn].aspects[nonitem] or 0, "trinium_research:aspect_"..nonitem
-		local asp = research.dp2[pn].aspects[nonitem]
+		local aspect_name = research.aspect_list[i]
+		local cur_amount, name = research.dp2[pn].aspects[aspect_name] or 0, "trinium_research:aspect_" .. aspect_name
 		local writer = ItemStack(name)
-		writer:set_wear(math.max(65535 - cur_ammount * 16, 1))
-		if cur_ammount == 0 then
+		writer:set_wear(math.max(65535 - cur_amount * 16, 1))
+		if cur_amount == 0 then
 			inv:set_stack("aspect_panel", i, "")
 		else
 			inv:set_stack("aspect_panel", i, writer)
@@ -119,7 +116,7 @@ minetest.register_node("trinium_research:table", {
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.45, -0.5, -0.45, 0.45, -0.4, 0.45}, -- platform
 			{-0.1, -0.4, 0.2, 0.1, 0.455, 0.4}, -- tube
@@ -145,7 +142,7 @@ minetest.register_node("trinium_research:table", {
 		recalculate_aspects(pn, inv)
 	end,
 
-	allow_metadata_inventory_move = function(pos, list1, index1, list2, index2, stacksize, player)
+	allow_metadata_inventory_move = function(pos, list1, index1, list2, index2, stack_size, player)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		local pn = player:get_player_name()
@@ -156,32 +153,34 @@ minetest.register_node("trinium_research:table", {
 			if not ep then return 0 end
 			return index1 ~= notes_meta:get_int("begin") and not table.exists(ep, api.functions.equal(index1)) and 1 or 0
 		end
-		if list2 == "r2m" then return stacksize end
+		if list2 == "r2m" then
+			return stack_size
+		end
 		if not (list1 == "aspect_panel" and (list2 == "map" or list2 == "aspect_inputs")) then return 0 end
 		if list2 == "map" and research.dp2[pn].ink <= 0 then return 0 end
 		return inv:get_stack(list2, index2):get_count() > 0 and 0 or 1
 	end,
 
-	allow_metadata_inventory_put = function(pos, list, index, stack, player)
+	allow_metadata_inventory_put = function(_, list, _, stack)
 		local name,size = stack:get_name(), stack:get_count()
 		return ((list == "research_notes" and name == "trinium_research:notes_2") or
 				(list == "lens" and name == "trinium_research:lens")) and 1 or 0
 	end,
 
-	allow_metadata_inventory_take = function(pos, list, index, stack, player)
+	allow_metadata_inventory_take = function(_, list, _, stack)
 		local name,size = stack:get_name(), stack:get_count()
 		return (list == "research_notes" or list == "lens") and size or 0
 	end,
 
-	on_receive_fields = function(pos, formname, fields, player)
+	on_receive_fields = function(pos, _, fields, player)
 		if fields.quit then return end
 		local pn = player:get_player_name()
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		for k,v in pairs(fields) do
-			local ksplit = k:split"~"
-			if ksplit[1] == "research_table" then
-				local a = ksplit[2]
+			local k_split = k:split "~"
+			if k_split[1] == "research_table" then
+				local a = k_split[2]
 				if a == "change_fs" then
 					local tnb = tonumber(v)
 					meta:set_string("current_mode", tnb)
@@ -214,13 +213,11 @@ minetest.register_node("trinium_research:table", {
 						research.dp2[pn].aspects[a2] = research.dp2[pn].aspects[a2] - 1
 					end
 
-					local newaspect
-					newaspect = table.exists(research.aspects, function(v)
+					local new_aspect = table.exists(research.aspects, function(v)
 						return (v.req1 == a1 and v.req2 == a2) or (v.req2 == a1 and v.req1 == a2)
 					end)
-					if newaspect then
-						research.dp2[pn].aspects[newaspect] =
-								(research.dp2[pn].aspects[newaspect] or 5) + 1
+					if new_aspect then
+						research.dp2[pn].aspects[new_aspect] = (research.dp2[pn].aspects[new_aspect] or 5) + 1
 						minetest.sound_play("experience", {
 							to_player = pn,
 							gain = 3.0
@@ -233,15 +230,13 @@ minetest.register_node("trinium_research:table", {
 		end
 	end,
 
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-		if minetest.get_meta(pos):get_int"assembled" == -1 then
-			cmsg.push_message_player(player, S"Multiblock not assembled!")
-		else
+	on_rightclick = function(pos, _, player)
+		if minetest.get_meta(pos):get_int "assembled" == 1 then
 			recalculate_aspects(player:get_player_name(), minetest.get_meta(pos):get_inventory())
 		end
 	end,
 
-	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+	after_dig_node = function(pos, _, oldmetadata, digger)
 		local sh, l = oldmetadata.inventory.research_notes[1], oldmetadata.inventory.lens[1]
 		if not sh:is_empty() then
 			minetest.item_drop(sh, digger, pos)
@@ -255,7 +250,7 @@ minetest.register_node("trinium_research:table", {
 		return minetest.get_meta(pos):get_string"owner" == player:get_player_name()
 	end,
 
-	on_metadata_inventory_move = function(pos, list1, index1, list2, index2, stacksize, player)
+	on_metadata_inventory_move = function(pos, _, index1, list2, index2, _, player)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		local pn = player:get_player_name()
@@ -279,13 +274,13 @@ minetest.register_node("trinium_research:table", {
 			meta:set_string("additions", minetest.serialize(arr))
 			if is_done then
 				local stack = ItemStack("trinium_research:notes_1")
-				local smeta = stack:get_meta()
+				local notes_meta = stack:get_meta()
 				local old_stack = inv:get_stack("research_notes", 1)
 				local old_meta = old_stack:get_meta()
 				local id = old_meta:get_string"research_id"
 
-				smeta:set_string("description", S("Discovery - @1", research.researches[id].name))
-				smeta:set_string("research_id", id)
+				notes_meta:set_string("description", S("Discovery - @1", research.researches[id].name))
+				notes_meta:set_string("research_id", id)
 				inv:set_stack("research_notes", 1, stack)
 			end
 			update_formspec(pos)
@@ -298,35 +293,34 @@ minetest.register_node("trinium_research:table", {
 		recalculate_aspects(pn, inv)
 	end,
 
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
+	on_metadata_inventory_take = function(pos, list_name)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		if listname == "research_notes" then
+		if list_name == "research_notes" then
 			for i = 1, 49 do
 				inv:set_stack("map", i, "")
 			end
 		end
 	end,
 
-	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, list_name, index, stack)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local pn = player:get_player_name()
-		if listname == "research_notes" then
-			local stackmeta = stack:get_meta()
-			local resmap = table.copy(research.researches[stackmeta:get_string"research_id"].map)
-			stackmeta:set_int("begin", resmap[1].x + 7 * (resmap[1].y - 1))
-			table.walk(resmap, function(v, k)
+		if list_name == "research_notes" then
+			local stack_meta = stack:get_meta()
+			local res_map = table.copy(research.researches[stack_meta:get_string "research_id"].map)
+			stack_meta:set_int("begin", res_map[1].x + 7 * (res_map[1].y - 1))
+			table.walk(res_map, function(v, k)
 				local coords = v.x + 7 * (v.y - 1)
 				inv:set_stack("map", coords, "trinium_research:aspect_"..v.aspect)
 			end)
 
-			table.remove(resmap, 1)
-			local resmap2 = table.map(resmap, function(r)
+			table.remove(res_map, 1)
+			local res_map2 = table.map(res_map, function(r)
 				return r.x + 7 * (r.y - 1)
 			end)
-			stackmeta:set_string("endpoints", minetest.serialize(resmap2))
-			inv:set_stack(listname, index, stack)
+			stack_meta:set_string("endpoints", minetest.serialize(res_map2))
+			inv:set_stack(list_name, index, stack)
 		end
 	end,
 })
@@ -358,3 +352,4 @@ api.register_multiblock("research table", {
 		meta:set_string("formspec", fs)
 	end,
 })
+api.multiblock_rich_info "trinium_research:table"

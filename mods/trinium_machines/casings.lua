@@ -21,7 +21,7 @@ minetest.register_node("trinium_machines:casing_distillation", {
 	paramtype2 = "color",
 	color = "#9a00ff",
 })
-minetest.register_node("trinium_machines:casing_heatbrick", {
+minetest.register_node("trinium_machines:casing_heat_brick", {
 	description = S"Heat-Proof Brick Block",
 	groups = {cracky = 2},
 	tiles = {"trinium_machines.brick.png"},
@@ -36,7 +36,7 @@ local crude_input_bus_fs = "size[8,5.5]list[context;input;2.5,0;3,1]list[current
 local output_bus_fs = "size[8,8.5]list[context;output;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
 local crude_output_bus_fs = "size[8,5.5]list[context;output;2.5,0;3,1]list[current_player;main;0,1.5;8,4]"
 
-minetest.register_node("trinium_machines:hatch_inputbus", {
+minetest.register_node("trinium_machines:hatch_input_bus", {
 	description = S"Input Bus",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.casing.png"},
@@ -49,9 +49,9 @@ minetest.register_node("trinium_machines:hatch_inputbus", {
 	ghatch_id = "input.item",
 	ghatch_max = 1,
 })
-sdh("input.item", "trinium_machines:hatch_inputbus")
+sdh("input.item", "trinium_machines:hatch_input_bus")
 
-minetest.register_node("trinium_machines:hatch_crudeinputbus", {
+minetest.register_node("trinium_machines:hatch_crude_input_bus", {
 	description = S"Crude Input Bus",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.brick.png"},
@@ -65,7 +65,7 @@ minetest.register_node("trinium_machines:hatch_crudeinputbus", {
 	ghatch_max = 1,
 })
 
-minetest.register_node("trinium_machines:hatch_outputbus", {
+minetest.register_node("trinium_machines:hatch_output_bus", {
 	description = S"Output Bus",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.casing.png"},
@@ -78,9 +78,9 @@ minetest.register_node("trinium_machines:hatch_outputbus", {
 	ghatch_id = "output.item",
 	allow_metadata_inventory_put = function() return 0 end,
 })
-sdh("output.item", "trinium_machines:hatch_outputbus")
+sdh("output.item", "trinium_machines:hatch_output_bus")
 
-minetest.register_node("trinium_machines:hatch_crudeoutputbus", {
+minetest.register_node("trinium_machines:hatch_crude_output_bus", {
 	description = S"Crude Output Bus",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.brick.png"},
@@ -94,7 +94,7 @@ minetest.register_node("trinium_machines:hatch_crudeoutputbus", {
 	allow_metadata_inventory_put = function() return 0 end,
 })
 
-minetest.register_node("trinium_machines:hatch_pressureinput", {
+minetest.register_node("trinium_machines:hatch_pressure_input", {
 	description = S"Pressure Input Hatch",
 	groups = {cracky = 1, greggy_hatch = 1, pressure_container = 1, rich_info = 1},
 	tiles = {"trinium_machines.casing.png"},
@@ -115,4 +115,4 @@ minetest.register_node("trinium_machines:hatch_pressureinput", {
 		return S("Pressure: @1 kPa", meta:get_int"pressure" / 10)
 	end,
 })
-sdh("input.pressure", "trinium_machines:hatch_pressureinput")
+sdh("input.pressure", "trinium_machines:hatch_pressure_input")

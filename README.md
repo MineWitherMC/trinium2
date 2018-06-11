@@ -13,10 +13,10 @@ Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 * Please report any bugs (debug.txt is sometimes useful).
 
 ## Compatibility
-Requires Minetest 0.5, gettext build recommended.
+Requires Minetest 0.5, translation-compatible build recommended.
 
 ## Features
-* Fantastic Oregen and Mapgen System (WIP)
+* Fantastic Ore and Map Generation System (WIP)
 * Realistic (petro)chemistry
 * Research system
 * Pulse Network, my approach to storage systems (not done yet)

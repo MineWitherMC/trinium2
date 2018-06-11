@@ -3,8 +3,8 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct, input, output, data = machines.parse_multiblock{
-	controller = "trinium_machines:controller_chemicalreactor",
+local def, destruct, r_input, r_output, r_data = machines.parse_multiblock {
+	controller = "trinium_machines:controller_chemical_reactor",
 	casing = "trinium_machines:casing_chemical",
 	size = {front = 0, back = 2, up = 1, down = 1, sides = 1},
 	min_casings = 19,
@@ -43,7 +43,7 @@ recipes.add_method("chemical_reactor", {
 	end,
 })
 
-minetest.register_node("trinium_machines:controller_chemicalreactor", {
+minetest.register_node("trinium_machines:controller_chemical_reactor", {
 	description = S"Chemical Reactor Controller",
 	groups = {cracky = 1},
 	tiles = {{name = "trinium_machines.casing.png", color = "#5575ff"}},
@@ -61,7 +61,7 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 		local output = meta:get_string"output"
 		if output ~= "" then
 			meta:set_string("output", "")
-			local output = output:split";"
+			output = output:split ";"
 			local outputs = table.map(hatches["output.item"], function(x) return minetest.get_meta(x):get_inventory() end)
 
 			local good
@@ -86,9 +86,9 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 		temp = temp and minetest.get_meta(temp):get_int"temperature" or -1
 		pressure = pressure and minetest.get_meta(pressure):get_int"pressure" or -1
 
-		local crrec = recipes.recipes_by_method.chemical_reactor
+		local cr_recipes = recipes.recipes_by_method.chemical_reactor
 		local vars, func = api.exposed_var()
-		table.iwalk(crrec, function(v)
+		table.iwalk(cr_recipes, function(v)
 			local rec = recipes.recipe_registry[v]
 			if not recipes.check_inputs(input_map, rec.inputs) then return end
 			local data = rec.data
@@ -120,4 +120,5 @@ minetest.register_node("trinium_machines:controller_chemicalreactor", {
 })
 
 api.register_multiblock("chemical reactor", def)
-recipes.add("greggy_multiblock", input, output, data)
+recipes.add("greggy_multiblock", r_input, r_output, r_data)
+api.multiblock_rich_info "trinium_machines:controller_chemical_reactor"

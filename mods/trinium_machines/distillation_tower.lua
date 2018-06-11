@@ -3,8 +3,8 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct, input, output, data = machines.parse_multiblock{
-	controller = "trinium_machines:controller_distillationtower",
+local def, destruct, r_input, r_output, r_data = machines.parse_multiblock {
+	controller = "trinium_machines:controller_distillation_tower",
 	casing = "trinium_machines:casing_chemical",
 	size = {front = 0, back = 2, up = 1, down = 0, sides = 1},
 	min_casings = 13,
@@ -51,7 +51,7 @@ recipes.add_method("distillation_tower", {
 
 local distillation_random = PcgRandom(math.random() * 10^8)
 local distillation_time = 8
-minetest.register_node("trinium_machines:controller_distillationtower", {
+minetest.register_node("trinium_machines:controller_distillation_tower", {
 	description = S"Distillation Tower Controller",
 	groups = {cracky = 1},
 	tiles = {{name = "trinium_machines.casing.png", color = "#5575ff"}},
@@ -66,7 +66,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 			minetest.get_meta(pos):from_table()
 			pos = vector.add(pos, {x = 0, y = -1, z = 0})
 			node = minetest.get_node(pos).name
-		until node ~= "trinium_machines:controller_distillationlayer"
+		until node ~= "trinium_machines:controller_distillation_layer"
 	end,
 
 	on_timer = function(pos)
@@ -77,9 +77,9 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 		local output = meta:get_string"output"
 		if output ~= "" then
 			meta:set_string("output", "")
-			local outputinv = minetest.get_meta(hatches["output.item"][1]):get_inventory()
-			if outputinv:room_for_item("output", output) then
-				outputinv:add_item("output", output)
+			local output_inv = minetest.get_meta(hatches["output.item"][1]):get_inventory()
+			if output_inv:room_for_item("output", output) then
+				output_inv:add_item("output", output)
 			else
 				api.recolor_facedir(pos, 3)
 				return
@@ -89,9 +89,9 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 		local input = minetest.get_meta(hatches["input.item"][1]):get_inventory()
 		local input_map = api.inv_to_itemmap(input:get_list"input")
 
-		local dtrec = recipes.recipes_by_method.distillation_tower
+		local dt_recipes = recipes.recipes_by_method.distillation_tower
 		local vars, func = api.exposed_var()
-		table.iwalk(dtrec, function(v)
+		table.iwalk(dt_recipes, function(v)
 			local rec = recipes.recipe_registry[v]
 			if not input_map[rec.inputs[1]] then return end
 			if (input_map["trinium_materials:cell_empty"] or 0) < rec.data.recovery - 1 then return end
@@ -100,7 +100,7 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 			for i = 2, #rec.outputs do
 				local pos2 = vector.add(pos, vector.multiply({x = 0, y = -1, z = 0}, i - 1))
 				local node = minetest.get_node(pos2).name
-				if node ~= "trinium_machines:controller_distillationlayer" then
+				if node ~= "trinium_machines:controller_distillation_layer" then
 					api.recolor_facedir(pos, 3)
 					return
 				end
@@ -155,5 +155,6 @@ minetest.register_node("trinium_machines:controller_distillationtower", {
 	end,
 })
 
-api.register_multiblock("distillation layer", def)
-recipes.add("greggy_multiblock", input, output, data)
+api.register_multiblock("distillation tower", def)
+recipes.add("greggy_multiblock", r_input, r_output, r_data)
+api.multiblock_rich_info "trinium_machines:controller_distillation_tower"

@@ -103,7 +103,7 @@ minetest.register_node("tinker_phase:tool_station", {
 	tiles = {"tinker_phase.assembly_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png"},
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
 			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
@@ -119,8 +119,8 @@ minetest.register_node("tinker_phase:tool_station", {
 		api.initialize_inventory(inv, {inputs = 6, output = 1})
 		meta:set_string("formspec", tool_station_formspec)
 	end,
-	allow_metadata_inventory_put = function(_, listname, _, stack)
-		return listname == "inputs" and minetest.get_item_group(stack:get_name(), "_tinkerphase_part") ~= 0
+	allow_metadata_inventory_put = function(_, list_name, _, stack)
+		return list_name == "inputs" and minetest.get_item_group(stack:get_name(), "_tinker_phase_part") ~= 0
 			and stack:get_count() or 0
 	end,
 	allow_metadata_inventory_move = function(_, from_list, _, to_list, _, count)
@@ -129,10 +129,10 @@ minetest.register_node("tinker_phase:tool_station", {
 
 	on_metadata_inventory_move = recalculate,
 	on_metadata_inventory_put = recalculate,
-	on_metadata_inventory_take = function(pos, listname)
+	on_metadata_inventory_take = function(pos, list_name)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		if listname == "output" then
+		if list_name == "output" then
 			for i = 1, 6 do
 				local stack = inv:get_stack("inputs", i)
 				stack:take_item()

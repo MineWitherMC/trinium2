@@ -22,7 +22,9 @@ function api.init_wrap(func, ...)
 end
 
 function api.delayed_call(modname, func, ...)
-	if not minetest.get_modpath(modname) then return end -- simplest compat ever!
+	if not minetest.get_modpath(modname) then
+		return
+	end
 	if not signals_sent[modname] then
 		if not queue[modname] then queue[modname] = {} end
 		table.insert(queue[modname], api.init_wrap(func, ...))

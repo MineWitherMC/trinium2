@@ -13,7 +13,7 @@ end
 
 math.ln2 = math.log(2)
 local randomizer = PcgRandom(math.random() * 10^8)
-function math.lograndom(a, b)
+function math.gaussian(a, b)
 	return randomizer:rand_normal_dist(a, b)
 end
 

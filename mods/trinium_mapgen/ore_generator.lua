@@ -20,7 +20,7 @@ assert(stone_cid ~= 127)
 
 local data = {}
 local perlin_map = {}
-minetest.register_on_generated(function(minp, _, seed)
+minetest.register_on_generated(function(min_pos, _, seed)
 	local rand = PcgRandom(seed)
 	local vb, vbs, wb = veins_by_breakpoints, vein_breakpoints_s, vein_breakpoint_w
 	if not vb or not vbs or not wb then
@@ -50,8 +50,8 @@ minetest.register_on_generated(function(minp, _, seed)
 
 	local xs, ys, zs = rand:next(34, 66), rand:next(9, 12), rand:next(34, 66)
 	local dx, dy, dz = rand:next(0, 80 - xs), rand:next(0, 80 - ys), rand:next(0, 80 - zs)
-	local xc, yc, zc = minp.x + dx, minp.y + dy, minp.z + dz
-	local j, veinname, weight, vein
+	local xc, yc, zc = min_pos.x + dx, min_pos.y + dy, min_pos.z + dz
+	local j, vein_name, weight, vein
 
 	for i = 2, #vbs do
 		j = 0
@@ -88,10 +88,10 @@ minetest.register_on_generated(function(minp, _, seed)
 
 	PerlinNoiseMap(noise_params, vec):get3dMap_flat(corner, perlin_map)
 
-	local pkey = 1
+	local perlin_key = 1
 	local count = 0
 	for i in area:iter(xc, yc, zc, xc + xs - 1, yc + ys - 1, zc + zs - 1) do
-		if data[i] == stone_cid and perlin_map[pkey] > 0 then
+		if data[i] == stone_cid and perlin_map[perlin_key] > 0 then
 			count = count + 1
 			x, y, w = 0, 0, v.ore_chances_multiplier
 			choice = rand:next(1, w)
@@ -101,7 +101,7 @@ minetest.register_on_generated(function(minp, _, seed)
 			end
 			data[i] = v.ore_list[y]
 		end
-		pkey = pkey + 1
+		perlin_key = perlin_key + 1
 	end
 
 	if trinium.DEBUG_MODE then

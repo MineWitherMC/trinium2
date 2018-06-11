@@ -29,14 +29,14 @@ function machines.parse_multiblock(def0)
 				return
 			end
 			if minetest.get_item_group(r.name, "greggy_hatch") > 0 then
-				local maxcount = api.get_field(r.name, "ghatch_max") or math.huge
+				local max_count = api.get_field(r.name, "ghatch_max") or math.huge
 				local type = api.get_field(r.name, "ghatch_id")
 				if not vars.counts[type] then vars.counts[type] = 0 end
 				vars.counts[type] = vars.counts[type] + 1
 				local finder = find(r.x, r.y, r.z)
 				if not finder then
 					vars.good = table.exists(def0.hatches, equal(type)) and
-							vars.counts[type] <= maxcount
+							vars.counts[type] <= max_count
 				else
 					vars.good = finder:split":"[1] == "hatch" and finder:split":"[2] == type
 				end
@@ -47,7 +47,7 @@ function machines.parse_multiblock(def0)
 		return vars.good and region.counts[def0.casing] >= def0.min_casings
 	end
 
-	local function unparse(region)
+	local function destroy(region)
 		table.walk(region.region, function(r)
 			if r.name ~= minetest.get_node(r.actual_pos).name then return end
 			if r.name == def0.casing or minetest.get_item_group(r.name, "greggy_hatch") > 0 then
@@ -60,7 +60,7 @@ function machines.parse_multiblock(def0)
 	function def.after_construct(pos, is_constructed, region)
 		local meta = minetest.get_meta(pos)
 		if not is_constructed then
-			unparse(region)
+			destroy(region)
 			meta:from_table()
 			minetest.get_node_timer(pos):stop()
 			return
@@ -99,23 +99,23 @@ function machines.parse_multiblock(def0)
 	for i = 1, #def0.addon_map do
 		if def0.addon_map[i].name ~= "air" then
 			local item = def0.addon_map[i]
-			local isplit = item.name:split":"
-			if isplit[1] ~= "hatch" then
+			local item_split = item.name:split ":"
+			if item_split[1] ~= "hatch" then
 				table.insert(def.map, item)
 			else
-				local s = isplit[2]:split"."
+				local s = item_split[2]:split "."
 				local desc = api.string_superseparation(s[2]).." "..api.string_superseparation(s[1])
-				table.insert(def.map, {x = item.x, y = item.y, z = item.z,
-						name = machines.default_hatches[isplit[2]], desc = S("Any Hatch - @1", desc)})
+				table.insert(def.map, { x = item.x, y = item.y, z = item.z,
+				                        name = machines.default_hatches[item_split[2]], desc = S("Any Hatch - @1", desc) })
 			end
 		end
 	end
 
-	local function unparse_meta(pos)
-		unparse(minetest.get_meta(pos):get_string"region":data() or {region = {}})
+	local function destroy_meta(pos)
+		destroy(minetest.get_meta(pos):get_string "region":data() or { region = {} })
 	end
 
-	return def, unparse_meta,
+	return def, destroy_meta,
 			{def0.casing}, {def0.controller}, {min_casings = def0.min_casings, hatches = def0.hatches}
 end
 

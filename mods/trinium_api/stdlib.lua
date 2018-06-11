@@ -9,7 +9,7 @@ function table.count(array)
 end
 
 function table.filter(array, callable)
-	local array = table.copy(array)
+	array = table.copy(array)
 	for k,v in pairs(array) do
 		if not callable(v,k) then
 			array[k] = nil
@@ -48,7 +48,7 @@ function table.iwalk(array, callable, cond)
 end
 
 function table.map(array, callable)
-	local array = table.copy(array)
+	array = table.copy(array)
 	for k,v in pairs(array) do
 		array[k] = callable(v,k)
 	end
@@ -83,7 +83,7 @@ function table.sum(t)
 	return k
 end
 
-function table.fconcat(t, x)
+function table.f_concat(t, x)
 	x = x or ""
 	local str = ""
 	table.walk(t, function(v) str = str..x..v end)
@@ -95,7 +95,7 @@ function table.tail(t)
 	return helper(unpack(t)) or {}
 end
 
-function table.mtail(t, mult)
+function table.multi_tail(t, mult)
 	local k = t
 	for i = 1, mult do k = table.tail(k) end
 	return k

@@ -3,8 +3,7 @@ local S = research.S
 local M = trinium.materials.materials
 local api = trinium.api
 
-
-local enlightener_formspec = ([=[
+local infuser_formspec = ([=[
 	size[10,7.5]
 	list[context;lens;4,0;1,1;]
 	image[3,0;1,1;trinium_research.lens.png^[brighten]
@@ -28,15 +27,15 @@ local enlightener_formspec = ([=[
 ]=]):format(api.get_fs_texture(M.parchment:get"sheet", "trinium_materials:stardust",
 		M.pyrocatalyst:get"dust", M.bifrost:get"dust", M.xpcatalyst:get"dust", M.imbued_forcillium:get"dust", M.endium:get"dust"))
 
-minetest.register_node("trinium_research:enlightener", {
+minetest.register_node("trinium_research:sheet_infuser", {
 	stack_max = 1,
 	tiles = {"trinium_research.wall.png"},
-	description = S"Enlightener",
+	description = S "Sheet Infuser",
 	groups = {cracky = 1},
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
 			{-0.5, 0.4, -0.5, 0.5, 0.5, 0.5},
@@ -112,13 +111,12 @@ minetest.register_node("trinium_research:enlightener", {
 			inv:set_stack("catalysts", i, s)
 		end
 
-		local lens = inv:get_stack("lens", 1)
-		local lmeta = lens:get_meta()
+		local lens_meta = lens:get_meta()
 		local map_res = table.exists(map_data, function(x)
-			return 	(x.band_material or lmeta:get_string"metal") == lmeta:get_string"metal" and
-					(x.lens_core or lmeta:get_string"gem") == lmeta:get_string"gem" and
-					(x.band_tier or 0) <= lmeta:get_int"tier" and
-					(x.band_shape or lmeta:get_string"shape") == lmeta:get_string"shape"
+			return (x.band_material or lens_meta:get_string "metal") == lens_meta:get_string "metal" and
+					(x.lens_core or lens_meta:get_string "gem") == lens_meta:get_string "gem" and
+					(x.band_tier or 0) <= lens_meta:get_int "tier" and
+					(x.band_shape or lens_meta:get_string "shape") == lens_meta:get_string "shape"
 		end)
 		if not map_res then
 			cmsg.push_message_player(player, S"Infusion has failed!")
@@ -135,15 +133,21 @@ minetest.register_node("trinium_research:enlightener", {
 		stack:set_string("description", S("Infused Research Notes - @1", research.researches[res].name))
 		inv:set_stack("output", 1, stack)
 	end,
+
+	on_rightclick = function(pos, _, player)
+		if minetest.get_meta(pos):get_int("assembled") == 0 then
+			cmsg.push_message_player(player, S "Multiblock is not assembled!")
+		end
+	end,
 })
 
-local enlightener_mb = {
+local infuser_mb = {
 	width = 2,
 	height_d = 1,
 	height_u = 3,
 	depth_b = 4,
 	depth_f = 0,
-	controller = "trinium_research:enlightener",
+	controller = "trinium_research:sheet_infuser",
 	map = {
 		{x = 0, y = -1, z = 2, name = "trinium_default:reflector_glass"},
 		{x = 0, y = -1, z = 1, name = "trinium_research:casing"},
@@ -271,9 +275,10 @@ local enlightener_mb = {
 	},
 	after_construct = function(pos, is_constructed)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", is_constructed and enlightener_formspec or "")
+		meta:set_string("formspec", is_constructed and infuser_formspec or "")
 	end,
 }
 
-api.register_multiblock("sheet enlightener", enlightener_mb)
-api.multiblock_rename(enlightener_mb)
+api.register_multiblock("sheet infuser", infuser_mb)
+api.multiblock_rename(infuser_mb)
+api.multiblock_rich_info "trinium_research:sheet_infuser"

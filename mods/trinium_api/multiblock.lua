@@ -30,18 +30,22 @@ function api.register_multiblock(name, def)
 			def.depth_b + def.depth_f < 13 and
 			def.depth_b + def.depth_f > 1 then
 		for i = (def.height_d == 0 and 0 or -def.height_d), def.height_u do
-			local newmap = table.filter(def.map, function(x) return x.y == i end)
+			local new_map = table.filter(def.map, function(x)
+				return x.y == i
+			end)
 			if i == 0 then
-				table.insert(newmap, {x = 0, y = 0, z = 0, name = def.controller})
+				table.insert(new_map, { x = 0, y = 0, z = 0, name = def.controller })
 			end
 			local map1, tooltips = {}, {}
 			for k = -def.depth_f, def.depth_b do
 			for j = -def.width, def.width do
-				local res = table.exists(newmap, function(a) return a.x == j and a.z == k end)
+				local res = table.exists(new_map, function(a)
+					return a.x == j and a.z == k
+				end)
 				if res then
-					map1[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = newmap[res].name
-					if newmap[res].desc then
-						tooltips[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = newmap[res].desc
+					map1[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].name
+					if new_map[res].desc then
+						tooltips[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].desc
 					end
 				end
 			end
@@ -73,8 +77,8 @@ function api.register_multiblock(name, def)
 			for z = z_min, z_max do
 				local crd = vector.add(pos, {x = x, y = y, z = z})
 				local nn = minetest.get_node(crd).name
-				local depth, rshift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
-				table.insert(rg.region, {x = rshift, y = y, z = depth, name = nn, actual_pos = crd})
+				local depth, r_shift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
+				table.insert(rg.region, { x = r_shift, y = y, z = depth, name = nn, actual_pos = crd })
 				rg.counts[nn] = (rg.counts[nn] or 0) + 1
 			end
 			end
@@ -93,6 +97,40 @@ function api.register_multiblock(name, def)
 			meta:set_int("assembled", is_active and 1 or 0)
 			if def.after_construct then
 				def.after_construct(pos, is_active, rg)
+			end
+		end,
+	})
+end
+
+function api.multiblock_rename(def1)
+	local node, def = def1.controller, def1.map
+	local tbl = {}
+	table.walk(def, function(v)
+		if not tbl[v.name] then
+			tbl[v.name] = 0
+		end
+		tbl[v.name] = tbl[v.name] + 1
+	end)
+	minetest.override_item(node, {
+		description = minetest.registered_nodes[node].description .. api.translate_requirements(tbl)
+	})
+end
+
+function api.multiblock_rich_info(node)
+	api.assert(minetest.registered_items[node], minetest.get_current_modname(), "rich info structure", node)
+	local groups = table.copy(minetest.registered_items[node].groups)
+	groups.rich_info = 1
+	local old_rich_info = minetest.registered_items[node].get_rich_info
+	minetest.override_item(node, {
+		groups = groups,
+		get_rich_info = function(pos, player)
+			local meta = minetest.get_meta(pos)
+			if meta:get_int "assembled" == 1 then
+				if old_rich_info then
+					return old_rich_info(pos, player)
+				end
+			else
+				return api.S "Multiblock is not assembled!"
 			end
 		end,
 	})

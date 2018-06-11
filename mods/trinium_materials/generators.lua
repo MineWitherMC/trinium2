@@ -2,7 +2,7 @@ local mat = trinium.materials
 local recipes = trinium.recipes
 local api = trinium.api
 
-mat.add_recipe_generator("alloysmelting_tower", function(self)
+mat.add_recipe_generator("smelting_tower", function(self)
 	local name = self.name
 	local formula = mat.materials_reg[name].formula
 	local inputs = {}
@@ -28,7 +28,7 @@ mat.add_recipe_generator("alloysmelting_tower", function(self)
 	end
 	melting = math.ceil(melting / 50) * 50
 
-	--[[recipes.add("alloysmelting_tower",
+	--[[recipes.add("smelting_tower",
 		inputs,
 		{self:get("ingot", count)},
 		{temperature = melting})]]
@@ -81,7 +81,7 @@ mat.add_recipe_generator("crude_blast_furnace", function(self)
 	formula:forEach(function(v) sum = sum + v[2] end)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
-		{self:get("dust", sum), mat.fgetter("coal", "dust", 1 + math.floor(sum * 2 / 3))},
+			{ self:get("dust", sum), mat.force_getter("coal", "dust", 1 + math.floor(sum * 2 / 3)) },
 		formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data(),
 		{divisible = true})
 end)

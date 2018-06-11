@@ -75,15 +75,15 @@ M.rhenium_alloy = materials.add("rhenium_alloy", {
 	formula = {{"titanium", 11}, {"rhenium", 2}, {"platinum", 5}},
 	types = {"ingot", "dust", "rod"},
 	description = S"Rhenium Alloy"
-}):generate_data("melting_point"):generate_interactions():generate_recipe("alloysmelting_tower")
+})                         :generate_data("melting_point"):generate_interactions():generate_recipe("smelting_tower")
 
 -- Silver Alloy
 M.silver_alloy = materials.add("silver_alloy", {
 	formula = {{"silver", 2}, {"tennantite", 5}},
 	types = {"ingot", "dust"},
-	description = S"Conductant Silver",
+	description = S "Conductive Silver",
 	data = {melting_point = 1563},
-}):generate_interactions():generate_recipe("alloysmelting_tower"):generate_recipe("crude_alloyer")
+})                        :generate_interactions():generate_recipe("smelting_tower"):generate_recipe("crude_alloyer")
 
 -- Bronze
 M.bronze = materials.add("bronze", {
@@ -91,7 +91,7 @@ M.bronze = materials.add("bronze", {
 	types = {"ingot", "dust"},
 	description = S"Bronze",
 }):generate_data("melting_point"):generate_interactions()
-		:generate_recipe("alloysmelting_tower"):generate_recipe("crude_alloyer")
+                    :generate_recipe("smelting_tower"):generate_recipe("crude_alloyer")
 
 -- Molybdenum-Bismuth
 M.bismuth_molybdenum = materials.add("bismuth_molybdenum", {
@@ -99,4 +99,4 @@ M.bismuth_molybdenum = materials.add("bismuth_molybdenum", {
 	types = {"ingot", "dust", "catalyst"},
 	description = S"Molybdenum-Bismuth",
 }):generate_data("melting_point"):generate_interactions()
-		:generate_recipe("alloysmelting_tower"):generate_recipe("crude_alloyer")
+                                :generate_recipe("smelting_tower"):generate_recipe("crude_alloyer")

@@ -20,22 +20,22 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 			local meta = minetest.get_meta(pos)
 			local ctrlpos = minetest.deserialize(meta:get_string"controller_pos")
 			if not ctrlpos or minetest.get_node(ctrlpos).name ~= "pulse_network:controller" then return true end
-			local ctrlmeta = minetest.get_meta(ctrlpos)
-			return ctrlmeta:get_int"capacity_types" - add_types >= ctrlmeta:get_int"used_types" and
-				ctrlmeta:get_int"capacity_items" - add_items >= ctrlmeta:get_int"used_items"
+			local ctrl_meta = minetest.get_meta(ctrlpos)
+			return ctrl_meta:get_int "capacity_types" - add_types >= ctrl_meta:get_int "used_types" and
+					ctrl_meta:get_int "capacity_items" - add_items >= ctrl_meta:get_int "used_items"
 		end,
 
-		after_dig_node = function(_, _, oldmeta)
-			local ctrlpos = oldmeta.fields.controller_pos
+		after_dig_node = function(_, _, oldmetadata)
+			local ctrlpos = oldmetadata.fields.controller_pos
 			if not ctrlpos then return end
 			ctrlpos = ctrlpos:data()
 			if not ctrlpos then return end
 			if ctrlpos and minetest.get_node(ctrlpos).name == "pulse_network:controller" then
-				local ctrlmeta = minetest.get_meta(ctrlpos)
-				local cs = ctrlmeta:get_int"capacity_types"
-				local items = ctrlmeta:get_int"capacity_items"
-				ctrlmeta:set_int("capacity_types", cs - add_types)
-				ctrlmeta:set_int("capacity_items", items - add_items)
+				local ctrl_meta = minetest.get_meta(ctrlpos)
+				local cs = ctrl_meta:get_int "capacity_types"
+				local items = ctrl_meta:get_int "capacity_items"
+				ctrl_meta:set_int("capacity_types", cs - add_types)
+				ctrl_meta:set_int("capacity_items", items - add_items)
 				pulse.trigger_update(ctrlpos)
 			end
 		end,

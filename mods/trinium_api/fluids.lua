@@ -1,6 +1,6 @@
 local api = trinium.api
 
-function api.register_fluid(srcname, flname, srcdescr, fldescr, color, def)
+function api.register_fluid(src_name, flow_name, src_description, flow_description, color, def)
 	def = table.copy(def)
 	def.paramtype = "light"
 	def.walkable = false
@@ -10,8 +10,8 @@ function api.register_fluid(srcname, flname, srcdescr, fldescr, color, def)
 	def.is_ground_content = false
 	def.drowning = 1
 	def.drop = ""
-	def.liquid_alternative_flowing = flname
-	def.liquid_alternative_source = srcname
+	def.liquid_alternative_flowing = flow_name
+	def.liquid_alternative_source = src_name
 	def.groups = def.groups or {}
 	def.groups.liquid = 3
 	def.post_effect_color = {a = 103, r = 30, g = 60, b = 90}
@@ -31,8 +31,8 @@ function api.register_fluid(srcname, flname, srcdescr, fldescr, color, def)
 		}
 	}
 	def.liquidtype = "source"
-	def.description = srcdescr
-	minetest.register_node(srcname, def)
+	def.description = src_description
+	minetest.register_node(src_name, def)
 
 	def2.drawtype = "flowingliquid"
 	def2.paramtype2 = "flowingliquid"
@@ -61,7 +61,7 @@ function api.register_fluid(srcname, flname, srcdescr, fldescr, color, def)
 		},
 	}
 	def2.liquidtype = "flowing"
-	def2.description = fldescr
-	minetest.register_node(flname, def2)
+	def2.description = flow_description
+	minetest.register_node(flow_name, def2)
 end
 api.register_liquid = api.register_fluid

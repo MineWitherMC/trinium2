@@ -60,7 +60,7 @@ end
 research.aspects = {} -- unordered map
 research.aspect_list = {} -- list
 function research.add_aspect(name, def)
-	research.aspects[name] = api.set_defaults(def, {req1 = nil, req2 = nil})
+	research.aspects[name] = api.set_defaults(def)
 	research.aspects[name].id = name
 	table.insert(research.aspect_list, name)
 	table.sort(research.aspect_list)

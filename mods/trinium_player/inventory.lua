@@ -11,7 +11,7 @@ function api.try_craft(player)
 	end
 	list = trinium.recipe_stringify(9, list)
 	local rr = trinium.recipes.recipe_registry
-	local rbm = trinium.recipes.recipes_by_method["trinium:crafting"]
+	local rbm = trinium.recipes.recipes_by_method.crafting
 
 	local recipe, output = table.exists(rbm, function(v) return rr[v].inputs_string == list end)
 	if not recipe then
@@ -51,9 +51,9 @@ betterinv.register_tab("trinium:default", {
 		local pn = player:get_player_name()
 		local inv1, inv2 = player:get_inventory(), bi[pn]
 		for k in pairs(fields) do
-			local ksplit = k:split"~" -- Module, action, parameters
-			if ksplit[1] == "inventory" then
-				local a = ksplit[2]
+			local k_split = k:split "~" -- Module, action, parameters
+			if k_split[1] == "inventory" then
+				local a = k_split[2]
 				if a == "craft" then
 					local s = inv2:get_stack("output", 1):to_string()
 					if s ~= "" then

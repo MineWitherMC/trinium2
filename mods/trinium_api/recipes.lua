@@ -57,16 +57,19 @@ function recipes.add(method, inputs, outputs, data)
 	-- Registering recipe
 	local new_amount = #recipes.recipe_registry + 1
 	local outputs_string
-	if table.every(outputs, function(k) return type(k) == "string" end) then
-		outputs_string = recipes.stringify(method_table.output_amount, outputs)
-	end
 
 	if data.divisible then
 		inputs, outputs = recipes.divide(inputs, outputs)
 	end
 
+	if table.every(outputs, function(k)
+		return type(k) == "string"
+	end) then
+		outputs_string = recipes.stringify(method_table.output_amount, outputs)
+	end
+
 	recipes.recipe_registry[new_amount] = {
-		["type"] = method,
+		type = method,
 		inputs = inputs,
 		outputs = outputs,
 		data = data,
@@ -112,8 +115,8 @@ function recipes.add_method(method, tbl)
 	trinium.recipes.recipes_by_method[method] = {}
 end
 
-function recipes.get_coords(width, shiftx, shifty, n)
-	return math.modulate(n, width) + shiftx, math.ceil(n / width) + shifty
+function recipes.get_coords(width, shift_x, shift_y, n)
+	return math.modulate(n, width) + shift_x, math.ceil(n / width) + shift_y
 end
 
 function recipes.coord_getter(width, dx, dy)

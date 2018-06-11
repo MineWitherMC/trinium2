@@ -23,20 +23,26 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 
-		on_put = function(inv, listname, index, _, player)
-			if not dp[listname] then dp[listname] = {} end
-			dp[listname][index] = inv:get_stack(listname, index):to_string()
-			if listname == "trash" then
+		on_put = function(inv, list_name, index, _, player)
+			if not dp[list_name] then
+				dp[list_name] = {}
+			end
+			dp[list_name][index] = inv:get_stack(list_name, index):to_string()
+			if list_name == "trash" then
 				inv:set_stack("trash", 1, "")
 				dp.trash = {}
-			elseif listname == "crafting" then api.try_craft(player)
+			elseif list_name == "crafting" then
+				api.try_craft(player)
 			end
 		end,
 
-		on_take = function(inv, listname, index, _, player)
-			if not dp[listname] then dp[listname] = {} end
-			dp[listname][index] = inv:get_stack(listname, index):to_string()
-			if listname == "crafting" then api.try_craft(player)
+		on_take = function(inv, list_name, index, _, player)
+			if not dp[list_name] then
+				dp[list_name] = {}
+			end
+			dp[list_name][index] = inv:get_stack(list_name, index):to_string()
+			if list_name == "crafting" then
+				api.try_craft(player)
 			end
 		end,
 	})

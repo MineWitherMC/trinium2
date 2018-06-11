@@ -7,54 +7,52 @@ minetest.register_node("trinium_research:node_controller", {
 	stack_max = 1,
 	tiles = {"trinium_research.node.png"},
 	description = S"Research Node Controller",
-	groups = {cracky = 1},
+	groups = { cracky = 1, rich_info = 1 },
 	paramtype2 = "facedir",
 	sounds = trinium.sounds.default_stone,
-	on_rightclick = function(pos, _, player, itemstack)
-		local meta = minetest.get_meta(pos)
-		if meta:get_int"assembled" == 0 then
-			cmsg.push_message_player(player, S"Multiblock not assembled!")
-			return
-		end
+	on_rightclick = function(_, _, player, itemstack)
 		local pn = player:get_player_name()
-		if itemstack:is_empty() then
-			cmsg.push_message_player(player,
-					S("Research Node@nPaper: @1@nInk: @2", research.dp2[pn].paper, research.dp2[pn].ink))
-		else
-			local item = itemstack:get_name()
-			if item == M.paper:get"sheet" then
-				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count()
-				itemstack:take_item(99)
-			elseif item == M.carton:get"sheet" then
-				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 4
-				itemstack:take_item(99)
-			elseif item == M.parchment:get"sheet" then
-				research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 16
-				itemstack:take_item(99)
-			elseif item == M.ink:get"cell" then
-				research.dp2[pn].ink = research.dp2[pn].ink + itemstack:get_count() * 100
-				itemstack:take_item(99)
-			elseif item == "trinium_research:charm1" then
-				research.random_aspects(pn, 30 * itemstack:get_count(), {"ignis", "aer", "terra", "aqua"})
-				itemstack:take_item(99)
-			elseif item == "trinium_research:charm2" then
-				research.random_aspects(pn, 100 * itemstack:get_count())
-				itemstack:take_item(99)
-			elseif item == "trinium_research:charm3" then
-				if itemstack:get_meta():get_string"focus" ~= "" then
-					research.random_aspects(pn, 150, {itemstack:get_meta():get_string"focus"})
-				end
-				itemstack:take_item(1)
-			elseif item == "trinium_research:abacus" then
-				local label = {}
-				for i = 1, #research.aspect_list do
-					local an = research.aspect_list[i]
-					table.insert(label, S("@1 x@2", api.string_capitalization(an),
-							research.dp2[pn].aspects[an] or 0))
-				end
-				cmsg.push_message_player(player, table.concat(label, "\n"))
+		local item = itemstack:get_name()
+		if item == M.paper:get "sheet" then
+			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count()
+			itemstack:take_item(99)
+		elseif item == M.carton:get "sheet" then
+			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 4
+			itemstack:take_item(99)
+		elseif item == M.parchment:get "sheet" then
+			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 16
+			itemstack:take_item(99)
+		elseif item == M.ink:get "cell" then
+			research.dp2[pn].ink = research.dp2[pn].ink + itemstack:get_count() * 100
+			itemstack:take_item(99)
+		elseif item == "trinium_research:charm1" then
+			research.random_aspects(pn, 30 * itemstack:get_count(), table.filter(research.aspects, function(a)
+				return not a.req1 and not a.req2
+			end))
+			itemstack:take_item(99)
+		elseif item == "trinium_research:charm2" then
+			research.random_aspects(pn, 100 * itemstack:get_count())
+			itemstack:take_item(99)
+		elseif item == "trinium_research:charm3" then
+			if itemstack:get_meta():get_string "focus" ~= "" then
+				research.random_aspects(pn, 150, { itemstack:get_meta():get_string "focus" })
 			end
+			itemstack:take_item(1)
+		elseif item == "trinium_research:abacus" then
+			local label = {}
+			for i = 1, #research.aspect_list do
+				local an = research.aspect_list[i]
+				table.insert(label, S("@1 x@2", api.string_capitalization(an),
+						research.dp2[pn].aspects[an] or 0))
+			end
+			cmsg.push_message_player(player, table.concat(label, "\n"))
 		end
+	end,
+
+	get_rich_info = function(pos, player)
+		local pn = player:get_player_name()
+		return S("Paper: @1@nInk: @2@nWarp: @3",
+				research.dp2[pn].paper, research.dp2[pn].ink, research.dp2[pn].warp)
 	end,
 })
 
@@ -99,3 +97,4 @@ local node_mb = {
 
 api.register_multiblock("research node", node_mb)
 api.multiblock_rename(node_mb)
+api.multiblock_rich_info "trinium_research:node_controller"

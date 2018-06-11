@@ -3,9 +3,9 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct, input, output, data = machines.parse_multiblock{
-	controller = "trinium_machines:controller_crudeblastfurnace",
-	casing = "trinium_machines:casing_heatbrick",
+local def, destruct, r_input, r_output, r_data = machines.parse_multiblock {
+	controller = "trinium_machines:controller_crude_blast_furnace",
+	casing = "trinium_machines:casing_heat_brick",
 	size = {front = 0, back = 2, up = 2, down = 1, sides = 1},
 	min_casings = 28,
 	addon_map = {
@@ -28,7 +28,7 @@ recipes.add_method("crude_blast_furnace", {
 })
 
 local melting_time = 12
-minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
+minetest.register_node("trinium_machines:controller_crude_blast_furnace", {
 	description = S"Crude Blast Furnace Controller",
 	groups = {cracky = 1},
 	tiles = {{name = "trinium_machines.brick.png", color = "#c7b671"}},
@@ -46,7 +46,7 @@ minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
 		local output = meta:get_string"output"
 		if output ~= "" then
 			meta:set_string("output", "")
-			local output = output:split";"
+			output = output:split ";"
 			local outputs = table.map(hatches["output.item"], function(x) return minetest.get_meta(x):get_inventory() end)
 
 			local good
@@ -68,9 +68,9 @@ minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
 		local input = minetest.get_meta(hatches["input.item"][1]):get_inventory()
 		local input_map = api.inv_to_itemmap(input:get_list"input")
 
-		local crrec = recipes.recipes_by_method.crude_blast_furnace
+		local cbf_recipes = recipes.recipes_by_method.crude_blast_furnace
 		local vars, func = api.exposed_var()
-		table.iwalk(crrec, function(v)
+		table.iwalk(cbf_recipes, function(v)
 			local rec = recipes.recipe_registry[v]
 			if not recipes.check_inputs(input_map, rec.inputs) then return end
 
@@ -88,4 +88,5 @@ minetest.register_node("trinium_machines:controller_crudeblastfurnace", {
 })
 
 api.register_multiblock("crude blast furnace", def)
-recipes.add("greggy_multiblock", input, output, data)
+recipes.add("greggy_multiblock", r_input, r_output, r_data)
+api.multiblock_rich_info "trinium_machines:controller_crude_blast_furnace"

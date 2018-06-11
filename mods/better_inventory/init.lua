@@ -2,14 +2,14 @@ betterinv = {}
 betterinv.tab_position = tonumber(minetest.settings:get("betterinv.tab_position") or "1")
 
 betterinv.tabs = {}
-betterinv.tablist = {}
+betterinv.tab_list = {}
 betterinv.contexts = {}
 betterinv.selections = {}
 betterinv.default = nil
 betterinv.prepend = "background[5,5;1,1;trinium_gui_background.png;true]"
 function betterinv.register_tab(name, def)
 	betterinv.tabs[name] = def
-	table.insert(betterinv.tablist, name)
+	table.insert(betterinv.tab_list, name)
 	def.name = name
 	if def.default then betterinv.default = name end
 end
@@ -19,8 +19,8 @@ function betterinv.generate_buttons(size, filter, selected)
 	if betterinv.tab_position == 4 then str = "tabheader[0,0;betterinv_tabs;" end
 	local select = false
 	local i = 0
-	for j = 1, #betterinv.tablist do
-		local k = betterinv.tablist[j]
+	for j = 1, #betterinv.tab_list do
+		local k = betterinv.tab_list[j]
 		local v = betterinv.tabs[k]
 		if filter(v) then
 			i = i + 1
@@ -80,8 +80,10 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname ~= "" then return end
+minetest.register_on_player_receive_fields(function(player, form_name, fields)
+	if form_name ~= "" then
+		return
+	end
 	local pn = player:get_player_name()
 
 	local good = false
@@ -90,18 +92,18 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 	if fields.betterinv_tabs then
 		local id = tonumber(fields.betterinv_tabs)
-		good = betterinv.selections[pn] ~= betterinv.tablist[id]
+		good = betterinv.selections[pn] ~= betterinv.tab_list[id]
 		if good then
-			betterinv.selections[pn] = betterinv.tablist[id]
-			player:set_inventory_formspec(betterinv.tabs[betterinv.tablist[id]].getter(player, betterinv.contexts[pn][selection]))
+			betterinv.selections[pn] = betterinv.tab_list[id]
+			player:set_inventory_formspec(betterinv.tabs[betterinv.tab_list[id]].getter(player, betterinv.contexts[pn][selection]))
 		end
 	else
 		for k in pairs(fields) do
-			local ksplit = k:split"~"
-			if ksplit[1] == "betterinv" then
+			local k_split = k:split "~"
+			if k_split[1] == "betterinv" then
 				good = true
-				player:set_inventory_formspec(betterinv.tabs[ksplit[2]].getter(player, betterinv.contexts[pn][selection]))
-				betterinv.selections[pn] = ksplit[2]
+				player:set_inventory_formspec(betterinv.tabs[k_split[2]].getter(player, betterinv.contexts[pn][selection]))
+				betterinv.selections[pn] = k_split[2]
 			end
 		end
 	end

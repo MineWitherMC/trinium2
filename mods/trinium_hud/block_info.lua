@@ -17,9 +17,9 @@ minetest.register_on_joinplayer(function(player)
 	huds[pn].bg_info = player:hud_add{
 		hud_elem_type = "image",
 		text = "",
-		scale = {x = -15, y = -30},
+		scale = { x = -20, y = -30 },
 		alignment = {x = 0, y = 0},
-		position = {x = 0.1, y = 0.5},
+		position = { x = 0.125, y = 0.5 },
 	}
 
 	huds[pn].node = player:hud_add{
@@ -32,11 +32,11 @@ minetest.register_on_joinplayer(function(player)
     }
 
 	huds[pn].rich = player:hud_add{
-        hud_elem_type = "text",
-        text = "",
-        number = 0xffffff,
-        alignment = {x = 0, y = 0},
-        position = {x = 0.1, y = 0.5},
+		hud_elem_type = "text",
+		text = "",
+		number = 0xffffff,
+		alignment = {x = 0, y = 0},
+		position = { x = 0.125, y = 0.5 },
     }
 
     huds[pn].mod = player:hud_add{
@@ -133,7 +133,7 @@ hud.register_globalstep("block_info", {
 			local player = players[i]
 			local pn, pos = player:get_player_name(), get_pointed_node(player)
 			if pos then
-				local def = minetest.registered_items[minetest.get_node(pos).name] or {}
+				local def = minetest.registered_items[minetest.get_node(pos).name] or { groups = {} }
 				if def.description ~= block_descriptions[pn] or def.groups.rich_info == 1 then
 					if block_descriptions[pn] == "" then
 						player:hud_change(huds[pn].bg, "text", "trinium_hud.background.png")
@@ -143,9 +143,11 @@ hud.register_globalstep("block_info", {
 					player:hud_change(huds[pn].mod, "text", api.string_superseparation(def.mod_origin or "???"))
 					player:hud_change(huds[pn].image, "text", generate_inv_cube(def))
 
-					if def.groups.rich_info == 1 then
+					local rich_info = def.groups.rich_info == 1 and def.get_rich_info(pos, player)
+					-- todo: refactor rich info to only change when needed and use less time/memory/CPU
+					if rich_info then
 						player:hud_change(huds[pn].bg_info, "text", "trinium_hud.background.png")
-						player:hud_change(huds[pn].rich, "text", def.get_rich_info(pos, player))
+						player:hud_change(huds[pn].rich, "text", rich_info)
 					else
 						player:hud_change(huds[pn].bg_info, "text", "")
 						player:hud_change(huds[pn].rich, "text", "")

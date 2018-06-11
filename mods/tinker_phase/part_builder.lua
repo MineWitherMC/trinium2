@@ -25,7 +25,7 @@ local part_builder_formspec_chest = [[
 local function recalculate(pos)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
-	local pattern = table.concat(table.mtail(inv:get_stack("pattern", 1):get_name():split"_", 2), "_")
+	local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split "_", 2), "_")
 	local def = tinker.patterns[pattern]
 	local count = inv:get_stack("inputs", 1):get_count() + inv:get_stack("inputs", 2):get_count()
 	if not def or count < def.cost then
@@ -46,27 +46,27 @@ local function recalculate(pos)
 	end
 end
 
-local function allow_put(pos, listname, index, stack)
+local function allow_put(pos, list_name, index, stack)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 
 	local n = stack:get_name()
-	if listname == "pattern" then
-		return minetest.get_item_group(n, "_tinkerphase_pattern")
-	elseif listname == "inputs" then
+	if list_name == "pattern" then
+		return minetest.get_item_group(n, "_tinker_phase_pattern")
+	elseif list_name == "inputs" then
 		local other = inv:get_stack("inputs", 3 - index)
 		if not other:is_empty() and other:get_name() ~= n then return 0 end
-		return minetest.get_item_group(n, "_tinkerphase_tool_material") * stack:get_count()
+		return minetest.get_item_group(n, "_tinker_phase_tool_material") * stack:get_count()
 	else
 		return 0
 	end
 end
 
-local function on_take(pos, listname)
-	if listname == "output" then
+local function on_take(pos, list_name)
+	if list_name == "output" then
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local pattern = table.concat(table.mtail(inv:get_stack("pattern", 1):get_name():split"_", 2), "_")
+		local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split "_", 2), "_")
 		local def = tinker.patterns[pattern]
 		local c, l = def.cost, inv:get_list"inputs"
 
@@ -89,7 +89,7 @@ minetest.register_node("tinker_phase:part_builder", {
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
 			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
@@ -121,7 +121,7 @@ minetest.register_node("tinker_phase:part_builder_with_chest", {
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
 			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
@@ -142,7 +142,7 @@ minetest.register_node("tinker_phase:part_builder_with_chest", {
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		return (from_list == to_list or minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinkerphase_pattern") > 0)
+		return (from_list == to_list or minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinker_phase_pattern") > 0)
 				and count or 0
 	end,
 

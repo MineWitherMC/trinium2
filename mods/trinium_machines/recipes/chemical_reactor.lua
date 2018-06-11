@@ -8,7 +8,7 @@ A("chemical_reactor",
 	{time = 25, pressure = 175, temperature = 850, catalyst = "osmium",
 		pressure_tolerance = 25, temperature_tolerance = 20})
 
--- 2(C3H6) + 2NH3 + 3O2 -> 2(CH2CHCN) + 6H2O
+-- 2(C3H6) + 2NH3 + 3O2 -> 2C3H3N + 6H2O
 A("chemical_reactor",
 	{M.propene:get("cell", 2), M.ammonia:get("cell", 2), M.oxygen:get("cell", 3), "trinium_materials:cell_empty"},
 	{M.acrylonitrile:get("cell", 2), M.water:get("cell", 6)},

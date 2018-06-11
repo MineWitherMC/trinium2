@@ -23,7 +23,7 @@ minetest.register_node("trinium_research:randomizer", {
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
-		["type"] = "fixed",
+		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
 			{-0.5, 0.4, -0.5, 0.5, 0.5, 0.5},
@@ -78,25 +78,26 @@ minetest.register_node("trinium_research:randomizer", {
 		end
 
 		local press = ItemStack"trinium_research:press"
-		local pressmeta = press:get_meta()
+		local press_meta = press:get_meta()
 		local upg = minetest.get_item_group(upgrade:get_name(), "lens_upgrade") + 1
+
 		local shape = table.remap(table.keys(table.filter(research.lens_data.shapes, function(x)
 			return x <= upg
 		end)))
+		shape = { table.random(shape) }
 
-		local gem, metal, shape, tierexp =
-			math.lograndom(research.constants.min_gems, research.constants.max_gems),
-			math.lograndom(research.constants.min_metal, research.constants.max_metal),
-			{table.random(shape)}, math.random(1, 2^(research.constants.max_tier - upg + 1) - 1)
+		local gem, metal, tier_exp = math.gaussian(research.constants.min_gems, research.constants.max_gems),
+		math.gaussian(research.constants.min_metal, research.constants.max_metal),
+		math.random(1, 2 ^ (research.constants.max_tier - upg + 1) - 1)
 		shape = shape[1]
 
-		local tier = research.constants.max_tier - math.floor(0.01 + math.log(tierexp) / math.ln2)
-		pressmeta:set_int("gem", gem)
-		pressmeta:set_int("metal", metal)
-		pressmeta:set_string("shape", shape)
-		pressmeta:set_int("tier", tier)
+		local tier = research.constants.max_tier - math.floor(0.01 + math.log(tier_exp) / math.ln2)
+		press_meta:set_int("gem", gem)
+		press_meta:set_int("metal", metal)
+		press_meta:set_string("shape", shape)
+		press_meta:set_int("tier", tier)
 
-		pressmeta:set_string("description",
+		press_meta:set_string("description",
 				S("Research Press@nGem amount needed: @1@nMetal amount needed: @2@nShape: @3@nTier: @4",
 						gem, metal, S(api.string_capitalization(shape)), tier))
 		alloy:take_item(research.constants.press_cost)
@@ -104,12 +105,6 @@ minetest.register_node("trinium_research:randomizer", {
 		inv:set_stack("press", 1, press)
 		upgrade:take_item()
 		inv:set_stack("upgrade", 1, upgrade)
-	end,
-
-	on_rightclick = function(pos, _, player)
-		if minetest.get_meta(pos):get_int("assembled") == 0 then
-			cmsg.push_message_player(player, S"Multiblock not assembled!")
-		end
 	end,
 })
 
@@ -131,3 +126,4 @@ api.register_multiblock("press randomizer", {
 		meta:set_string("formspec", is_constructed and randomizer_formspec or "")
 	end,
 })
+api.multiblock_rich_info "trinium_research:randomizer"
