@@ -47,7 +47,7 @@ A("spade", {
 		return tinker.wrap_description(1, {
 			current_durability = meta:get_int"current_durability",
 			max_durability = meta:get_int"max_durability",
-			base = S("@1 Spade", meta:get_string"material_name"),
+			base = S("@1 Shovel", meta:get_string "material_name"),
 			modifiers = meta:get_string"modifiers":data()
 		})
 	end,

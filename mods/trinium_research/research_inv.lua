@@ -83,7 +83,7 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(S"Back")
 	if research.chapters[chapter_id].create_map then
 		buttons = buttons..("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
-				:format(buttons, S "Get Chapter Map", S "This chapter uses Secret researches discovered via Sheet Infuser")
+				:format(buttons, S "Get Research Map", S "This chapter uses Secret researches discovered via Sheet Infuser")
 	end
 	if not research.researches_by_chapter[chapter_id] then
 		return
@@ -290,8 +290,8 @@ function book.processor(player, context, fields)
 				meta:set_string("description", S("Research Notes - @1", res.name))
 				meta:set_string("research_id", k_split[2])
 
-				if inv:contains_item("main", stack, true) then
-					cmsg.push_message_player(player, S"You already have these research notes!")
+				if inv:contains_item("main", stack, true) or research.check(pn, k_split[2]) then
+					cmsg.push_message_player(player, S "You already have this research!")
 					return
 				elseif research.dp2[pn].ink < 3 then
 					cmsg.push_message_player(player, S"Insufficient Ink!")

@@ -1,6 +1,6 @@
 local api = trinium.api
 local bi = trinium.bound_inventories
-local S = api.S
+local S = trinium.player_S
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()

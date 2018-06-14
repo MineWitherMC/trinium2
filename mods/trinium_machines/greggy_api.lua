@@ -134,10 +134,10 @@ recipes.add_method("greggy_multiblock", {
 	formspec_begin = function(data)
 		local hatches = table.map(data.hatches, function(h)
 			local s = h:split"."
-			return api.string_superseparation(s[2]).." "..api.string_superseparation(s[1])
+			return S(api.string_superseparation(s[2]) .. " " .. api.string_superseparation(s[1]))
 		end)
 		return ("textarea[0.25,2;4.5,3;;;%s]"):format(
-			S("Minimum Casings: @1\n\nAllowed hatches:\n@2", data.min_casings, table.concat(hatches, "\n"))
+				S("Minimum Casings: @1@n@nAllowed hatches:@n@2", data.min_casings, table.concat(hatches, "\n"))
 		)
 	end,
 })

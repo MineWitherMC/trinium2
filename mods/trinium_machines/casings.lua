@@ -37,7 +37,7 @@ local output_bus_fs = "size[8,8.5]list[context;output;2,0;4,4]list[current_playe
 local crude_output_bus_fs = "size[8,5.5]list[context;output;2.5,0;3,1]list[current_player;main;0,1.5;8,4]"
 
 minetest.register_node("trinium_machines:hatch_input_bus", {
-	description = S"Input Bus",
+	description = S "Item Input Hatch",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.casing.png"},
 	overlay_tiles = {{name = "trinium_machines.input_bus_overlay.png", color = "white"}},
@@ -52,7 +52,7 @@ minetest.register_node("trinium_machines:hatch_input_bus", {
 sdh("input.item", "trinium_machines:hatch_input_bus")
 
 minetest.register_node("trinium_machines:hatch_crude_input_bus", {
-	description = S"Crude Input Bus",
+	description = S "Crude Item Input Hatch",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.brick.png"},
 	overlay_tiles = {{name = "trinium_machines.input_bus_overlay.png", color = "white"}},
@@ -66,7 +66,7 @@ minetest.register_node("trinium_machines:hatch_crude_input_bus", {
 })
 
 minetest.register_node("trinium_machines:hatch_output_bus", {
-	description = S"Output Bus",
+	description = S "Item Output Hatch",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.casing.png"},
 	overlay_tiles = {{name = "trinium_machines.output_bus_overlay.png", color = "white"}},
@@ -81,7 +81,7 @@ minetest.register_node("trinium_machines:hatch_output_bus", {
 sdh("output.item", "trinium_machines:hatch_output_bus")
 
 minetest.register_node("trinium_machines:hatch_crude_output_bus", {
-	description = S"Crude Output Bus",
+	description = S "Crude Item Output Hatch",
 	groups = {cracky = 1, greggy_hatch = 1},
 	tiles = {"trinium_machines.brick.png"},
 	overlay_tiles = {{name = "trinium_machines.output_bus_overlay.png", color = "white"}},

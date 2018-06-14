@@ -1,5 +1,6 @@
 local api = trinium.api
 local recipes = trinium.recipes
+local S = api.S
 
 for i = 3, 13, 2 do
 	for j = 3, 13 do
@@ -12,9 +13,9 @@ for i = 3, 13, 2 do
 			end,
 			formspec_width = i + 2,
 			formspec_height = j + 2,
-			formspec_name = "Multiblock",
+			formspec_name = S "Multiblock",
 			formspec_begin = function(data)
-				return ("label[0,%s;Current Height: %s]"):format(j + 1, data.h)
+				return ("label[0,%s;%s]"):format(j + 1, S("Current Height: @1", data.h))
 			end,
 		})
 	end
@@ -130,7 +131,7 @@ function api.multiblock_rich_info(node)
 					return old_rich_info(pos, player)
 				end
 			else
-				return api.S "Multiblock is not assembled!"
+				return S "Multiblock is not assembled!"
 			end
 		end,
 	})

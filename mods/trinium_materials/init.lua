@@ -1,7 +1,7 @@
 local path = minetest.get_modpath"trinium_materials"
 
 trinium.materials = {}
-trinium.materials.S = minetest.get_translator"trinium_research"
+trinium.materials.S = minetest.get_translator "trinium_materials"
 
 dofile(path.."/api.lua")
 dofile(path.."/material_types.lua")

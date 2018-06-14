@@ -73,7 +73,7 @@ minetest.register_node("trinium_research:randomizer", {
 		end
 
 		if not press1:is_empty() then
-			cmsg.push_message_player(player, S"Extract press to continue!")
+			cmsg.push_message_player(player, S "Extract Press to continue!")
 			return
 		end
 
@@ -97,9 +97,10 @@ minetest.register_node("trinium_research:randomizer", {
 		press_meta:set_string("shape", shape)
 		press_meta:set_int("tier", tier)
 
+		local ss = api.string_superseparation(shape)
 		press_meta:set_string("description",
 				S("Research Press@nGem amount needed: @1@nMetal amount needed: @2@nShape: @3@nTier: @4",
-						gem, metal, S(api.string_capitalization(shape)), tier))
+						gem, metal, S(ss), tier))
 		alloy:take_item(research.constants.press_cost)
 		inv:set_stack("rhenium_alloy", 1, alloy)
 		inv:set_stack("press", 1, press)

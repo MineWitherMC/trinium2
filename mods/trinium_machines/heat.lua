@@ -3,7 +3,7 @@ local S = trinium.machines.S
 local sdh = trinium.machines.set_default_hatch
 
 minetest.register_node("trinium_machines:hatch_temp_input", {
-	description = S"Temperature Hatch",
+	description = S "Heat Input Hatch",
 	groups = {cracky = 1, greggy_hatch = 1, heat_container = 1, rich_info = 1},
 	tiles = {"trinium_machines.casing.png"},
 	overlay_tiles = {{name = "trinium_machines.temperature_input_overlay.png", color = "white"}},

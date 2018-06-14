@@ -1,0 +1,25 @@
+# textdomain: tinker_phase
+
+Pattern - @1=Шаблон - @1
+Material Cost: @1=Цена: @1 единиц
+Durability: @1/@2=Прочность: @1/@2
+
+Dense=Плотность
+Reinforced=Укрепление
+
+Part Builder=Сборщик частей
+Part Builder with Chest=Сборщик частей с сундуком
+Tool Station=Инженерная станция
+
+@1 Pickaxe Head=Лезвие кирки из @1
+Pickaxe Head=Лезвие кирки
+@1 Axe Head=Лезвие топора из @1
+Axe Head=Лезвие топора
+@1 Shovel Head=Лезвие лопаты из @1
+Shovel Head=Лезвие лопаты
+@1 Tool Rod=Стержень из @1
+Tool Rod=Стержень
+
+@1 Pickaxe=Кирка из @1
+@1 Hatchet=Топор из @1
+@1 Shovel=Лопата из @1

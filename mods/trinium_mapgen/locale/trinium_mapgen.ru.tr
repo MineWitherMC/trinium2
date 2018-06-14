@@ -1,0 +1,26 @@
+# textdomain: trinium_mapgen
+
+Cobblestone=Булыжник
+Stone=Камень
+Sand=Песок
+Gravel=Гравий
+Snow=Снег
+Snow Layer=Снег
+Dirt=Земля
+Dirt with Grass=Земля с травой
+Dirt with Snow=Земля с заснеженной травой
+Dirt with Podzol=Земля с листвой
+Dirt with Dry Grass=Земля с засушенной травой
+Clay=Блок глины
+Fir Log=Древесина пихты
+Fir Needles=Хвоя пихты
+Acacia Log=Древесина акации
+Acacia Leaves=Листва акации
+Maple Log=Древесина клёна
+Maple Leaves=Листва клёна
+Water=Вода
+Flowing Water=Текущая вода
+River Water=Речная вода
+Flowing River Water=Текущая речная вода
+Rock=Камень
+Stick=Палка

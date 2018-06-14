@@ -1,5 +1,5 @@
 local api = trinium.api
-local S = api.S
+local S = trinium.player_S
 local recipes = trinium.recipes
 
 trinium.nei = {}
@@ -155,7 +155,7 @@ local function get_formspec(pn, id, item, mode)
 			%s
 			label[0,%s;%s]
 		]=]):format(width, height + 0.5,
-				formspec, height + 0.2, S("@1 @2 of @3", S1[mode], new_id, number))
+				formspec, height + 0.2, S(("%s @1 of @2"):format(mode == 1 and "Recipe" or "Usage"), new_id, number))
 
 		if number > 1 then
 			formspec = formspec..([=[

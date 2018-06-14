@@ -263,7 +263,7 @@ do
 
 	minetest.register_craftitem("trinium_materials:brick", {
 		description = S"Brick",
-		inventory_image = "trinium_materials.ingot.png^[multiply:#483526"
+		inventory_image = "trinium_materials.ingot.png^[multiply:#887556"
 	})
 
 	minetest.register_craftitem("trinium_materials:clay", {

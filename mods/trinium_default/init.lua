@@ -1,6 +1,6 @@
 trinium.default = {}
 local default = trinium.default
-default.S = minetest.get_translator("trinium_default")
+default.S = minetest.get_translator "trinium_default"
 local S = default.S
 local ss = trinium.sounds
 

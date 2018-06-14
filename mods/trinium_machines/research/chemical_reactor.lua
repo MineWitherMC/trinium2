@@ -233,6 +233,7 @@ This compound will definitely be very useful in your further progressions.]],
 		{ x = 1, y = 6, aspect = "ratus" },
 		{ x = 4, y = 4, aspect = "firmitatem" },
 	},
+	important = 1,
 })
 research.add_req("ABS", "Acrylonitrile")
 research.add_req("ABS", "HydrocarbonDehydration-3")

@@ -1,6 +1,6 @@
 local A = tinker.add_system_material
 local M = trinium.materials.materials
-local S = tinker.S
+local S = trinium.materials.S
 
 A(M.iron, {
 	base_durability = 275,

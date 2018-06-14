@@ -148,6 +148,7 @@ minetest.register_node("trinium_research:lens_carver", {
 		local item_gem2 = table.exists(research.lens_data.gems, function(x) return x == item_gem end)
 		local item_metal2 = table.exists(research.lens_data.metals, function(x) return x == item_metal end)
 
+		local ss = api.string_superseparation(shape)
 		local lens = ItemStack"trinium_research:lens"
 		local lens_meta = lens:get_meta()
 		lens_meta:set_string("gem", item_gem2)
@@ -157,7 +158,7 @@ minetest.register_node("trinium_research:lens_carver", {
 		lens_meta:set_string("description",
 				S("Research Lens@nGem Material: @1@nMetal Material: @2@nShape: @3@nTier: @4",
 						item_gem1, item_metal1,
-						S(api.string_capitalization(shape)), actual_tier))
+						S(ss), actual_tier))
 		upgrade:take_item()
 		inv:set_stack("upgrade", 1, upgrade)
 		inv:set_stack("lens", 1, lens)

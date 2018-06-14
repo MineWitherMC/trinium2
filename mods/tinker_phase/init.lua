@@ -37,7 +37,7 @@ function tinker.add_pattern(name, def)
 		groups = { hidden_from_irp = 1, _tinker_phase_part = 1 },
 	})
 	minetest.register_craftitem("tinker_phase:pattern_"..name, {
-		description = S("Pattern - @1", def.description:sub(4)).."\n"..
+		description = S("Pattern - @1", S(def.description:sub(4))) .. "\n" ..
 				minetest.colorize("#CCC", S("Material Cost: @1", def.cost)),
 		inventory_image = "tinker_phase.pattern_base.png^(tinker_phase.part."..name..".png^[colorize:#4D3C22)",
 		groups = { _tinker_phase_pattern = 1 },

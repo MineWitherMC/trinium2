@@ -57,7 +57,7 @@ local function get_terminal_formspec(ctrlpos, index, search_string)
 		button[6,11;1,1;send_search;>>]
 		field_close_on_enter[search;false]
 		%s
-		textarea[5.25,5.7;3,1;;;%s]
+		textarea[5.25,5.5;3,1.2;;;%s]
 	]]):format(search_string, generate_buttons(ctrlpos, index, search_string),
 			S("Types: @1/@2", UT, CT).."\n"..S("Items: @1/@2", UI, CI))
 end

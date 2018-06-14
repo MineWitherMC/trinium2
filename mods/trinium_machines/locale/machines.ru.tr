@@ -1,0 +1,35 @@
+# textdomain: trinium_machines
+
+Crude Blast Furnace Controller=Контроллер примитивной доменной печи
+Chemical Reactor Controller=Контроллер химического реактора
+Distillation Layer Core=Ядро слоя рекрификации
+Distillation Tower Controller=Контроллер рекрификационной колонны
+
+Chemical Casing=Химический корпус
+Distillation Grate=Дистилляционная труба
+Heat-Proof Brick Block=Теплоустойчивый кирпич
+
+Item Input Hatch=Шина входа предметов
+Crude Item Input Hatch=Примитивная шина входа предметов
+Item Output Hatch=Шина выхода предметов
+Crude Item Output Hatch=Примитивная шина выхода предметов
+Pressure Input Hatch=Шина входа давления
+Heat Input Hatch=Шина нагрева
+
+Heat Cable=Нагревательный кабель
+Creative Heat Generator=Творческий нагреватель
+
+Pressure: @1 kPa=Давление: @1 кПа
+Heat: @1K=Температура: @1 K
+Minimum Casings: @1@n@nAllowed hatches:@n@2=Минимальное количество корпусов: @1@n@nДопустимые шины:@n@2
+Any Hatch - @1=Любая шина вида "@1"
+
+GT Multiblock=Модульная структура
+Crude Blast Furnace=Примитивная доменная печь
+Chemical Reactor=Химический реактор
+Distillation=Рекрификация
+
+Heat Input=Нагрев
+Pressure Input=Вход давления
+Item Input=Вход предметов
+Item Output=Выход предметов

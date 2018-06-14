@@ -90,11 +90,11 @@ minetest.register_node("trinium_research:sheet_infuser", {
 		end
 		local lens, map = inv:get_stack("lens", 1), inv:get_stack("chapter_core", 1)
 		if lens:is_empty() then
-			cmsg.push_message_player(player, S"No Research Lens!")
+			cmsg.push_message_player(player, S "Insert Lens to continue!")
 			return
 		end
 		if map:is_empty() then
-			cmsg.push_message_player(player, S"No Research Map!")
+			cmsg.push_message_player(player, S "Insert Research Map to continue!")
 			return
 		end
 		if not inv:get_stack("output", 1):is_empty() then
@@ -132,12 +132,6 @@ minetest.register_node("trinium_research:sheet_infuser", {
 		stack:set_string("research_id", res)
 		stack:set_string("description", S("Infused Research Notes - @1", research.researches[res].name))
 		inv:set_stack("output", 1, stack)
-	end,
-
-	on_rightclick = function(pos, _, player)
-		if minetest.get_meta(pos):get_int("assembled") == 0 then
-			cmsg.push_message_player(player, S "Multiblock is not assembled!")
-		end
 	end,
 })
 

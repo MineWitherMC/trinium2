@@ -1,0 +1,105 @@
+# textdomain: trinium_materials
+
+@1 Plate=Пластина из @1
+@1 Sheet=Лист @1
+@1 Cell=Капсула @1
+@1 Ingot=Слиток @1
+@1=Кристалл @1
+@1 Dust=Пыль @1
+@1 Rod=Стержень из @1
+@1 Brick=Кирпич из @1
+@1 Ore=Руда @1
+@1 Pulp=Порошок @1
+@1-based Catalyst=Катализатор на основе @1
+
+Ferric Oxide=триоксида железа
+Chromia=хромовой зелени
+
+Water=воды
+Hydrogen=водорода
+Nitrogen=азота
+Oxygen=кислорода
+Ammonia=аммиака
+Steam=пара
+
+Methane=метана
+Ethylene=этилена
+Ethane=этана
+Propene=пропена
+Propane=пропана
+Butane=бутана
+Butadiene=бутадиена
+Pentane=пентана
+Isoprene=изопрена
+Benzene=бензола
+Toluene=толуола
+Octane=октана
+Xylene=ксилола
+
+Ethylbenzene=этилбензола
+Styrene=стирола
+Acrylonitrile=акрилонитрила
+ABS Plastic=ABS-пластика
+
+Glass=стекла
+Paper=бумаги
+Carton=картона
+Parchment=пергамента
+Ink=чернил
+
+Raw Oil=сырой нефти
+Desulfurized Oil=очищенной нефти
+Refinery Gas=природного газа
+Petroleum Ether=петролейного эфира
+Naphtha=лигроина
+Natural Kerosene=фракционного керосина
+Natural Diesel=фракционного дизеля
+Mazut=мазута
+
+Empty Cell=Пустая капсула
+Stardust=Звёздная пыль
+Brick=Кирпич
+Clay=Глина
+Stick=Палка
+Rock=Камень
+
+Pyrolysis Catalyst=пирокатализатора
+Experience Catalyst=катализатора опыта
+Bifrost=фрезеритного катализатора
+Forcillium=форсиллия
+Imbued Forcillium=заряженного форсиллия
+Endium=эндиума
+
+Titanium=титана
+Iron=железа
+Copper=меди
+Zinc=цинка
+Molybdenum=молибдена
+Silver=серебра
+Tin=олова
+Antimony=сурьмы
+Rhenium=рения
+Platinum=платины
+Osmium=осмия
+Lead=свинца
+Bismuth=висмута
+
+Rhenium Alloy=рениевого сплава
+Cupronickel=купроникеля
+Conductive Silver=проводящего серебра
+Pulsating Alloy=пульсирующего сплава
+Bronze=бронзы
+Molybdenum-Bismuth=молибдено-висмутового сплава
+
+Coal=угля
+Antracite=антрацита
+Graphite=графита
+Diamond=алмаза
+Tennantite=теннантита
+Chalcopyrite=халькопирита
+Freibergite=фрейбергита
+Galena=галенита
+Sphalerite=сфалерита
+Tetrahedrite=тетраэдрита
+
+Sulfur=серы

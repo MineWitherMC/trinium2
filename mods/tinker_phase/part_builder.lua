@@ -38,6 +38,7 @@ local function recalculate(pos)
 		if not item then
 			inv:set_stack("output", 1, "")
 		else
+			api.dump(def.description, item.description)
 			meta2:set_string("color", "#"..item.color)
 			meta2:set_string("description", S(def.description, item.description))
 			meta2:set_string("material_data", minetest.serialize(item))
