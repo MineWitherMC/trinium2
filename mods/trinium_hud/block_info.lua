@@ -9,7 +9,7 @@ minetest.register_on_joinplayer(function(player)
 	huds[pn].bg = player:hud_add{
 		hud_elem_type = "image",
 		text = "",
-		scale = {x = -30, y = -15},
+		scale = { x = -40, y = -15 },
 		alignment = {x = 0, y = 0.5},
 		position = {x = 0.5, y = 0.1},
 	}
@@ -23,12 +23,12 @@ minetest.register_on_joinplayer(function(player)
 	}
 
 	huds[pn].node = player:hud_add{
-        hud_elem_type = "text",
-        text = "",
-        number = 0xffffff,
-        alignment = {x = 1, y = 0},
-        position = {x = 0.35, y = 0.125},
-        offset = {x = 48, y = 0},
+		hud_elem_type = "text",
+		text = "",
+		number = 0xffffff,
+		alignment = {x = 1, y = 0},
+		position = { x = 0.3, y = 0.125 },
+		offset = {x = 48, y = 0},
     }
 
 	huds[pn].rich = player:hud_add{
@@ -40,21 +40,21 @@ minetest.register_on_joinplayer(function(player)
     }
 
     huds[pn].mod = player:hud_add{
-        hud_elem_type = "text",
-        text = "",
-        number = 0x003267,
-        alignment = {x = 1, y = 0},
-        position = {x = 0.35, y = 0.15},
-        offset = {x = 48, y = 0},
+	    hud_elem_type = "text",
+	    text = "",
+	    number = 0x003267,
+	    alignment = {x = 1, y = 0},
+	    position = { x = 0.3, y = 0.15 },
+	    offset = {x = 48, y = 0},
     }
 
 	huds[pn].image = player:hud_add{
-        hud_elem_type = "image",
-        text = "",
-        scale = {x = 1, y = 1},
-        alignment = 0,
-        position = {x = 0.65, y = 0.1375},
-        offset = {x = -56, y = 0},
+		hud_elem_type = "image",
+		text = "",
+		scale = {x = 1, y = 1},
+		alignment = 0,
+		position = { x = 0.7, y = 0.1375 },
+		offset = {x = -56, y = 0},
     }
 
 	block_descriptions[pn] = ""

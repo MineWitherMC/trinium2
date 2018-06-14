@@ -1,4 +1,5 @@
 # textdomain: pulse_network
+
 Pulse Network Combinator=Комбинатор пульс-сети
 Pulse Network Controller=Контроллер пульс-сети
 Pulse Network Storage Cell=Базовая ячейка пульс-сети
@@ -6,3 +7,13 @@ Void Pulse Network Storage Cell=Пустотная ячейка пульс-се�
 Condensed Pulse Network Storage Cell=Сжатая ячейка пульс-сети
 Ultimate Pulse Network Storage Cell=Совершенная ячейка пульс-сети
 Pulse Network Terminal=Терминал пульс-сети
+
+Combinator successfully connected to network!=Комбинатор привязан к сети!
+Connected to (@1, @2, @3)=Привязан к (@1, @2, @3)
+Combinator got unlinked!=Привяжите комбинатор к сети!
+Target too far!=Устройство слишком далеко!
+This device is already connected!=Устройство уже подключено к сети!
+Device successfully connected to network!=Устройство успешно подключено!
+Incorrect target!=Неверная цель!
+Types: @1/@2=Типов: @1/@2
+Items: @1/@2=Предметов: @1/@2

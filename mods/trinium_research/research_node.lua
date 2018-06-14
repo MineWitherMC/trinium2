@@ -51,8 +51,8 @@ minetest.register_node("trinium_research:node_controller", {
 
 	get_rich_info = function(pos, player)
 		local pn = player:get_player_name()
-		return S("Paper: @1@nInk: @2@nWarp: @3",
-				research.dp2[pn].paper, research.dp2[pn].ink, research.dp2[pn].warp)
+		return S("Ink: @1@nPaper: @2@nWarp: @3",
+				research.dp2[pn].ink, research.dp2[pn].paper, research.dp2[pn].warp)
 	end,
 })
 

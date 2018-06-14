@@ -71,8 +71,8 @@ minetest.register_node("pulse_network:controller", {
 
 	get_rich_info = function(pos, player)
 		local meta = minetest.get_meta(pos)
-		return S("Used types: @1/@2", meta:get_int "used_types", meta:get_int "capacity_types") .. "\n" ..
-				S("Stored items: @1/@2", meta:get_int "used_items", meta:get_int "capacity_items")
+		return S("Types: @1/@2", meta:get_int "used_types", meta:get_int "capacity_types") .. "\n" ..
+				S("Items: @1/@2", meta:get_int "used_items", meta:get_int "capacity_items")
 	end,
 
 	after_dig_node = function(_, _, oldmetadata)

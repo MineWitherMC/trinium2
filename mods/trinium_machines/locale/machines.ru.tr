@@ -20,9 +20,10 @@ Heat Cable=Нагревательный кабель
 Creative Heat Generator=Творческий нагреватель
 
 Pressure: @1 kPa=Давление: @1 кПа
-Heat: @1K=Температура: @1 K
+Heat: @1K=Температура: @1 кельвин
 Minimum Casings: @1@n@nAllowed hatches:@n@2=Минимальное количество корпусов: @1@n@nДопустимые шины:@n@2
 Any Hatch - @1=Любая шина вида "@1"
+Ticking Heat: @1K=Генерируется @1 кельвин
 
 GT Multiblock=Модульная структура
 Crude Blast Furnace=Примитивная доменная печь
