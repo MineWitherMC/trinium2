@@ -94,10 +94,14 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 
 	local enable
 	for k, v in pairs(research.researches_by_chapter[chapter_id]) do
+		local desc = v.name
+		if v.warp then
+			desc = desc .. "\n" .. minetest.colorize("#663399", S("Forbidden Knowledge: Level @1", v.warp))
+		end
 		enable = false
 		if research.dp1[pn][k] or v.pre_unlock then
 			-- Research available
-			for k1,v1 in pairs(v.requirements) do
+			for v1 in pairs(v.requirements) do
 				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
 					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
@@ -108,13 +112,13 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 				buttons = buttons..([=[
 					item_image_button[%s,%s;1,1;%s;open_research~%s;]
 					tooltip[open_research~%s;%s]
-				]=]):format(v.x - cx, v.y - cy, v.texture, k, k, v.name)
+				]=]):format(v.x - cx, v.y - cy, v.texture, k, k, desc)
 				enable = true
 			end
-		elseif table.every(v.requirements, function(a) return research.researches[a].pre_unlock or
-				research.dp1[pn][a] end) and not v.hidden then
+		elseif table.every(v.requirements, function(_, a) return not research.researches[a] or
+				research.researches[a].pre_unlock or research.check(pn, a) end) and not v.hidden then
 			-- Obtainable research sheet
-			for k1,v1 in pairs(v.requirements) do
+			for v1 in pairs(v.requirements) do
 				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
 					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
@@ -127,7 +131,7 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 						background[%s,%s;1,1;trinium_research_gui.glowing.png]
 						item_image_button[%s,%s;1,1;%s;get_sheet~%s;]
 						tooltip[get_sheet~%s;%s]
-					]=]):format(v.x - cx, v.y - cy, v.x - cx, v.y - cy, v.texture, k, k, v.name)
+					]=]):format(v.x - cx, v.y - cy, v.x - cx, v.y - cy, v.texture, k, k, desc)
 				enable = true
 			end
 		end
@@ -147,48 +151,57 @@ local function get_book_research_fs(pn, context)
 	local res, key = split[2], tonumber(split[3])
 	local def = research.researches[res]
 	local text = def.text[key]
-	local unlocked_list = research.dp2[pn]
 
 	if type(text) == "string" then
-		text = {form = "textarea[0,1;8,7;;;"..text.."]", w = 8, h = 8, locked = false}
+		text = { form = "textarea[0.25,1;7.75,7;;;" .. text .. "]", w = 8, h = 8, locked = false }
 	end
 	if type(text[1]) == "table" then
 		for k,v in pairs(text[1]) do
-			text[k] = v
+			if not text[k] then
+				text[k] = v
+			end
 		end
 	end
+	if text.text and not text.form then
+		text.form = "textarea[0.25,1;7.75,7;;;" .. (text.text) .. "]"
+	end
 
-	if text.requirements and not table.every(text.requirements, function(v, k) return unlocked_list[k] end) then
+	if text.requirements and not table.every(text.requirements, function(v, k) return research.check(pn, k) end) then
 		-- has requirement
 		return ([=[
-			label[0,7.6;%s]
-			button[6,0.25;1,0.5;turn_backward;<]
-			button[7,0.25;1,0.5;turn_forward;>]
-			textarea[0,1;8,7;;;%s]
-			button[7,7.4;1,1;open_chapter~%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S"This page is not found yet", def.chapter, S"Back"),
-				"size[8,8.6]"
-	elseif text.locked and not unlocked_list[res.."-"..key] then
-		local good = true
-		local reqs = table.concat(table.map(text.required_aspects, function(v, k)
-			if not research.dp1[pn].aspects[k] then
-				research.dp1[pn].aspects[k] = 0
-			end
-			local amount = research.dp1[pn].aspects[k]
-			local color = amount >= v and "#00CC00" or "#CC0000"
-			if amount < v then good = false end
-
-			return minetest.colorize(color,
-					S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, amount))
-		end), "\n")
-		return ([=[
-			label[0,7.6;%s]
+			label[0,8.2;%s]
 			button[6,0.25;1,0.5;turn_backward;<]
 			button[7,0.25;1,0.5;turn_forward;>]
 			textarea[0,1;8,7;;;%s]
 			button[7,8;1,1;open_chapter~%s;%s]
+		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S"This page is not found yet", def.chapter, S"Back"),
+				"size[8,8.6]"
+	elseif text.locked and not research.check(pn, res .. "-" .. key) then
+		local good = true
+		local r = 0
+		local reqs = table.f_concat(table.map(text.required_aspects, function(v, k)
+			if not research.dp2[pn].aspects[k] then
+				research.dp2[pn].aspects[k] = 0
+			end
+			local amount = research.dp2[pn].aspects[k]
+			local color = amount >= v and "#00CC00" or "#CC0000"
+			if amount < v then good = false end
+			r = r + 1
+
+			return ("label[0,%s;%s]"):format(
+					(2 + r) / 3,
+					minetest.colorize(color,
+							S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, amount))
+			)
+		end))
+		return ([=[
+			label[0,8.2;%s]
+			button[6,0.25;1,0.5;turn_backward;<]
+			button[7,0.25;1,0.5;turn_forward;>]
+			%s
+			button[7,8;1,1;open_chapter~%s;%s]
 			button[0,7;8,1;%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, k, #def.text),
+		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text),
 				reqs, def.chapter, S"Back", good and "unlock" or "", S"Unlock"), "size[8,8.6]"
 	else
 		local w, h = math.max(text.w, 8), math.max(text.h, 8) + 0.6
@@ -218,13 +231,12 @@ local book = {description = S"Research Book"}
 function book.getter(player, context)
 	local pn = player:get_player_name()
 	context.book = context.book or "default_bg"
-	context.book_x = context.book_x or 0
 	context.book_y = context.book_y or 0
 	local split = context.book:split"~"
 	if split[1] == "default_bg" then
 		return sfinv.make_formspec(player, context, get_book_fs(pn), false, false, get_book_bg(pn))
 	elseif split[1] == "chapter" then
-		local fs = get_book_chapter_fs(split[2], pn, context.book_x, context.book_y)
+		local fs = get_book_chapter_fs(split[2], pn, 0, context.book_y)
 		return sfinv.make_formspec(player, context, fs, false, false, get_book_chapter_bg(split[2]))
 	elseif split[1] == "research" then -- research~SomeTestResearch~3 (3rd page)
 		local fs, s = get_book_research_fs(pn, context)
@@ -249,7 +261,6 @@ function book.processor(player, context, fields)
 				context.book = "chapter~" .. k_split[2]
 			elseif a == "open_book" then
 				context.book = "default_bg"
-				context.book_x = 0
 				context.book_y = 0
 			elseif a == "open_research" then
 				context.book = ("research~%s~1"):format(k_split[2])
@@ -267,11 +278,10 @@ function book.processor(player, context, fields)
 				local res = research.researches[cs[2]]
 
 				cs[3] = tonumber(cs[3])
-				table.walk(res.text[cs[3]], function(v, k)
+				table.walk(res.text[cs[3]].required_aspects, function(v, k)
 					research.dp2[pn].aspects[k] = research.dp2[pn].aspects[k] - v
 				end)
 
-				res.player_stuff[pn].research_array[2][k1] = nil
 				research.dp1[pn][cs[2].."-"..cs[3]] = 1
 			elseif a == "get_sheet" then
 				local stack = ItemStack("trinium_research:notes_2")

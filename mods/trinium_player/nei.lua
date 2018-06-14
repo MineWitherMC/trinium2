@@ -79,10 +79,14 @@ function item_panel.getter(player, context)
 end
 
 function nei.absolute_draw_recipe(l_recipes, rec_id)
-	local max = #l_recipes
-	if max == 0 then return "", 0, 0, 0 end
-	local id = math.modulate(rec_id or 1, max)
-	local recipe = recipes.recipe_registry[l_recipes[id]]
+	local id = rec_id
+	local max = #recipes.recipe_registry
+	if l_recipes then
+		max = #l_recipes
+		if max == 0 then return "", 0, 0, 0 end
+		id = math.modulate(rec_id or 1, max)
+	end
+	local recipe = l_recipes and recipes.recipe_registry[l_recipes[id]] or recipes.recipe_registry[id]
 	local method = recipes.methods[recipe.type]
 
 	local formspec = ("%s label[0,0;%s]"):format(method.formspec_begin(recipe.data), method.formspec_name)
@@ -137,9 +141,8 @@ function nei.draw_recipe(item, player, rec_id, tbl1, rec_method)
 	return nei.absolute_draw_recipe(recipes1, rec_id)
 end
 
-local R = recipes.recipes
-function nei.draw_research_recipe(item, num)
-	local x = {nei.absolute_draw_recipe(R[item], num or 1)}
+function nei.draw_research_recipe(recipe_id)
+	local x = { nei.absolute_draw_recipe(false, recipe_id) }
 	return {form = x[1], w = x[2], h = x[3]}
 end
 

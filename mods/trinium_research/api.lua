@@ -43,9 +43,11 @@ function research.grant(pn, name)
 	local s = research.get_tree(name):filter(function(k) return not research.check(pn, k) end)
 	if s:count() > 0 then
 		minetest.chat_send_player(pn, S"Unknown Research!")
+		return false
 	else
 		dp1[pn][name] = true
 		minetest.chat_send_player(pn, S("Successfully learned @1", name))
+		return true
 	end
 end
 
@@ -91,4 +93,9 @@ function research.random_aspects(pn, num, arr)
 		if not research.dp2[pn].aspects[rand] then research.dp2[pn].aspects[rand] = 5 end
 		research.dp2[pn].aspects[rand] = research.dp2[pn].aspects[rand] + 1
 	end
+end
+
+function research.label_escape(text, desc, asp)
+	return { form = "textarea[0.25,1;7.75,7;;;" .. text .. "]",
+	         w = 8, h = 8, locked = true, required_aspects = asp, name = desc }
 end

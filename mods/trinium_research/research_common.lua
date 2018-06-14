@@ -67,13 +67,21 @@ minetest.register_craftitem("trinium_research:notes_1", {
 	on_place = function(item, player)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()
-		research.dp1[pn][meta:get_string"research_id"] = 1
+		local name = meta:get_string "research_id"
+		if research.grant(pn, name) and research.researches[name] and research.researches[name].warp then
+			cmsg.push_message_player(player, S("Given @1 warp!", research.researches[name].warp))
+			research.dp2[pn].warp = research.dp2[pn].warp + research.researches[name].warp
+		end
 		return ""
 	end,
 	on_secondary_use = function(item, player)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()
-		research.dp1[pn][meta:get_string"research_id"] = 1
+		local name = meta:get_string "research_id"
+		if research.grant(pn, name) and research.researches[name] and research.researches[name].warp then
+			cmsg.push_message_player(player, S("Given @1 warp!", research.researches[name].warp))
+			research.dp2[pn].warp = research.dp2[pn].warp + research.researches[name].warp
+		end
 		return ""
 	end,
 })

@@ -99,6 +99,8 @@ function recipes.add(method, inputs, outputs, data)
 		end
 		table.insert(trinium.recipes.recipes_by_method[method], new_amount)
 	end
+
+	return new_amount
 end
 
 function recipes.add_method(method, tbl)

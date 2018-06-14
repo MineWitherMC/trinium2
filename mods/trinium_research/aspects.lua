@@ -1,5 +1,5 @@
 local research = trinium.research
-local S = research.S
+local function S(k) return minetest.colorize("#808080", research.S(k)) end
 
 -- Tier 0
 research.add_aspect("aer", {
