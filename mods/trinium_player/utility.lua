@@ -55,7 +55,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 -- Utility
-betterinv.register_tab("utility", {
+betterinv.register_tab("utilities", {
 	description = S"Utility",
 	getter = function(player, context)
 		local pn = player:get_player_name()

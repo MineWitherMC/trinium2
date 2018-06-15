@@ -6,11 +6,13 @@ trinium.nei = {}
 local nei = trinium.nei
 nei.player_stuff = {}
 
+
 local S1 = {S"Recipe", S"Usage", S"Cheat"}
 
 local function get_formspec_array(search_string, mode)
 	local ss, items = search_string:lower()
-	local formspec, lengthPerPage, i, j = {}, 56, 0, 1
+	local formspec, width, height, cell_size, i, j = {}, 8, 9, 1, 0, 1
+	local length_per_page = width * height
 	items = table.filter(minetest.registered_items, function(v)
 		return (
 			v.mod_origin ~= "*builtin*" and
@@ -20,21 +22,23 @@ local function get_formspec_array(search_string, mode)
 		)
 	end)
 	local x, y
-	local page_amount = math.max(math.ceil(table.count(items) / lengthPerPage), 1)
-	local pa = math.ceil(table.count(items) / lengthPerPage)
+	local page_amount = math.max(math.ceil(table.count(items) / length_per_page), 1)
+	local pa = math.ceil(table.count(items) / length_per_page)
 	for j = 1, page_amount do
 		formspec[j] = ([=[
-			field[0.25,8.8;6,0;search;;%s]
+			field[0.25,%s;%s,1;search;;%s]
 			field_close_on_enter[search;false]
-			button[6,8.1;1,1;search_use;>>]
-			button[7,8.1;1,1;search_clear;X]
+			button[%s,%s;1,1;search_use;>>]
+			button[%s,%s;1,1;search_clear;X]
 			label[1,0.2;%s]
 			button[0,0.2;1,0.5;page_open~-1;<]
-			button[7,0.2;1,0.5;page_open~+1;>]
-			button[5,0.2;2,0.5;change_mode;%s]
+			button[%s,0.2;1,0.5;page_open~+1;>]
+			button[%s,0.2;3,0.5;change_mode;%s]
 			tooltip[change_mode;%s]
-		]=]):format(search_string, S("Page @1 of @2", math.min(j, pa), pa), S "Change Mode",
-			S("Current mode: @1", S1[mode]))
+		]=]):format(height * cell_size + 1.3, width * cell_size - 2, search_string,
+				width * cell_size - 2, height * cell_size + 1, width * cell_size - 1, height * cell_size + 1,
+				S("Page @1 of @2", math.min(j, pa), pa), width * cell_size - 1,
+				width * cell_size - 4, S "Change Mode", S("Current mode: @1", S1[mode]))
 	end
 	j = 1
 	local tbl = {}
@@ -44,15 +48,16 @@ local function get_formspec_array(search_string, mode)
 	table.sort(tbl, api.sort_by_param"name")
 	for _,v in ipairs(tbl) do
 		if v.type ~= "none" then
-			x = i % 8
-			y = (i - x) / 8
+			x = i % width
+			y = (i - x) / width
 			formspec[j] = formspec[j]..([=[
-				item_image_button[%s,%s;1,1;%s;view_recipe~%s;]
+				item_image_button[%s,%s;%s,%s;%s;view_recipe~%s;]
 				tooltip[view_recipe~%s;%s]
-			]=]):format(x, y + 1, v.name, v.name, v.name, api.get_field(v.name, "description")..
-					"\n"..minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))))
+			]=]):format(x * cell_size, y * cell_size + 1, cell_size, cell_size, v.name, v.name, v.name,
+					api.get_field(v.name, "description") .. "\n" ..
+							minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))))
 			i = i + 1
-			if i >= lengthPerPage then
+			if i >= length_per_page then
 				i = 0
 				j = j + 1
 			end
@@ -60,23 +65,25 @@ local function get_formspec_array(search_string, mode)
 	end
 
 	if i == 0 then j = j - 1 end
-	return formspec, j
+	return formspec, j, { x = width * cell_size, y = height * cell_size + 1.6 }
 end
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	nei.player_stuff[pn] = {}
-	nei.player_stuff[pn].page = 1
-	nei.player_stuff[pn].search = ""
-	nei.player_stuff[pn].formspecs_array, nei.player_stuff[pn].page_amount = get_formspec_array("", 1)
+	local ps = nei.player_stuff[pn]
+	ps.page = 1
+	ps.search = ""
+	ps.formspecs_array, ps.page_amount, ps.size = get_formspec_array("", 1)
 end)
 
 local item_panel = { description = S "NeverEnoughItems" }
 
-function item_panel.getter(player, context)
+function item_panel.getter(player)
 	local pn = player:get_player_name()
-	return betterinv.generate_formspec(player, nei.player_stuff[pn].formspecs_array[nei.player_stuff[pn].page],
-			false, false, false)
+	local ps = nei.player_stuff[pn]
+	return betterinv.generate_formspec(player, ps.formspecs_array[ps.page],
+			ps.size, false, false)
 end
 
 function nei.absolute_draw_recipe(l_recipes, rec_id)

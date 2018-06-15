@@ -14,7 +14,7 @@ minetest.register_chatcommand("research_me", {
 		if research.researches[param] then
 			research.force_grant(name, param)
 		else
-			minetest.chat_send_player(pn, S("Unknown research: @1", param))
+			minetest.chat_send_player(name, S("Unknown research: @1", param))
 		end
 	end,
 })

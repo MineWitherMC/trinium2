@@ -24,9 +24,9 @@ function api.try_craft(player)
 end
 
 -- Crafting
-betterinv.register_tab("default", {
+betterinv.register_tab("inventory", {
 	description = S"Crafting",
-	getter = function(player, context)
+	getter = function(player)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
 		local str = inv2 and inv2:get_stack("output", 1):to_string() or ""
@@ -65,7 +65,7 @@ betterinv.register_tab("default", {
 								s1:take_item()
 								inv2:set_stack("crafting", i, s1)
 							end
-							try_craft(player)
+							api.try_craft(player)
 						end
 					end
 				end

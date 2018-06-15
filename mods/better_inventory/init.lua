@@ -43,7 +43,7 @@ function betterinv.generate_buttons(size, filter, selected)
 	return str
 end
 
-local theme_inv = [[
+betterinv.theme_inv = [[
 	listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF]
 	list[current_player;main;0,4.7;8,1;]
 	list[current_player;main;0,5.85;8,3;8]
@@ -63,12 +63,24 @@ function betterinv.generate_formspec(player, fs, size, bg, inv)
 
 	local fs1 = ("size[%s,%s]container[%s,%s]%s"):format(size.x, size.y, x, y, bg or "")
 	fs1 = fs1..fs
-	if inv then fs1 = fs1..theme_inv end
+	if inv then fs1 = fs1 .. betterinv.theme_inv end
 	fs1 = fs1.."container_end[]"
 	fs1 = fs1..betterinv.generate_buttons(size, function(tab)
-		return not tab.available or tab.available(player)
+		return tab.available == nil or tab.available(player)
 	end, betterinv.selections[player:get_player_name()])
 	return fs1
+end
+
+function betterinv.extract_formspec(s)
+	local x, y = 0, 0
+	local p = betterinv.tab_position
+	if p == 0 then y = 1
+	elseif p == 1 then x = 2
+	end
+
+	s = s:split "container_end[]"[1]
+	s = s:split(("container[%s,%s]"):format(x, y))[2]
+	return s
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -77,7 +89,9 @@ minetest.register_on_joinplayer(function(player)
 	for k in pairs(betterinv.tabs) do betterinv.contexts[pn][k] = {} end
 	betterinv.selections[pn] = betterinv.default
 	if betterinv.default then
-		player:set_inventory_formspec(betterinv.tabs[betterinv.default].getter(player, betterinv.contexts[pn]))
+		minetest.after(0.01, function()
+			player:set_inventory_formspec(betterinv.tabs[betterinv.default].getter(player, betterinv.contexts[pn]))
+		end)
 	end
 end)
 
@@ -88,6 +102,14 @@ function betterinv.redraw_for_player(player, fields)
 
 	tab.processor(player, betterinv.contexts[pn][selection], fields or {})
 	player:set_inventory_formspec(tab.getter(player, betterinv.contexts[pn][selection]))
+end
+
+function betterinv.get_external_context(player, tab)
+	return betterinv.contexts[player:get_player_name()][tab]
+end
+
+function betterinv.disable_tab(tab)
+	betterinv.tabs[tab].available = trinium.api.functions.const(false)
 end
 
 minetest.register_on_player_receive_fields(function(player, form_name, fields)

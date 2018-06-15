@@ -200,6 +200,14 @@ function api.assert(x,y,z,t)
 	return assert(x, "\n" .. y .. " requested nonexistent " .. z .. " " .. t)
 end
 
+function api.save_to_worldfile(name, str)
+	name = minetest.get_worldpath() .. "/" .. name
+	local handler = assert(io.open(name, "w"))
+	handler:write(str)
+	handler:close()
+	error("Done!")
+end
+
 api.functions = {} -- table of functions
 local func = api.functions
 
