@@ -13,7 +13,7 @@ Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 * Please report any bugs (debug.txt is sometimes useful).
 
 ## Compatibility
-Requires Minetest 0.5, translation-compatible build recommended.
+Requires Minetest `5.0.0-ddd03c3` or higher.
 
 ## Features
 * Fantastic Ore and Map Generation System (WIP)

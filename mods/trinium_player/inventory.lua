@@ -20,18 +20,17 @@ function api.try_craft(player)
 		output = rr[rbm[recipe]].outputs[1]
 	end
 	inv:set_stack("output", 1, output)
-	sfinv.set_player_inventory_formspec(player, sfinv.contexts[pn])
+	betterinv.redraw_for_player(player)
 end
 
 -- Crafting
-betterinv.register_tab("trinium:default", {
+betterinv.register_tab("default", {
 	description = S"Crafting",
-	default = true,
 	getter = function(player, context)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
 		local str = inv2 and inv2:get_stack("output", 1):to_string() or ""
-		return sfinv.make_formspec(player, context, ([[
+		return betterinv.generate_formspec(player, ([[
 				list[detached:bound~%s;crafting;1.75,0.5;3,3;]
 				item_image_button[5.75,1.5;1,1;%s;inventory~craft;]
 				image[4.75,1.5;1,1;trinium_gui.arrow.png]
@@ -44,7 +43,7 @@ betterinv.register_tab("trinium:default", {
 				image[6,4.75;1,1;trinium_gui_hb_bg.png]
 				image[7,4.75;1,1;trinium_gui_hb_bg.png]
 				listring[current_player;main]listring[detached:bound~%s;crafting]
-			]]):format(pn, str, pn), true)
+			]]):format(pn, str, pn), false, false, true)
 	end,
 	processor = function(player, _, fields)
 		if fields.quit then return end

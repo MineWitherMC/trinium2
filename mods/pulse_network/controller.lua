@@ -1,8 +1,7 @@
-local pulse = trinium.pulse_network
-local S = pulse.S
+local S = pulse_network.S
 local api = trinium.api
 
-function pulse.trigger_update(controller_pos)
+function pulse_network.trigger_update(controller_pos)
 	local meta = minetest.get_meta(controller_pos)
 	local cd = minetest.deserialize(meta:get_string"connected_devices")
 	for i = 1, #cd do
@@ -13,7 +12,7 @@ function pulse.trigger_update(controller_pos)
 	end
 end
 
-function pulse.import_to_controller(pos)
+function pulse_network.import_to_controller(pos)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 	local items = meta:get_string"inventory":data()
@@ -44,7 +43,7 @@ function pulse.import_to_controller(pos)
 		meta:set_string("inventory", minetest.serialize(items))
 	end
 
-	pulse.trigger_update(pos)
+	pulse_network.trigger_update(pos)
 end
 
 minetest.register_node("pulse_network:controller", {
@@ -66,7 +65,7 @@ minetest.register_node("pulse_network:controller", {
 		api.initialize_inventory(meta:get_inventory(), {input = 1})
 	end,
 
-	on_metadata_inventory_put = pulse.import_to_controller,
+	on_metadata_inventory_put = pulse_network.import_to_controller,
 	allow_metadata_inventory_take = function() return 0 end,
 
 	get_rich_info = function(pos, player)

@@ -1,7 +1,6 @@
-local pulse = trinium.pulse_network
-local S = pulse.S
+local S = pulse_network.S
 
-function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
+function pulse_network.add_storage_cell(id, texture, desc, add_types, add_items)
 	minetest.register_node(id, {
 		stack_max = 16,
 		tiles = texture,
@@ -36,18 +35,18 @@ function pulse.add_storage_cell(id, texture, desc, add_types, add_items)
 				local items = ctrl_meta:get_int "capacity_items"
 				ctrl_meta:set_int("capacity_types", cs - add_types)
 				ctrl_meta:set_int("capacity_items", items - add_items)
-				pulse.trigger_update(ctrlpos)
+				pulse_network.trigger_update(ctrlpos)
 			end
 		end,
 	})
 end
 
 -- per tier, type amount is divided by 3, and storage is multiplied by 8
-pulse.add_storage_cell("pulse_network:storage_cell", {"pulse_network.storage_cell.png"},
+pulse_network.add_storage_cell("pulse_network:storage_cell", { "pulse_network.storage_cell.png" },
 		S"Pulse Network Storage Cell", 27, 5000)
-pulse.add_storage_cell("pulse_network:void_storage_cell", {"pulse_network.void_storage_cell.png"},
+pulse_network.add_storage_cell("pulse_network:void_storage_cell", { "pulse_network.void_storage_cell.png" },
 		S"Void Pulse Network Storage Cell", 9, 40000)
-pulse.add_storage_cell("pulse_network:condensed_storage_cell", {"pulse_network.condensed_storage_cell.png"},
+pulse_network.add_storage_cell("pulse_network:condensed_storage_cell", { "pulse_network.condensed_storage_cell.png" },
 		S"Condensed Pulse Network Storage Cell", 3, 320000)
-pulse.add_storage_cell("pulse_network:super_storage_cell", {"pulse_network.super_storage_cell.png"},
+pulse_network.add_storage_cell("pulse_network:super_storage_cell", { "pulse_network.super_storage_cell.png" },
 		S"Ultimate Pulse Network Storage Cell", 1, 2560000)

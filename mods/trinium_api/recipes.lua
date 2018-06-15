@@ -151,7 +151,7 @@ recipes.add_method("drop", {
 	formspec_height = 5,
 	formspec_name = api.S"Drop",
 	formspec_begin = function(data)
-		return ("label[0,4.7;%s]"):format(api.S("Max Drop: @1", data.max_items))
+		return ("textarea[0,4.7;7,1;;;%s]"):format(api.S("Max Drop: @1", data.max_items))
 	end,
 
 	process = function(a, outputs, b)

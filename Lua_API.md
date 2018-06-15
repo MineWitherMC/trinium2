@@ -50,11 +50,11 @@ All of these functions are in `table` table.
 	* Returns iterator of `arr` items sorted by keys.
 	* `func` is any comparator function, defaults to lua comparison.
 * `sum(arr)`
-* `fconcat(arr)`
+* `f_concat(arr)`
 	* Similar to `concat(arr)`, but works with any keys with random order.
 * `tail(arr)`
 	* Returns table without first element.
-* `mtail(arr, mult)`
+* `multi_tail(arr, mult)`
 	* Similar to `tail(arr)`, but `mult` first elements are stripped instead.
 * `random(table)`
 	* Selects uniform random element from table.
@@ -69,14 +69,14 @@ All of these functions are in `math` table.
 	* If `current` is not between `center - tolerance` and `center + tolerance`,
 	 returns 0.
 	* `amplitude` is `1` by default.
-* `lograndom(min, max)`
+* `gaussian(min, max)`
 	* Returns normally distributed integer between `min` and `max`.
 * `modulate(num, max)`
 	* Alternative to Lua builtin modulo which actually returns `max` instead of
 	 `0` when `num` is fully divisible by `max`.
 * `weighted_random(arr, func)`
-	* Returns random key from `arr`. Weight of each key is defined by corresponding
-	 value.
+	* Returns random key from `arr`. Weight of each key is defined by
+	 corresponding value.
 	* `func` is random function which can be called like following:
 	 `func(min, max)`. `math.random` by default.
 * `weighted_avg(arr)`
@@ -105,8 +105,6 @@ All of these functions are in `trinium.api` table.
 	* A shortcut for registration of simple colored fluid nodes.
 	* `def` replaces the default fluid definition table.
 	* *Has an alias `register_liquid`.*
-* `register_multiblock(name, def)`
-	* Registers multiblock. See **Multiblock Definition** for more information.
 * `dump(...)`
 	* Logs all input variables.
 * `setting_get(name, default)`
@@ -121,7 +119,8 @@ All of these functions are in `trinium.api` table.
 	 (must not return a table).
 	* Returned elements have the format `{vertex, distance}`.
 * `search(init, serialize, vertex)`
-	* Similar to previous function, however, returns elements in `vertice` format.
+	* Similar to previous function, however, returns elements in `vertex`
+	 format.
 * `set_defaults(tbl1, tbl2)`
 	* Returns `tbl1` copy with missing values from `tbl2`.
 * `string_capitalization(s)`
@@ -134,14 +133,11 @@ All of these functions are in `trinium.api` table.
 * `translate_requirements(tbl)`
 	* Returns string with list of needed items.
 	* `tbl` is a table formatted as `[ItemString] => amount`.
-* `multiblock_rename(def)`
-	* Renames multiblock controller to have needed nodes.
-	* `def` is in Multiblock Definition format.
 * `sort_by_param(k)`
 	* Returns a function for sorting tables which have `k` key.
-* `count_stacks(inv, list, disallow_multistacks)`
+* `count_stacks(inv, list, disallow_multi_stacks)`
 	* Returns count of stacks in inventory given list.
-	* In case `disallow_multistacks` is present and true, returns unique stack
+	* In case `disallow_multi_stacks` is present and true, returns unique stack
 	 count.
 * `iterator(callback)`
 	* Returns an iterator to use in a `for` loop.
@@ -154,7 +150,7 @@ All of these functions are in `trinium.api` table.
 	* Returns item texture if it is defined, otherwise `nil`.
 * `process_color(color)`
 	* Converts `color` to ColorString format and makes it semi-transparent.
-* `cstring(color)`
+* `color_string(color)`
 	* Same thing without transparency.
 * `adder()`
 	* Returns a table and `add` function for the table. Useful for registration.
@@ -187,6 +183,8 @@ All of these functions are in `trinium.recipes` table.
 			* Each element is a string, changing corresponding input tooltip.
 			* Elements outside of `inputs` range do nothing.
 		* `output_tooltips` - similar to previous one.
+	* Returns Recipe Registry ID. The recipe can then be obtained via
+	 `trinium.recipes.recipe_registry[id]`.
 * `add_method(name, def)`
 	* Adds recipe method. See **Recipe Method Definition** for more information.
 * `get_coords(width, dx, dy, n)`
@@ -208,6 +206,19 @@ All of these functions are in `trinium.recipes` table.
 	 their greatest common divisor.
 	* Example: `divide({"item1 2", "item2 6"}, {"item3 4"})` returns
 	 `{"item1 1", "item2 3"}, {"item3 2"}`
+
+### Multiblock Functions
+All of these functions are in `trinium.api` table.
+* `register_multiblock(name, def)`
+	* Registers multiblock. See **Multiblock Definition** for more information.
+* `multiblock_rename(def)`
+	* Renames multiblock controller to have needed nodes.
+	* `def` is in Multiblock Definition format.
+* `multiblock_rich_info(node)`
+	* Adds Rich info to given multiblock controller.
+	* In case the structure is not assembled, shows a message about that.
+	* In case the node already has Rich Info, it is only shown when multiblock is
+	 assembled.
 
 ### Queueing
 Did you ever need to soft-depend on mod, or to create a cyclic dependency? These
@@ -243,8 +254,8 @@ These require `trinium_research` and are stored in `trinium.research` table.
 * `lens_data` - table with following elements:
 	* `gems` - table formatted as `[material ID] => ItemString`.
 	* `metals` - similar to previous one.
-	* `shapes` - table formatted as `[material ID] => minTier`, where `minTier` is
-	 minimum required upgrade tier for Randomizer to create them.
+	* `shapes` - table formatted as `[material ID] => minTier`, where `minTier`
+	 is minimum required upgrade tier for Randomizer to create them.
 * `constants`
 	* `press_cost` - amount of Rhenium Alloy Randomizer needs per one press.
 	* `min_gems` - minimum amount of Gems press can require.
@@ -269,7 +280,8 @@ These require `trinium_research` and are stored in `trinium.research` table.
 * `check(pn, name)`
 	* Returns `true` if and only if player has unlocked requested research.
 * `get_tree(name)`
-	* Returns list-based `DataMesh` of requirements of given research, recursively.
+	* Returns list-based `DataMesh` of requirements of given research,
+	 recursively.
 * `grant(pn, name)`
 	* Gives player requested research if its requirements are already completed.
 * `force_grant(pn, name)`
@@ -317,13 +329,14 @@ These require `tinker_phase` and are stored in `tinker` table.
 
 
 ## Pulse Network
-These require `pulse_network` and are stored in `trinium.pulse_network` table.
+These require `pulse_network` and are stored in `pulse_network` table.
 * `trigger_update(ctrlpos)`
 	* Sends reload signal to all devices connected to network.
 	* Should be called whenever items are put or taken into network, etc.
 	* Automatically called by Pulsating Combinator and `import_to_controller`.
 * `import_to_controller(ctrlpos)`
-	* Sends item from controller internal buffer to network, reloading all devices.
+	* Sends item from controller internal buffer to network, reloading all
+	 devices.
 * `add_storage_cell(id, texture, desc, types, items)`
 	* Adds storage cell.
 	* `types` is an integer representing type storage added to network.
@@ -360,18 +373,66 @@ These require `trinium_mapgen` and are stored in `trinium.mapgen` table.
 	* See **Vein Definition** for more information.
 
 
-## Miscellaneous
-* Better Inventory is fully backwards-compatible with sfinv, so no API here.
-* cmsg is fully backwards-compatible with original cmsg, so no API here.
-* ### HUD
-	These require `trinium_hud` and are stored in `trinium.hud` table.
+## HUD
+These require `trinium_hud` and are stored in `trinium.hud` table.
 
-	#### Constants
-	* `steps` - table formatted as `[[globalstep ID] => definition]`.
+### Constants
+* `steps` - table formatted as `[[globalstep ID] => definition]`.
 
-	#### Methods
-	* `register_globalstep`
-		* Globalstep wrapper. See **Globalstep Wrapper** for more information.
+### Methods
+* `register_globalstep`
+	* Globalstep wrapper. See **Globalstep Wrapper** for more information.
+	
+### Node Definitions
+* Rich Info
+	* A better way to use `infotext`. Nodes with Rich Info support must have
+	 group `rich_info = 1` and a callback `get_rich_info(pos, player)`.
+	 * The callback can return `nil` in order to hide the Rich Info window.
+	 
+
+## BetterInventory
+This mod is mostly backwards-compatible with `sfinv`, however, it has its own
+ API. Its methods require `better_inventory` and are stored in `betterinv`
+ table.
+* `register_tab(name, def)`
+	* Registers an inventory tab.
+	* See **Inventory Tab Definition** for more information.
+* `generate_buttons(size, filter, selected)`
+	* Generates button formspec part or tab header, depending on the mode.
+	* `size` is a table formatted as `[x] => sizeX, [y] => sizeY`.
+	* `filter` is a function of `tab_definition`, constant `true` by default.
+* `generate_formspec(player, fs, size, bg, inv)`
+	* Wraps `fs` into a box and adds buttons or tab header, depending on the
+	 mode.
+	* `size` is a table formatted as `[x] => sizeX, [y] => sizeY`.
+	* `bg` is a string.
+	* `inv` is a boolean.
+* `redraw_for_player(player, fields)`
+	* Redraws player's inventory. Should not be called from tab callbacks.
+	* `fields` is empty table by default.
+	
+## Player Utilities
+These functions require `trinium_player` as a dependency.
+
+### General
+All of these functions are stored in `trinium.api` table.
+* `try_craft(player)`
+	* Updates player's recipe output.
+
+### NEI
+All of these functions are stored in `trinium.nei` table.
+* `nei.absolute_draw_recipe(table, id)`
+	* Draws recipe by Registry ID.
+	* In case `table` is `false`, `id` is Registry ID.
+	* Otherwise, `table` must be formatted as `[recipe ID] => registry ID`.
+	* Returns a sequence with `formspec, width, height, count, id`.
+	* In case `id` is higher than amount of items in `table`, it is taken by
+	 modulo.
+* `nei.draw_research_recipe(recipe_id)`
+	* Draws recipe regardless of player being able to perform it.
+	* `recipe_id` is obtained from `trinium.recipes.add`.
+	* Returns table formatted as `{form = ..., w = ..., h = ...}`.
+
 
 ## Various Objects
 ### DataMesh
@@ -402,7 +463,8 @@ Existing methods:
 ## Various Definitions
 ### Multiblock Definition
 Multiblock definition is a table with following elements:
-* `controller` - parsed node, which must have `paramtype2` of `facedir`.
+* `controller` - parsed node, which must have `paramtype2` of `facedir` or
+ `colorfacedir`.
 * `width` - integer, processed distance to the left and right from controller.
 * `depth_b` - integer, processed distance behind of controller.
 * `depth_f` - integer, processed distance in front of controller.
@@ -460,7 +522,66 @@ Recipe Method definition is a table with following elements:
 	* Should return whether recipe is correctly composed.
 	* If this function returns `false`, minetest instance is terminated.
 	* Always true by default.
-
+	
+### Chapter Definition (`trinium_research`)
+Chapter Definition is a table with following elements:
+* `texture` - ItemString.
+* `x` - integer, horizontal coordinate.
+	* Can only be from 0 to 7 due to limitations of Formspec API.
+* `y` - integer, vertical coordinate.
+	* Can only be from 0 to 7 due to limitations of Research API.
+* `name` - localized string.
+* `tier` - integer from 1 to 4.
+	* Currently only changes chapter background.
+	
+### Research Definition (`trinium_research`)
+Research Definition is a table with following elements:
+* `texture` - ItemString.
+* `x` - integer, horizontal coordinate.
+	* Can only be from 0 to 7 due to limitations of Formspec API.
+* `y` - integer, vertical coordinate.
+* `name` - localized string.
+* `chapter` - string, Chapter ID.
+* `text` - list of pages.
+	* Each page is either a localized string or a associative table.
+	* Localized string makes page appear as text with wordwraps.
+	* Associative table variant should have following elements:
+		* `w` - float, page width. 
+			* `8` by default, making it smaller has no effect.
+		* `h` - float, page height. 
+			* `8.6` by default, making it smaller has no effect.
+		* `requirements` - table formatted as `[ResearchID] => 1`.
+			* This page will be hidden in case some of requirements are not
+			 researched.
+		* `locked` - boolean, if true the page must be bought for aspects.
+			* `false` by default.
+			* If research also has requirements, it cannot be bought until
+			 the requirements are satisfied.
+		* `required_aspects` - table formatted as `[aspect] => amount`.
+			* Only has effect if `locked` is true.
+		* `text` - localized string.
+	* Also see `research.label_escape`.
+	* Also see `nei.draw_research_recipe`.
+* `pre_unlock` - boolean, `false` by default.
+* `requires_lens` - table with following elements:
+	* `requirement` - boolean.
+	* `metal` - LensMaterialID.
+	* `gem` - LensMaterialID.
+	* `shape` - LensShapeID.
+	* `tier` - integer.
+	* In case some of the elements are not present, the corresponding lens trait
+	 is ignored.
+	* Only has effect when `pre_unlock` is `false`.
+* `map` - list of aspects.
+	* List elements are tables with following elements:
+		* `x` - integer from 1 to 7, horizontal coordinate.
+		* `y` - integer from 1 to 7, vertical coordinate.
+		* `aspect` - string, aspect ID.
+	* Only has effect when `pre_unlock` is `false`.
+* `warp` - non-negative integer.
+	* `0` by default.
+	* Only has effect when `pre_unlock` is `false`.
+		
 ### Aspect Definition (`trinium_research`)
 Aspect Definition is a table with following elements:
 * `texture` - TextureString.
@@ -514,8 +635,8 @@ Tool Definition is a table with following elements:
 * `durability_mult` - float.
 	* The final tool durability is multiplied by this value.
 * `components` - list of elements from `tinker.patterns`.
-	* The tool is assembled when all these elements are put into table and nothing
-	 more.
+	* The tool is assembled when all these elements are put into table and
+	 nothing more.
 	* Should be unique.
 * `level_boost` - integer.
 	* Increases tool maximum harvest level.
@@ -564,8 +685,8 @@ Vein Definition is a table with following elements:
 	* This must be of the same length as `ore_list`.
 	* Each number sets relative rarity of corresponding ore in vein.
 * `density` - integer from 0 to 100.
-	* Percentage of ore blocks per vein. 100 means no stone will be left, whereas
-	 0 means no ores will be spawned.
+	* Percentage of ore blocks per vein. 100 generally means no stone will be
+	 left, whereas 0 means very little to zero ores will be spawned.
 * `weight` - positive integer.
 	* The more this variable is, the more common the vein is.
 	* General recommendation is 5-10 for very rare veins, 20-30 for rare, 40-60
@@ -580,3 +701,13 @@ Globalstep Definition is a table with following elements:
 * `consistent` - boolean.
 	* If `true`, new function run won't happen before old one stops.
 	* `false` by default.
+
+### Inventory Tab Definition (`better_inventory`)
+Inventory Tab Definition is a table with following elements:
+* `description` - localized string.
+* `getter` - function of `player` and `context`.
+	* Should return formspec.
+	* Also see `betterinv.generate_formspec`.
+* `processor` - function of `player`, `context` and `fields`.
+	* Called when element is activated in formspec.
+	* `fields` can be empty.

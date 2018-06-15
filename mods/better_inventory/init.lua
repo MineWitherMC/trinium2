@@ -5,13 +5,13 @@ betterinv.tabs = {}
 betterinv.tab_list = {}
 betterinv.contexts = {}
 betterinv.selections = {}
-betterinv.default = nil
+betterinv.default = "default"
 betterinv.prepend = "background[5,5;1,1;trinium_gui_background.png;true]"
 function betterinv.register_tab(name, def)
+	def.processor = def.processor or trinium.api.functions.empty
 	betterinv.tabs[name] = def
 	table.insert(betterinv.tab_list, name)
 	def.name = name
-	if def.default then betterinv.default = name end
 end
 
 function betterinv.generate_buttons(size, filter, selected)
@@ -50,6 +50,7 @@ local theme_inv = [[
 ]]
 
 function betterinv.generate_formspec(player, fs, size, bg, inv)
+	if not size then size = { x = 8, y = 8.6 } end
 	local p = betterinv.tab_position
 	if p == 2 or p == 0 then size.y = size.y + 1
 	elseif p == 1 or p == 3 then size.x = size.x + 2
@@ -80,6 +81,15 @@ minetest.register_on_joinplayer(function(player)
 	end
 end)
 
+function betterinv.redraw_for_player(player, fields)
+	local pn = player:get_player_name()
+	local selection = betterinv.selections[pn]
+	local tab = betterinv.tabs[selection]
+
+	tab.processor(player, betterinv.contexts[pn][selection], fields or {})
+	player:set_inventory_formspec(tab.getter(player, betterinv.contexts[pn][selection]))
+end
+
 minetest.register_on_player_receive_fields(function(player, form_name, fields)
 	if form_name ~= "" then
 		return
@@ -107,9 +117,8 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 			end
 		end
 	end
-	if not good and tab and tab.processor then
-		tab.processor(player, betterinv.contexts[pn][selection], fields)
-		player:set_inventory_formspec(tab.getter(player, betterinv.contexts[pn][selection]))
+	if not good and tab then
+		betterinv.redraw_for_player(player, fields)
 	end
 end)
 
@@ -140,5 +149,8 @@ if not minetest.get_modpath"sfinv" then -- todo: cleanup this
 	function sfinv.get_or_create_context(player)
 		local pn = player:get_player_name()
 		return betterinv.contexts[pn][betterinv.selections[pn]]
+	end
+	function sfinv.set_player_inventory_formspec(player)
+		return betterinv.redraw_for_player(player)
 	end
 end

@@ -1,5 +1,4 @@
-local pulse = trinium.pulse_network
-local S = pulse.S
+local S = pulse_network.S
 local api = trinium.api
 
 local function generate_buttons(ctrlpos, index, search)
@@ -92,7 +91,7 @@ minetest.register_node("pulse_network:terminal", {
 		end
 		ctrl_inv:set_stack("input", 1, inv:get_stack("input", 1))
 		inv:set_stack("input", 1, "")
-		pulse.import_to_controller(ctrlpos)
+		pulse_network.import_to_controller(ctrlpos)
 		meta:set_string("formspec", get_terminal_formspec(ctrlpos, meta:get_int"index", meta:get_string"search"))
 	end,
 
@@ -154,7 +153,7 @@ minetest.register_node("pulse_network:terminal", {
 				end
 
 				ctrl_meta:set_string("inventory", minetest.serialize(inv))
-				pulse.import_to_controller(ctrlpos)
+				pulse_network.import_to_controller(ctrlpos)
 				meta:set_string("formspec", get_terminal_formspec(ctrlpos, meta:get_int"index", meta:get_string"search"))
 			end
 		end

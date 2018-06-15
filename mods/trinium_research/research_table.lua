@@ -15,11 +15,11 @@ local function get_table_formspec(mode, pn, real_research, aspect_key)
 			list[context;lens;1,0.25;1,1;]
 			list[context;trash;10.5,0.25;1,1;]
 			image[9.5,0.25;1,1;trinium_gui.trash.png]
-			label[2,0.25;%s]
+			textarea[2.25,0;7.25,2;;;%s]
 			tabheader[0,0;research_table~change_fs;%s,%s;1;true;false]
 		]=]):format(aspect_key, real_research and "list[context;map;4.5,2;7,7;]" or "",
-			S("Ink: @1@nPaper: @2@nWarp: @3", research.dp2[pn].ink,
-				research.dp2[pn].paper, research.dp2[pn].warp),
+				S("Ink: @1@nPaper: @2@nWarp: @3",
+						research.dp2[pn].ink, research.dp2[pn].paper, research.dp2[pn].warp),
 			S"Map", S"Inventory")
 	elseif mode == 2 or mode == "2" then
 		return ([=[

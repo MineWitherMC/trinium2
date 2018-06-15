@@ -99,7 +99,7 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 			desc = desc .. "\n" .. minetest.colorize("#663399", S("Forbidden Knowledge: Level @1", v.warp))
 		end
 		enable = false
-		if research.dp1[pn][k] or v.pre_unlock then
+		if v.pre_unlock or research.check(pn, k) then
 			-- Research available
 			for v1 in pairs(v.requirements) do
 				if research.researches_by_chapter[chapter_id][v1] then
@@ -174,8 +174,7 @@ local function get_book_research_fs(pn, context)
 			button[7,0.25;1,0.5;turn_forward;>]
 			textarea[0,1;8,7;;;%s]
 			button[7,8;1,1;open_chapter~%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S"This page is not found yet", def.chapter, S"Back"),
-				"size[8,8.6]"
+		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S "This page is not found yet", def.chapter, S "Back")
 	elseif text.locked and not research.check(pn, res .. "-" .. key) then
 		local good = true
 		local r = 0
@@ -202,7 +201,7 @@ local function get_book_research_fs(pn, context)
 			button[7,8;1,1;open_chapter~%s;%s]
 			button[0,7;8,1;%s;%s]
 		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text),
-				reqs, def.chapter, S"Back", good and "unlock" or "", S"Unlock"), "size[8,8.6]"
+				reqs, def.chapter, S "Back", good and "unlock" or "", S "Unlock")
 	else
 		local w, h = math.max(text.w, 8), math.max(text.h, 8) + 0.6
 		return ([=[
@@ -212,7 +211,7 @@ local function get_book_research_fs(pn, context)
 			%s
 			button[%s,%s;1,1;open_chapter~%s;%s]
 		]=]):format(h - 0.4, S("@1 - page @2/@3", def.name, key, #def.text),
-				w - 2, w - 1, text.form, w - 1, h - 0.6, def.chapter, S"Back"), ("size[%s,%s]"):format(w, h)
+				w - 2, w - 1, text.form, w - 1, h - 0.6, def.chapter, S "Back"), { x = w, y = h }
 	end
 end
 
@@ -234,13 +233,13 @@ function book.getter(player, context)
 	context.book_y = context.book_y or 0
 	local split = context.book:split"~"
 	if split[1] == "default_bg" then
-		return sfinv.make_formspec(player, context, get_book_fs(pn), false, false, get_book_bg(pn))
+		return betterinv.generate_formspec(player, get_book_fs(pn), false, get_book_bg(pn), false)
 	elseif split[1] == "chapter" then
 		local fs = get_book_chapter_fs(split[2], pn, 0, context.book_y)
-		return sfinv.make_formspec(player, context, fs, false, false, get_book_chapter_bg(split[2]))
+		return betterinv.generate_formspec(player, fs, false, get_book_chapter_bg(split[2]), false)
 	elseif split[1] == "research" then -- research~SomeTestResearch~3 (3rd page)
 		local fs, s = get_book_research_fs(pn, context)
-		return sfinv.make_formspec(player, context, fs, false, s)
+		return betterinv.generate_formspec(player, fs, s, false, false)
 	end
 end
 

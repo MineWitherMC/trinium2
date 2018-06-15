@@ -55,11 +55,11 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 -- Utility
-betterinv.register_tab("trinium:utility", {
+betterinv.register_tab("utility", {
 	description = S"Utility",
 	getter = function(player, context)
 		local pn = player:get_player_name()
-		return sfinv.make_formspec(player, context, ([[
+		return betterinv.generate_formspec(player, ([[
 				list[detached:bound~%s;trash;0.5,0.5;1,1]
 				image[0.5,1.5;1,1;trinium_gui.trash.png]
 				image[0,4.75;1,1;trinium_gui_hb_bg.png]
@@ -71,6 +71,6 @@ betterinv.register_tab("trinium:utility", {
 				image[6,4.75;1,1;trinium_gui_hb_bg.png]
 				image[7,4.75;1,1;trinium_gui_hb_bg.png]
 				listring[current_player;main]listring[detached:bound~%s;trash]
-			]]):format(pn, pn), true)
+			]]):format(pn, pn), false, false, true)
 	end
 })

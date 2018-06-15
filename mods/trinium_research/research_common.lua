@@ -72,6 +72,7 @@ minetest.register_craftitem("trinium_research:notes_1", {
 			cmsg.push_message_player(player, S("Given @1 warp!", research.researches[name].warp))
 			research.dp2[pn].warp = research.dp2[pn].warp + research.researches[name].warp
 		end
+		betterinv.redraw_for_player(player)
 		return ""
 	end,
 	on_secondary_use = function(item, player)
@@ -82,6 +83,7 @@ minetest.register_craftitem("trinium_research:notes_1", {
 			cmsg.push_message_player(player, S("Given @1 warp!", research.researches[name].warp))
 			research.dp2[pn].warp = research.dp2[pn].warp + research.researches[name].warp
 		end
+		betterinv.redraw_for_player(player)
 		return ""
 	end,
 })

@@ -218,3 +218,5 @@ function func.equal(a)
 		return a == b
 	end
 end
+
+function func.empty() end

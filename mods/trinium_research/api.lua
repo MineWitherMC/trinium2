@@ -45,7 +45,7 @@ function research.grant(pn, name)
 		minetest.chat_send_player(pn, S"Unknown Research!")
 		return false
 	else
-		dp1[pn][name] = true
+		research.dp1[pn][name] = true
 		minetest.chat_send_player(pn, S("Successfully learned @1", name))
 		return true
 	end
@@ -54,7 +54,7 @@ end
 function research.force_grant(pn, name)
 	local s = research.get_tree(name):filter(function(k) return not research.check(pn, k) end):push(name)
 	s:forEach(function(r)
-		dp1[pn][r] = true
+		research.dp1[pn][r] = true
 		minetest.chat_send_player(pn, S("Successfully given @1", r))
 	end)
 end

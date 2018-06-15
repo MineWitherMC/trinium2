@@ -75,7 +75,8 @@ local item_panel = { description = S "NeverEnoughItems" }
 
 function item_panel.getter(player, context)
 	local pn = player:get_player_name()
-	return sfinv.make_formspec(player, context, nei.player_stuff[pn].formspecs_array[nei.player_stuff[pn].page], false)
+	return betterinv.generate_formspec(player, nei.player_stuff[pn].formspecs_array[nei.player_stuff[pn].page],
+			false, false, false)
 end
 
 function nei.absolute_draw_recipe(l_recipes, rec_id)

@@ -1,5 +1,4 @@
-local pulse = trinium.pulse_network
-local S = pulse.S
+local S = pulse_network.S
 
 local function reconnect(item, player, node)
 	local meta = item:get_meta()
@@ -32,7 +31,7 @@ local function connect(item, player, node, name)
 			if minetest.registered_items[name].on_pulsenet_connection then
 				minetest.registered_items[name].on_pulsenet_connection(node, controller_pos)
 			end
-			pulse.trigger_update(controller_pos)
+			pulse_network.trigger_update(controller_pos)
 			cmsg.push_message_player(player, S"Device successfully connected to network!")
 		end
 	end
