@@ -24,8 +24,8 @@ local infuser_formspec = ([=[
 	image[8,0;1,1;%s]
 	image[8,1;1,1;%s]
 	image[8,2;1,1;%s]
-]=]):format(api.get_fs_texture(M.parchment:get "sheet", "trinium_materials:stardust",
-		M.pyrocatalyst:get "dust", M.bifrost:get "dust", M.xpcatalyst:get "dust", M.imbued_forcillium:get "dust", M.endium:get "dust"))
+]=]):format(api.get_fs_texture(M.parchment:get "sheet", "trinium_materials:stardust", M.pyrocatalyst:get "dust",
+		M.bifrost:get "dust", M.xpcatalyst:get "dust", M.imbued_forcillium:get "dust", M.endium:get "dust"))
 
 minetest.register_node("trinium_research:sheet_infuser", {
 	stack_max = 1,
