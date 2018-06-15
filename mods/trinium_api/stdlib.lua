@@ -55,14 +55,6 @@ function table.map(array, callable)
 	return array
 end
 
-function table.remap(array)
-	local array2 = {}
-	for _,v in ipairs(array) do
-		table.insert(array2, v)
-	end
-	return array2
-end
-
 function table.keys(t)
 	local keys = {}
 	for k in pairs(t) do table.insert(keys, k) end
@@ -75,6 +67,14 @@ function table.asort(t, callable)
 	table.sort(k, function(a, b) return callable(a, b) end)
 
 	return api.iterator(function(current) return current, k[current], t[k[current]] end), #k, 0
+end
+
+function table.remap(array)
+	local array2 = {}
+	for i, k, v in table.asort(array) do
+		table.insert(array2, v)
+	end
+	return array2
 end
 
 function table.sum(t)

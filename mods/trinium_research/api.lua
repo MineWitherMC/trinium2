@@ -29,12 +29,20 @@ function research.check(pn, name)
 	return research.dp1[pn][name]
 end
 
+function research.basic_grant(pn, name)
+	if research.researches[name] and research.researches[name].warp then
+		minetest.chat_send_player(pn, S("Given @1 warp!", research.researches[name].warp))
+		research.dp2[pn].warp = research.dp2[pn].warp + research.researches[name].warp
+	end
+	research.dp1[pn][name] = true
+end
+
 function research.get_tree(name)
 	return api.search(name, api.functions.returner, function(c_res)
-		if c_res:find"%." then
-			return {c_res:split"."}
+		if c_res:find "%-" then
+			return { [c_res:split "-"[1]] = 1 }
 		else
-			return table.keys(research.researches[c_res].requirements)
+			return research.researches[c_res].requirements
 		end
 	end)
 end
@@ -45,7 +53,7 @@ function research.grant(pn, name)
 		minetest.chat_send_player(pn, S"Unknown Research!")
 		return false
 	else
-		research.dp1[pn][name] = true
+		research.basic_grant(pn, name)
 		minetest.chat_send_player(pn, S("Successfully learned @1", name))
 		return true
 	end
@@ -54,7 +62,7 @@ end
 function research.force_grant(pn, name)
 	local s = research.get_tree(name):filter(function(k) return not research.check(pn, k) end):push(name)
 	s:forEach(function(r)
-		research.dp1[pn][r] = true
+		research.basic_grant(pn, name)
 		minetest.chat_send_player(pn, S("Successfully given @1", r))
 	end)
 end

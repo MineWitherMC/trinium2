@@ -126,8 +126,12 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 		local id = tonumber(fields.betterinv_tabs)
 		good = betterinv.selections[pn] ~= betterinv.tab_list[id]
 		if good then
-			betterinv.selections[pn] = betterinv.tab_list[id]
-			player:set_inventory_formspec(betterinv.tabs[betterinv.tab_list[id]].getter(player, betterinv.contexts[pn][selection]))
+			local good_tabs = table.remap(table.filter(betterinv.tab_list, function(idx)
+				local c_tab = betterinv.tabs[idx]
+				return c_tab.available == nil or c_tab.available(player)
+			end))
+			betterinv.selections[pn] = good_tabs[id]
+			player:set_inventory_formspec(betterinv.tabs[good_tabs[id]].getter(player, betterinv.contexts[pn][selection]))
 		end
 	else
 		for k in pairs(fields) do

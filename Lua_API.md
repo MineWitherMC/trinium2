@@ -284,8 +284,11 @@ These require `trinium_research` and are stored in `trinium.research` table.
 	 recursively.
 * `grant(pn, name)`
 	* Gives player requested research if its requirements are already completed.
+	* Returns `true` if the research was actually given.
 * `force_grant(pn, name)`
 	* Gives player requested research recursively.
+* `basic_grant(pn, name)`
+	* Gives player requested research.
 * `add_aspect(name, def)`
 	* Adds aspect. See **Aspect Definition** for more information.
 * `random_aspects(pn, num, tbl)`
@@ -410,6 +413,10 @@ This mod is mostly backwards-compatible with `sfinv`, however, it has its own
 * `redraw_for_player(player, fields)`
 	* Redraws player's inventory. Should not be called from tab callbacks.
 	* `fields` is empty table by default.
+* `disable_tab(tab)`
+	* Makes a tab invisible. Its callbacks still can be fired externally.
+* `get_external_context(player, tab)`
+	* Returns requested context.
 	
 ## Player Utilities
 These functions require `trinium_player` as a dependency.
