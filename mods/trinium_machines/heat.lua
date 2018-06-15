@@ -4,9 +4,9 @@ local sdh = trinium.machines.set_default_hatch
 
 minetest.register_node("trinium_machines:hatch_temp_input", {
 	description = S "Heat Input Hatch",
-	groups = {cracky = 1, greggy_hatch = 1, heat_container = 1, rich_info = 1},
-	tiles = {"trinium_machines.casing.png"},
-	overlay_tiles = {{name = "trinium_machines.temperature_input_overlay.png", color = "white"}},
+	groups = { cracky = 1, greggy_hatch = 1, heat_container = 1, rich_info = 1 },
+	tiles = { "trinium_machines.casing.png" },
+	overlay_tiles = { { name = "trinium_machines.temperature_input_overlay.png", color = "white" } },
 	palette = "trinium_api.palette.png",
 	place_param2 = 175,
 	paramtype2 = "color",
@@ -26,22 +26,22 @@ minetest.register_node("trinium_machines:hatch_temp_input", {
 sdh("input.heat", "trinium_machines:hatch_temp_input")
 
 minetest.register_node("trinium_machines:cable_heat", {
-	description = S"Heat Cable",
-	groups = {cracky = 1, heat_container = 1, rich_info = 1},
-	tiles = {"trinium_machines.heat_cable.png"},
+	description = S "Heat Cable",
+	groups = { cracky = 1, heat_container = 1, rich_info = 1 },
+	tiles = { "trinium_machines.heat_cable.png" },
 
 	drawtype = "nodebox",
 	node_box = {
 		type = "connected",
-		fixed = {-3/16, -3/16, -3/16, 3/16, 3/16, 3/16},
-		connect_left = {-0.5, -3/16, -3/16, -3/16, 3/16, 3/16},
-		connect_right = {0.5, -3/16, -3/16, 3/16, 3/16, 3/16},
-		connect_top = {-3/16, 3/16, -3/16, 3/16, 0.5, 3/16},
-		connect_bottom = {-3/16, -3/16, -3/16, 3/16, -0.5, 3/16},
-		connect_front = {-3/16, -3/16, -3/16, 3/16, 3/16, -0.5},
-		connect_back = {-3/16, -3/16, 3/16, 3/16, 3/16, 0.5},
+		fixed = { -3 / 16, -3 / 16, -3 / 16, 3 / 16, 3 / 16, 3 / 16 },
+		connect_left = { -0.5, -3 / 16, -3 / 16, -3 / 16, 3 / 16, 3 / 16 },
+		connect_right = { 0.5, -3 / 16, -3 / 16, 3 / 16, 3 / 16, 3 / 16 },
+		connect_top = { -3 / 16, 3 / 16, -3 / 16, 3 / 16, 0.5, 3 / 16 },
+		connect_bottom = { -3 / 16, -3 / 16, -3 / 16, 3 / 16, -0.5, 3 / 16 },
+		connect_front = { -3 / 16, -3 / 16, -3 / 16, 3 / 16, 3 / 16, -0.5 },
+		connect_back = { -3 / 16, -3 / 16, 3 / 16, 3 / 16, 3 / 16, 0.5 },
 	},
-    connects_to = {"group:heat_container"},
+	connects_to = { "group:heat_container" },
 
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -58,9 +58,9 @@ local function chg_formspec(temp)
 	return ("size[3,3]field[0,1;3,1;force_temp;Set generated temperature;%s]"):format(temp)
 end
 minetest.register_node("trinium_machines:creative_heat_gen", {
-	description = S"Creative Heat Generator",
-	groups = {cracky = 1, heat_container = 1, rich_info = 1},
-	tiles = {"(trinium_machines.casing.png^[multiply:#FFC200)^trinium_machines.temperature_input_overlay.png"},
+	description = S "Creative Heat Generator",
+	groups = { cracky = 1, heat_container = 1, rich_info = 1 },
+	tiles = { "(trinium_machines.casing.png^[multiply:#FFC200)^trinium_machines.temperature_input_overlay.png" },
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_int("temperature", 300)
@@ -78,7 +78,7 @@ minetest.register_node("trinium_machines:creative_heat_gen", {
 		local meta = minetest.get_meta(pos)
 		local n = tonumber(fields.force_temp)
 		if not n then
-			cmsg.push_message_player(player, "Input is invalid: "..tostring(fields.force_temp))
+			cmsg.push_message_player(player, "Input is invalid: " .. tostring(fields.force_temp))
 		else
 			meta:set_int("forced_temp", n)
 			meta:set_string("formspec", chg_formspec(n))
@@ -87,29 +87,29 @@ minetest.register_node("trinium_machines:creative_heat_gen", {
 
 	on_heat_tick = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_int("temperature", meta:get_int"forced_temp")
+		meta:set_int("temperature", meta:get_int "forced_temp")
 	end,
 })
 
 local neighbors = {
-	{x = 1, y = 0, z = 0},
-	{x = -1, y = 0, z = 0},
-	{y = 1, x = 0, z = 0},
-	{y = -1, x = 0, z = 0},
-	{z = 1, y = 0, x = 0},
-	{z = -1, y = 0, x = 0},
+	{ x = 1, y = 0, z = 0 },
+	{ x = -1, y = 0, z = 0 },
+	{ y = 1, x = 0, z = 0 },
+	{ y = -1, x = 0, z = 0 },
+	{ z = 1, y = 0, x = 0 },
+	{ z = -1, y = 0, x = 0 },
 }
-minetest.register_abm{
+minetest.register_abm {
 	label = "[TrM] Heat Distribution",
 	nodenames = "group:heat_container",
 	interval = 0.75,
 	chance = 1,
 	action = function(pos, node)
 		local meta = minetest.get_meta(pos)
-		local temp = meta:get_int"temperature"
+		local temp = meta:get_int "temperature"
 		for i = 1, #neighbors do
 			local other_meta = minetest.get_meta(vector.add(neighbors[i], pos))
-			local other_temp = other_meta:get_int"temperature"
+			local other_temp = other_meta:get_int "temperature"
 			if other_temp > temp then
 				local dt = math.min((other_temp - temp) / 2, 10)
 				other_meta:set_int("temperature", other_temp - dt)

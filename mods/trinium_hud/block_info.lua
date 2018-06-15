@@ -6,56 +6,56 @@ local api = trinium.api
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	huds[pn] = {}
-	huds[pn].bg = player:hud_add{
+	huds[pn].bg = player:hud_add {
 		hud_elem_type = "image",
 		text = "",
 		scale = { x = -40, y = -15 },
-		alignment = {x = 0, y = 0.5},
-		position = {x = 0.5, y = 0.1},
+		alignment = { x = 0, y = 0.5 },
+		position = { x = 0.5, y = 0.1 },
 	}
 
-	huds[pn].bg_info = player:hud_add{
+	huds[pn].bg_info = player:hud_add {
 		hud_elem_type = "image",
 		text = "",
 		scale = { x = -20, y = -30 },
-		alignment = {x = 0, y = 0},
+		alignment = { x = 0, y = 0 },
 		position = { x = 0.125, y = 0.5 },
 	}
 
-	huds[pn].node = player:hud_add{
+	huds[pn].node = player:hud_add {
 		hud_elem_type = "text",
 		text = "",
 		number = 0xffffff,
-		alignment = {x = 1, y = 0},
+		alignment = { x = 1, y = 0 },
 		position = { x = 0.3, y = 0.125 },
-		offset = {x = 48, y = 0},
-    }
+		offset = { x = 48, y = 0 },
+	}
 
-	huds[pn].rich = player:hud_add{
+	huds[pn].rich = player:hud_add {
 		hud_elem_type = "text",
 		text = "",
 		number = 0xffffff,
-		alignment = {x = 0, y = 0},
+		alignment = { x = 0, y = 0 },
 		position = { x = 0.125, y = 0.5 },
-    }
+	}
 
-    huds[pn].mod = player:hud_add{
-	    hud_elem_type = "text",
-	    text = "",
-	    number = 0x003267,
-	    alignment = {x = 1, y = 0},
-	    position = { x = 0.3, y = 0.15 },
-	    offset = {x = 48, y = 0},
-    }
+	huds[pn].mod = player:hud_add {
+		hud_elem_type = "text",
+		text = "",
+		number = 0x003267,
+		alignment = { x = 1, y = 0 },
+		position = { x = 0.3, y = 0.15 },
+		offset = { x = 48, y = 0 },
+	}
 
-	huds[pn].image = player:hud_add{
+	huds[pn].image = player:hud_add {
 		hud_elem_type = "image",
 		text = "",
-		scale = {x = 1, y = 1},
+		scale = { x = 1, y = 1 },
 		alignment = 0,
 		position = { x = 0.7, y = 0.1375 },
-		offset = {x = -56, y = 0},
-    }
+		offset = { x = -56, y = 0 },
+	}
 
 	block_descriptions[pn] = ""
 end)
@@ -69,7 +69,7 @@ local prohibited = {
 local function generate_inv_cube(node)
 	if prohibited[node.drawtype] then return "" end
 
-    local tiles = node.tiles
+	local tiles = node.tiles
 	local overlay_tiles = node.overlay_tiles
 	if not tiles then return "" end
 	if #tiles == 0 then return "" end
@@ -78,7 +78,7 @@ local function generate_inv_cube(node)
 		if not tiles[i] then tiles[i] = tiles[i - 1] end
 		if overlay_tiles and not overlay_tiles[i] then overlay_tiles[i] = overlay_tiles[i - 1] end
 
-		for _,v in pairs{tiles, overlay_tiles} do
+		for _, v in pairs { tiles, overlay_tiles } do
 			if v and type(v[i]) == "table" then
 				if v[i].name and v[i].color then
 					v[i] = ("(%s)^[multiply:%s"):format(v[i].name, v[i].color)
@@ -100,22 +100,26 @@ local function generate_inv_cube(node)
 		end
 	end
 
-    if #tiles == 1 then -- Whole block
-        return minetest.inventorycube(tiles[1], tiles[1], tiles[1])
-	elseif #tiles == 2 then -- Top differs
-        return minetest.inventorycube(tiles[1], tiles[2], tiles[2])
-    elseif #tiles == 3 then -- Top and Bottom differ
-        return minetest.inventorycube(tiles[1], tiles[3], tiles[3])
-    elseif #tiles == 6 then -- All sides
-        return minetest.inventorycube(tiles[1], tiles[6], tiles[5])
-    else
+	if #tiles == 1 then
+		-- Whole block
+		return minetest.inventorycube(tiles[1], tiles[1], tiles[1])
+	elseif #tiles == 2 then
+		-- Top differs
+		return minetest.inventorycube(tiles[1], tiles[2], tiles[2])
+	elseif #tiles == 3 then
+		-- Top and Bottom differ
+		return minetest.inventorycube(tiles[1], tiles[3], tiles[3])
+	elseif #tiles == 6 then
+		-- All sides
+		return minetest.inventorycube(tiles[1], tiles[6], tiles[5])
+	else
 		return ""
 	end
 end
 
 local function get_pointed_node(player)
 	local dir = vector.multiply(player:get_look_dir(), 5)
-	local begin = vector.add(player:get_pos(), {x = 0, y = 13/8, z = 0})
+	local begin = vector.add(player:get_pos(), { x = 0, y = 13 / 8, z = 0 })
 	local rc = Raycast(begin, vector.add(begin, dir))
 	for i in rc do
 		if i.type == "node" and minetest.get_node(i.under).name ~= "air" then
@@ -139,7 +143,7 @@ hud.register_globalstep("block_info", {
 						player:hud_change(huds[pn].bg, "text", "trinium_hud.background.png")
 					end
 					block_descriptions[pn] = def.description
-					player:hud_change(huds[pn].node, "text", (def.description or "???"):split"\n"[1])
+					player:hud_change(huds[pn].node, "text", (def.description or "???"):split "\n"[1])
 					player:hud_change(huds[pn].mod, "text", api.string_superseparation(def.mod_origin or "???"))
 					player:hud_change(huds[pn].image, "text", generate_inv_cube(def))
 

@@ -24,29 +24,29 @@ local infuser_formspec = ([=[
 	image[8,0;1,1;%s]
 	image[8,1;1,1;%s]
 	image[8,2;1,1;%s]
-]=]):format(api.get_fs_texture(M.parchment:get"sheet", "trinium_materials:stardust",
-		M.pyrocatalyst:get"dust", M.bifrost:get"dust", M.xpcatalyst:get"dust", M.imbued_forcillium:get"dust", M.endium:get"dust"))
+]=]):format(api.get_fs_texture(M.parchment:get "sheet", "trinium_materials:stardust",
+		M.pyrocatalyst:get "dust", M.bifrost:get "dust", M.xpcatalyst:get "dust", M.imbued_forcillium:get "dust", M.endium:get "dust"))
 
 minetest.register_node("trinium_research:sheet_infuser", {
 	stack_max = 1,
-	tiles = {"trinium_research.wall.png"},
+	tiles = { "trinium_research.wall.png" },
 	description = S "Sheet Infuser",
-	groups = {cracky = 1},
+	groups = { cracky = 1 },
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
-			{-0.5, 0.4, -0.5, 0.5, 0.5, 0.5},
-			{-0.5, -0.3, 0.35, 0.5, 0.4, 0.5},
-			{-0.5, -0.3, -0.5, -0.35, 0.4, 0.35},
-			{0.35, -0.3, -0.5, 0.5, 0.4, 0.35},
+			{ -0.5, -0.5, -0.5, 0.5, -0.3, 0.5 },
+			{ -0.5, 0.4, -0.5, 0.5, 0.5, 0.5 },
+			{ -0.5, -0.3, 0.35, 0.5, 0.4, 0.5 },
+			{ -0.5, -0.3, -0.5, -0.35, 0.4, 0.35 },
+			{ 0.35, -0.3, -0.5, 0.5, 0.4, 0.35 },
 
-			{-0.2, -0.3, -0.2, 0.2, -0.22, 0.2},
-			{-0.1, 0.4, -0.2, 0.1, 0.32, 0.2},
-			{-0.2, 0.4, -0.1, 0.2, 0.32, 0.1},
-			{-0.1, 0.32, -0.1, 0.1, 0.29, 0.1},
+			{ -0.2, -0.3, -0.2, 0.2, -0.22, 0.2 },
+			{ -0.1, 0.4, -0.2, 0.1, 0.32, 0.2 },
+			{ -0.2, 0.4, -0.1, 0.2, 0.32, 0.1 },
+			{ -0.1, 0.32, -0.1, 0.1, 0.29, 0.1 },
 		}
 	},
 	sounds = trinium.sounds.default_stone,
@@ -54,24 +54,24 @@ minetest.register_node("trinium_research:sheet_infuser", {
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, {catalysts = 6, parchment = 1, lens = 1, chapter_core = 1, output = 1})
+		api.initialize_inventory(inv, { catalysts = 6, parchment = 1, lens = 1, chapter_core = 1, output = 1 })
 	end,
 	allow_metadata_inventory_move = function()
 		return 0
 	end,
 	allow_metadata_inventory_put = function(_, list, index, stack)
-		local name,size = stack:get_name(), stack:get_count()
-		return ((list == "parchment" and name == M.parchment:get"sheet") or
-			(list == "chapter_core" and name == "trinium_research:notes_3") or
-			(list == "lens" and name == "trinium_research:lens") or
-			(list == "catalysts" and
-				((index == 1 and name == "trinium_materials:stardust") or
-				(index == 2 and name == M.pyrocatalyst:get"dust") or
-				(index == 3 and name == M.bifrost:get"dust") or
-				(index == 4 and name == M.xpcatalyst:get"dust") or
-				(index == 5 and name == M.imbued_forcillium:get"dust") or
-				(index == 6 and name == M.endium:get"dust"))
-			)) and size or 0
+		local name, size = stack:get_name(), stack:get_count()
+		return ((list == "parchment" and name == M.parchment:get "sheet") or
+				(list == "chapter_core" and name == "trinium_research:notes_3") or
+				(list == "lens" and name == "trinium_research:lens") or
+				(list == "catalysts" and
+						((index == 1 and name == "trinium_materials:stardust") or
+								(index == 2 and name == M.pyrocatalyst:get "dust") or
+								(index == 3 and name == M.bifrost:get "dust") or
+								(index == 4 and name == M.xpcatalyst:get "dust") or
+								(index == 5 and name == M.imbued_forcillium:get "dust") or
+								(index == 6 and name == M.endium:get "dust"))
+				)) and size or 0
 	end,
 
 	on_receive_fields = function(pos, _, fields, player)
@@ -81,11 +81,11 @@ minetest.register_node("trinium_research:sheet_infuser", {
 
 		-- Crutch for fast checking of emptiness of slots
 		if inv:room_for_item("catalysts", "trinium_research:casing") then
-			cmsg.push_message_player(player, S"Insufficient Catalysts!")
+			cmsg.push_message_player(player, S "Insufficient Catalysts!")
 			return
 		end
 		if inv:get_stack("parchment", 1):get_count() < 2 then
-			cmsg.push_message_player(player, S"Insufficient Parchment!")
+			cmsg.push_message_player(player, S "Insufficient Parchment!")
 			return
 		end
 		local lens, map = inv:get_stack("lens", 1), inv:get_stack("chapter_core", 1)
@@ -98,7 +98,7 @@ minetest.register_node("trinium_research:sheet_infuser", {
 			return
 		end
 		if not inv:get_stack("output", 1):is_empty() then
-			cmsg.push_message_player(player, S"Extract Research Notes to continue!")
+			cmsg.push_message_player(player, S "Extract Research Notes to continue!")
 			return
 		end
 
@@ -119,7 +119,7 @@ minetest.register_node("trinium_research:sheet_infuser", {
 					(x.band_shape or lens_meta:get_string "shape") == lens_meta:get_string "shape"
 		end)
 		if not map_res then
-			cmsg.push_message_player(player, S"Infusion has failed!")
+			cmsg.push_message_player(player, S "Infusion has failed!")
 			return
 		end
 
@@ -143,129 +143,129 @@ local infuser_mb = {
 	depth_f = 0,
 	controller = "trinium_research:sheet_infuser",
 	map = {
-		{x = 0, y = -1, z = 2, name = "trinium_default:reflector_glass"},
-		{x = 0, y = -1, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = -1, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = -1, z = 2, name = "trinium_research:casing"},
-		{x = 1, y = -1, z = 3, name = "trinium_research:casing"},
-		{x = 0, y = -1, z = 3, name = "trinium_research:casing"},
-		{x = -1, y = -1, z = 3, name = "trinium_research:casing"},
-		{x = -1, y = -1, z = 2, name = "trinium_research:casing"},
-		{x = -1, y = -1, z = 1, name = "trinium_research:casing"},
-		{x = -1, y = -1, z = 0, name = "trinium_research:wall"},
-		{x = 0, y = -1, z = 0, name = "trinium_research:wall"},
-		{x = 1, y = -1, z = 0, name = "trinium_research:wall"},
-		{x = -1, y = -1, z = 4, name = "trinium_research:wall"},
-		{x = 0, y = -1, z = 4, name = "trinium_research:wall"},
-		{x = 1, y = -1, z = 4, name = "trinium_research:wall"},
-		{x = -2, y = -1, z = 1, name = "trinium_research:wall"},
-		{x = -2, y = -1, z = 2, name = "trinium_research:wall"},
-		{x = -2, y = -1, z = 3, name = "trinium_research:wall"},
-		{x = 2, y = -1, z = 1, name = "trinium_research:wall"},
-		{x = 2, y = -1, z = 2, name = "trinium_research:wall"},
-		{x = 2, y = -1, z = 3, name = "trinium_research:wall"},
-		{x = -2, y = -1, z = 0, name = "trinium_research:casing"},
-		{x = 2, y = -1, z = 0, name = "trinium_research:casing"},
-		{x = -2, y = -1, z = 4, name = "trinium_research:casing"},
-		{x = 2, y = -1, z = 4, name = "trinium_research:casing"},
+		{ x = 0, y = -1, z = 2, name = "trinium_default:reflector_glass" },
+		{ x = 0, y = -1, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = -1, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = -1, z = 2, name = "trinium_research:casing" },
+		{ x = 1, y = -1, z = 3, name = "trinium_research:casing" },
+		{ x = 0, y = -1, z = 3, name = "trinium_research:casing" },
+		{ x = -1, y = -1, z = 3, name = "trinium_research:casing" },
+		{ x = -1, y = -1, z = 2, name = "trinium_research:casing" },
+		{ x = -1, y = -1, z = 1, name = "trinium_research:casing" },
+		{ x = -1, y = -1, z = 0, name = "trinium_research:wall" },
+		{ x = 0, y = -1, z = 0, name = "trinium_research:wall" },
+		{ x = 1, y = -1, z = 0, name = "trinium_research:wall" },
+		{ x = -1, y = -1, z = 4, name = "trinium_research:wall" },
+		{ x = 0, y = -1, z = 4, name = "trinium_research:wall" },
+		{ x = 1, y = -1, z = 4, name = "trinium_research:wall" },
+		{ x = -2, y = -1, z = 1, name = "trinium_research:wall" },
+		{ x = -2, y = -1, z = 2, name = "trinium_research:wall" },
+		{ x = -2, y = -1, z = 3, name = "trinium_research:wall" },
+		{ x = 2, y = -1, z = 1, name = "trinium_research:wall" },
+		{ x = 2, y = -1, z = 2, name = "trinium_research:wall" },
+		{ x = 2, y = -1, z = 3, name = "trinium_research:wall" },
+		{ x = -2, y = -1, z = 0, name = "trinium_research:casing" },
+		{ x = 2, y = -1, z = 0, name = "trinium_research:casing" },
+		{ x = -2, y = -1, z = 4, name = "trinium_research:casing" },
+		{ x = 2, y = -1, z = 4, name = "trinium_research:casing" },
 
-		{x = 0, y = 0, z = 2, name = "trinium_default:forcillium_lamp"},
-		{x = 0, y = 0, z = 1, name = "trinium_default:reflector_glass"},
-		{x = 1, y = 0, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = 0, z = 2, name = "trinium_default:reflector_glass"},
-		{x = 1, y = 0, z = 3, name = "trinium_research:casing"},
-		{x = 0, y = 0, z = 3, name = "trinium_default:reflector_glass"},
-		{x = -1, y = 0, z = 3, name = "trinium_research:casing"},
-		{x = -1, y = 0, z = 2, name = "trinium_default:reflector_glass"},
-		{x = -1, y = 0, z = 1, name = "trinium_research:casing"},
-		{x = -1, y = 0, z = 0, name = "trinium_research:wall"},
-		{x = 1, y = 0, z = 0, name = "trinium_research:wall"},
-		{x = -1, y = 0, z = 4, name = "trinium_research:wall"},
-		{x = 0, y = 0, z = 4, name = "trinium_research:casing"},
-		{x = 1, y = 0, z = 4, name = "trinium_research:wall"},
-		{x = -2, y = 0, z = 1, name = "trinium_research:wall"},
-		{x = -2, y = 0, z = 2, name = "trinium_research:casing"},
-		{x = -2, y = 0, z = 3, name = "trinium_research:wall"},
-		{x = 2, y = 0, z = 1, name = "trinium_research:wall"},
-		{x = 2, y = 0, z = 2, name = "trinium_research:casing"},
-		{x = 2, y = 0, z = 3, name = "trinium_research:wall"},
-		{x = -2, y = 0, z = 0, name = "trinium_research:casing"},
-		{x = 2, y = 0, z = 0, name = "trinium_research:casing"},
-		{x = -2, y = 0, z = 4, name = "trinium_research:casing"},
-		{x = 2, y = 0, z = 4, name = "trinium_research:casing"},
+		{ x = 0, y = 0, z = 2, name = "trinium_default:forcillium_lamp" },
+		{ x = 0, y = 0, z = 1, name = "trinium_default:reflector_glass" },
+		{ x = 1, y = 0, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = 0, z = 2, name = "trinium_default:reflector_glass" },
+		{ x = 1, y = 0, z = 3, name = "trinium_research:casing" },
+		{ x = 0, y = 0, z = 3, name = "trinium_default:reflector_glass" },
+		{ x = -1, y = 0, z = 3, name = "trinium_research:casing" },
+		{ x = -1, y = 0, z = 2, name = "trinium_default:reflector_glass" },
+		{ x = -1, y = 0, z = 1, name = "trinium_research:casing" },
+		{ x = -1, y = 0, z = 0, name = "trinium_research:wall" },
+		{ x = 1, y = 0, z = 0, name = "trinium_research:wall" },
+		{ x = -1, y = 0, z = 4, name = "trinium_research:wall" },
+		{ x = 0, y = 0, z = 4, name = "trinium_research:casing" },
+		{ x = 1, y = 0, z = 4, name = "trinium_research:wall" },
+		{ x = -2, y = 0, z = 1, name = "trinium_research:wall" },
+		{ x = -2, y = 0, z = 2, name = "trinium_research:casing" },
+		{ x = -2, y = 0, z = 3, name = "trinium_research:wall" },
+		{ x = 2, y = 0, z = 1, name = "trinium_research:wall" },
+		{ x = 2, y = 0, z = 2, name = "trinium_research:casing" },
+		{ x = 2, y = 0, z = 3, name = "trinium_research:wall" },
+		{ x = -2, y = 0, z = 0, name = "trinium_research:casing" },
+		{ x = 2, y = 0, z = 0, name = "trinium_research:casing" },
+		{ x = -2, y = 0, z = 4, name = "trinium_research:casing" },
+		{ x = 2, y = 0, z = 4, name = "trinium_research:casing" },
 
-		{x = 0, y = 1, z = 2, name = "trinium_default:reflector_glass"},
-		{x = 0, y = 1, z = 1, name = "trinium_default:forcillium_lamp"},
-		{x = 1, y = 1, z = 1, name = "trinium_research:chassis"},
-		{x = 1, y = 1, z = 2, name = "trinium_default:forcillium_lamp"},
-		{x = 1, y = 1, z = 3, name = "trinium_research:chassis"},
-		{x = 0, y = 1, z = 3, name = "trinium_default:forcillium_lamp"},
-		{x = -1, y = 1, z = 3, name = "trinium_research:chassis"},
-		{x = -1, y = 1, z = 2, name = "trinium_default:forcillium_lamp"},
-		{x = -1, y = 1, z = 1, name = "trinium_research:chassis"},
-		{x = -1, y = 1, z = 0, name = "trinium_research:wall"},
-		{x = 0, y = 1, z = 0, name = "trinium_research:wall"},
-		{x = 1, y = 1, z = 0, name = "trinium_research:wall"},
-		{x = -1, y = 1, z = 4, name = "trinium_research:wall"},
-		{x = 0, y = 1, z = 4, name = "trinium_research:wall"},
-		{x = 1, y = 1, z = 4, name = "trinium_research:wall"},
-		{x = -2, y = 1, z = 1, name = "trinium_research:wall"},
-		{x = -2, y = 1, z = 2, name = "trinium_research:wall"},
-		{x = -2, y = 1, z = 3, name = "trinium_research:wall"},
-		{x = 2, y = 1, z = 1, name = "trinium_research:wall"},
-		{x = 2, y = 1, z = 2, name = "trinium_research:wall"},
-		{x = 2, y = 1, z = 3, name = "trinium_research:wall"},
-		{x = -2, y = 1, z = 0, name = "trinium_research:casing"},
-		{x = 2, y = 1, z = 0, name = "trinium_research:casing"},
-		{x = -2, y = 1, z = 4, name = "trinium_research:casing"},
-		{x = 2, y = 1, z = 4, name = "trinium_research:casing"},
+		{ x = 0, y = 1, z = 2, name = "trinium_default:reflector_glass" },
+		{ x = 0, y = 1, z = 1, name = "trinium_default:forcillium_lamp" },
+		{ x = 1, y = 1, z = 1, name = "trinium_research:chassis" },
+		{ x = 1, y = 1, z = 2, name = "trinium_default:forcillium_lamp" },
+		{ x = 1, y = 1, z = 3, name = "trinium_research:chassis" },
+		{ x = 0, y = 1, z = 3, name = "trinium_default:forcillium_lamp" },
+		{ x = -1, y = 1, z = 3, name = "trinium_research:chassis" },
+		{ x = -1, y = 1, z = 2, name = "trinium_default:forcillium_lamp" },
+		{ x = -1, y = 1, z = 1, name = "trinium_research:chassis" },
+		{ x = -1, y = 1, z = 0, name = "trinium_research:wall" },
+		{ x = 0, y = 1, z = 0, name = "trinium_research:wall" },
+		{ x = 1, y = 1, z = 0, name = "trinium_research:wall" },
+		{ x = -1, y = 1, z = 4, name = "trinium_research:wall" },
+		{ x = 0, y = 1, z = 4, name = "trinium_research:wall" },
+		{ x = 1, y = 1, z = 4, name = "trinium_research:wall" },
+		{ x = -2, y = 1, z = 1, name = "trinium_research:wall" },
+		{ x = -2, y = 1, z = 2, name = "trinium_research:wall" },
+		{ x = -2, y = 1, z = 3, name = "trinium_research:wall" },
+		{ x = 2, y = 1, z = 1, name = "trinium_research:wall" },
+		{ x = 2, y = 1, z = 2, name = "trinium_research:wall" },
+		{ x = 2, y = 1, z = 3, name = "trinium_research:wall" },
+		{ x = -2, y = 1, z = 0, name = "trinium_research:casing" },
+		{ x = 2, y = 1, z = 0, name = "trinium_research:casing" },
+		{ x = -2, y = 1, z = 4, name = "trinium_research:casing" },
+		{ x = 2, y = 1, z = 4, name = "trinium_research:casing" },
 
-		{x = 0, y = 2, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = 2, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = 2, z = 2, name = "trinium_research:casing"},
-		{x = 1, y = 2, z = 3, name = "trinium_research:casing"},
-		{x = 0, y = 2, z = 3, name = "trinium_research:casing"},
-		{x = -1, y = 2, z = 3, name = "trinium_research:casing"},
-		{x = -1, y = 2, z = 2, name = "trinium_research:casing"},
-		{x = -1, y = 2, z = 1, name = "trinium_research:casing"},
-		{x = -1, y = 2, z = 0, name = "trinium_research:wall"},
-		{x = 0, y = 2, z = 0, name = "trinium_research:wall"},
-		{x = 1, y = 2, z = 0, name = "trinium_research:wall"},
-		{x = -1, y = 2, z = 4, name = "trinium_research:wall"},
-		{x = 0, y = 2, z = 4, name = "trinium_research:wall"},
-		{x = 1, y = 2, z = 4, name = "trinium_research:wall"},
-		{x = -2, y = 2, z = 1, name = "trinium_research:wall"},
-		{x = -2, y = 2, z = 2, name = "trinium_research:wall"},
-		{x = -2, y = 2, z = 3, name = "trinium_research:wall"},
-		{x = 2, y = 2, z = 1, name = "trinium_research:wall"},
-		{x = 2, y = 2, z = 2, name = "trinium_research:wall"},
-		{x = 2, y = 2, z = 3, name = "trinium_research:wall"},
-		{x = -2, y = 2, z = 0, name = "trinium_research:casing"},
-		{x = 2, y = 2, z = 0, name = "trinium_research:casing"},
-		{x = -2, y = 2, z = 4, name = "trinium_research:casing"},
-		{x = 2, y = 2, z = 4, name = "trinium_research:casing"},
+		{ x = 0, y = 2, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = 2, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = 2, z = 2, name = "trinium_research:casing" },
+		{ x = 1, y = 2, z = 3, name = "trinium_research:casing" },
+		{ x = 0, y = 2, z = 3, name = "trinium_research:casing" },
+		{ x = -1, y = 2, z = 3, name = "trinium_research:casing" },
+		{ x = -1, y = 2, z = 2, name = "trinium_research:casing" },
+		{ x = -1, y = 2, z = 1, name = "trinium_research:casing" },
+		{ x = -1, y = 2, z = 0, name = "trinium_research:wall" },
+		{ x = 0, y = 2, z = 0, name = "trinium_research:wall" },
+		{ x = 1, y = 2, z = 0, name = "trinium_research:wall" },
+		{ x = -1, y = 2, z = 4, name = "trinium_research:wall" },
+		{ x = 0, y = 2, z = 4, name = "trinium_research:wall" },
+		{ x = 1, y = 2, z = 4, name = "trinium_research:wall" },
+		{ x = -2, y = 2, z = 1, name = "trinium_research:wall" },
+		{ x = -2, y = 2, z = 2, name = "trinium_research:wall" },
+		{ x = -2, y = 2, z = 3, name = "trinium_research:wall" },
+		{ x = 2, y = 2, z = 1, name = "trinium_research:wall" },
+		{ x = 2, y = 2, z = 2, name = "trinium_research:wall" },
+		{ x = 2, y = 2, z = 3, name = "trinium_research:wall" },
+		{ x = -2, y = 2, z = 0, name = "trinium_research:casing" },
+		{ x = 2, y = 2, z = 0, name = "trinium_research:casing" },
+		{ x = -2, y = 2, z = 4, name = "trinium_research:casing" },
+		{ x = 2, y = 2, z = 4, name = "trinium_research:casing" },
 
-		{x = 0, y = 3, z = 2, name = "trinium_default:reflector_glass"},
-		{x = 0, y = 3, z = 1, name = "trinium_research:chassis"},
-		{x = 1, y = 3, z = 2, name = "trinium_research:chassis"},
-		{x = 0, y = 3, z = 3, name = "trinium_research:chassis"},
-		{x = -1, y = 3, z = 2, name = "trinium_research:chassis"},
-		{x = -1, y = 3, z = 0, name = "trinium_research:casing"},
-		{x = 0, y = 3, z = 0, name = "trinium_research:casing"},
-		{x = 1, y = 3, z = 0, name = "trinium_research:casing"},
-		{x = -1, y = 3, z = 4, name = "trinium_research:casing"},
-		{x = 0, y = 3, z = 4, name = "trinium_research:casing"},
-		{x = 1, y = 3, z = 4, name = "trinium_research:casing"},
-		{x = -2, y = 3, z = 1, name = "trinium_research:casing"},
-		{x = -2, y = 3, z = 2, name = "trinium_research:casing"},
-		{x = -2, y = 3, z = 3, name = "trinium_research:casing"},
-		{x = 2, y = 3, z = 1, name = "trinium_research:casing"},
-		{x = 2, y = 3, z = 2, name = "trinium_research:casing"},
-		{x = 2, y = 3, z = 3, name = "trinium_research:casing"},
-		{x = -2, y = 3, z = 0, name = "trinium_research:casing"},
-		{x = 2, y = 3, z = 0, name = "trinium_research:casing"},
-		{x = -2, y = 3, z = 4, name = "trinium_research:casing"},
-		{x = 2, y = 3, z = 4, name = "trinium_research:casing"},
+		{ x = 0, y = 3, z = 2, name = "trinium_default:reflector_glass" },
+		{ x = 0, y = 3, z = 1, name = "trinium_research:chassis" },
+		{ x = 1, y = 3, z = 2, name = "trinium_research:chassis" },
+		{ x = 0, y = 3, z = 3, name = "trinium_research:chassis" },
+		{ x = -1, y = 3, z = 2, name = "trinium_research:chassis" },
+		{ x = -1, y = 3, z = 0, name = "trinium_research:casing" },
+		{ x = 0, y = 3, z = 0, name = "trinium_research:casing" },
+		{ x = 1, y = 3, z = 0, name = "trinium_research:casing" },
+		{ x = -1, y = 3, z = 4, name = "trinium_research:casing" },
+		{ x = 0, y = 3, z = 4, name = "trinium_research:casing" },
+		{ x = 1, y = 3, z = 4, name = "trinium_research:casing" },
+		{ x = -2, y = 3, z = 1, name = "trinium_research:casing" },
+		{ x = -2, y = 3, z = 2, name = "trinium_research:casing" },
+		{ x = -2, y = 3, z = 3, name = "trinium_research:casing" },
+		{ x = 2, y = 3, z = 1, name = "trinium_research:casing" },
+		{ x = 2, y = 3, z = 2, name = "trinium_research:casing" },
+		{ x = 2, y = 3, z = 3, name = "trinium_research:casing" },
+		{ x = -2, y = 3, z = 0, name = "trinium_research:casing" },
+		{ x = 2, y = 3, z = 0, name = "trinium_research:casing" },
+		{ x = -2, y = 3, z = 4, name = "trinium_research:casing" },
+		{ x = 2, y = 3, z = 4, name = "trinium_research:casing" },
 	},
 	after_construct = function(pos, is_constructed)
 		local meta = minetest.get_meta(pos)

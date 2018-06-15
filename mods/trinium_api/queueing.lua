@@ -4,7 +4,7 @@ local signals_sent = {}
 
 function api.send_init_signal()
 	local mod = minetest.get_current_modname()
-	assert(not signals_sent[mod], "\n"..mod.." sent its init signal twice!")
+	assert(not signals_sent[mod], "\n" .. mod .. " sent its init signal twice!")
 	signals_sent[mod] = true
 	if queue[mod] then
 		for i = 1, #queue[mod] do
@@ -15,7 +15,7 @@ function api.send_init_signal()
 end
 
 function api.init_wrap(func, ...)
-	local args = {...}
+	local args = { ... }
 	return function()
 		func(unpack(args))
 	end

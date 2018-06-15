@@ -4,7 +4,7 @@ local S = api.S
 
 for i = 3, 13, 2 do
 	for j = 3, 13 do
-		recipes.add_method(("multiblock_%s_%s"):format(i,j), {
+		recipes.add_method(("multiblock_%s_%s"):format(i, j), {
 			input_amount = i * j,
 			output_amount = 1,
 			get_input_coords = recipes.coord_getter(i, -1, 0),
@@ -39,20 +39,20 @@ function api.register_multiblock(name, def)
 			end
 			local map1, tooltips = {}, {}
 			for k = -def.depth_f, def.depth_b do
-			for j = -def.width, def.width do
-				local res = table.exists(new_map, function(a)
-					return a.x == j and a.z == k
-				end)
-				if res then
-					map1[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].name
-					if new_map[res].desc then
-						tooltips[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].desc
+				for j = -def.width, def.width do
+					local res = table.exists(new_map, function(a)
+						return a.x == j and a.z == k
+					end)
+					if res then
+						map1[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].name
+						if new_map[res].desc then
+							tooltips[j + def.width + (def.depth_b - k) * (def.width * 2 + 1) + 1] = new_map[res].desc
+						end
 					end
 				end
 			end
-			end
 			recipes.add(("multiblock_%s_%s"):format(def.width * 2 + 1, def.depth_b + def.depth_f + 1),
-					map1, {def.controller}, {h = i, input_tooltips = tooltips})
+					map1, { def.controller }, { h = i, input_tooltips = tooltips })
 		end
 	end
 
@@ -63,35 +63,34 @@ function api.register_multiblock(name, def)
 		chance = 1,
 		action = function(pos, node)
 			local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-			local x_min, x_max, y_min, y_max, z_min, z_max =
-				dir.x == 0 and -def.width or dir.x == 1 and -def.depth_b or -def.depth_f,
-				dir.x == 0 and def.width or dir.x == 1 and def.depth_f or def.depth_b,
-				-def.height_d,
-				def.height_u,
-				dir.z == 0 and -def.width or dir.z == 1 and -def.depth_b or -def.depth_f,
-				dir.z == 0 and def.width or dir.z == 1 and def.depth_f or def.depth_b
+			local x_min, x_max, y_min, y_max, z_min, z_max = dir.x == 0 and -def.width or dir.x == 1 and -def.depth_b or -def.depth_f,
+			dir.x == 0 and def.width or dir.x == 1 and def.depth_f or def.depth_b,
+			-def.height_d,
+			def.height_u,
+			dir.z == 0 and -def.width or dir.z == 1 and -def.depth_b or -def.depth_f,
+			dir.z == 0 and def.width or dir.z == 1 and def.depth_f or def.depth_b
 
-			local rg = {region = {}, counts = {}}
+			local rg = { region = {}, counts = {} }
 
 			for x = x_min, x_max do
-			for y = y_min, y_max do
-			for z = z_min, z_max do
-				local crd = vector.add(pos, {x = x, y = y, z = z})
-				local nn = minetest.get_node(crd).name
-				local depth, r_shift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
-				table.insert(rg.region, { x = r_shift, y = y, z = depth, name = nn, actual_pos = crd })
-				rg.counts[nn] = (rg.counts[nn] or 0) + 1
-			end
-			end
+				for y = y_min, y_max do
+					for z = z_min, z_max do
+						local crd = vector.add(pos, { x = x, y = y, z = z })
+						local nn = minetest.get_node(crd).name
+						local depth, r_shift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
+						table.insert(rg.region, { x = r_shift, y = y, z = depth, name = nn, actual_pos = crd })
+						rg.counts[nn] = (rg.counts[nn] or 0) + 1
+					end
+				end
 			end
 
-			setmetatable(rg, {__call = function(reg, def1)
+			setmetatable(rg, { __call = function(reg, def1)
 				return table.every(def1, function(d)
 					return table.exists(reg.region, function(x)
 						return x.x == d.x and x.y == d.y and x.z == d.z and x.name == d.name
 					end)
 				end)
-			end})
+			end })
 
 			local meta = minetest.get_meta(pos)
 			local is_active = def.activator(rg)

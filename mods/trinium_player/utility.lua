@@ -5,7 +5,7 @@ local S = trinium.player_S
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	local dp = api.get_data_pointer(pn, "bound_inventories")
-	bi[pn] = minetest.create_detached_inventory("bound~"..pn, {
+	bi[pn] = minetest.create_detached_inventory("bound~" .. pn, {
 		allow_move = function(_, from_list, _, to_list, _, count)
 			return to_list == "crafting" and from_list ~= "trash" and count or 0
 		end,
@@ -46,9 +46,9 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 	})
-	api.initialize_inventory(bi[pn], {trash = 1, crafting = 9, output = 1})
-	for k,v in pairs(dp._strings) do
-		for k1,v1 in pairs(v) do
+	api.initialize_inventory(bi[pn], { trash = 1, crafting = 9, output = 1 })
+	for k, v in pairs(dp._strings) do
+		for k1, v1 in pairs(v) do
 			bi[pn]:set_stack(k, k1, v1)
 		end
 	end
@@ -56,7 +56,7 @@ end)
 
 -- Utility
 betterinv.register_tab("utilities", {
-	description = S"Utility",
+	description = S "Utility",
 	getter = function(player, context)
 		local pn = player:get_player_name()
 		return betterinv.generate_formspec(player, ([[

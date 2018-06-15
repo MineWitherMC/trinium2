@@ -1,8 +1,8 @@
 local S = trinium.mapgen.S
 
 minetest.register_node("trinium_mapgen:rock", {
-	tiles = {"trinium_mapgen.rock.png", "trinium_mapgen.rock.png", "invisible_texture.png"},
-	description = S"Rock",
+	tiles = { "trinium_mapgen.rock.png", "trinium_mapgen.rock.png", "invisible_texture.png" },
+	description = S "Rock",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
@@ -14,8 +14,8 @@ minetest.register_node("trinium_mapgen:rock", {
 })
 
 minetest.register_node("trinium_mapgen:stick", {
-	tiles = {"trinium_mapgen.stick.png", "trinium_mapgen.stick.png", "invisible_texture.png"},
-	description = S"Stick",
+	tiles = { "trinium_mapgen.stick.png", "trinium_mapgen.stick.png", "invisible_texture.png" },
+	description = S "Stick",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
@@ -28,22 +28,22 @@ minetest.register_node("trinium_mapgen:stick", {
 
 minetest.register_decoration({
 	deco_type = "simple",
-	place_on = {"trinium_mapgen:dirt_with_grass", "trinium_mapgen:dirt_with_snow", 
-			"trinium_mapgen:dirt_with_podzol", "trinium_mapgen:dirt_with_dry_grass"},
+	place_on = { "trinium_mapgen:dirt_with_grass", "trinium_mapgen:dirt_with_snow",
+	             "trinium_mapgen:dirt_with_podzol", "trinium_mapgen:dirt_with_dry_grass" },
 	sidelen = 8,
 	fill_ratio = 0.0065,
-	biomes = {"taiga", "coniferous_forest", "basic_forest", "savanna", "grassland"},
+	biomes = { "taiga", "coniferous_forest", "basic_forest", "savanna", "grassland" },
 	decoration = "trinium_mapgen:stick",
 	height = 1,
 })
 
 minetest.register_decoration({
 	deco_type = "simple",
-	place_on = {"trinium_mapgen:dirt_with_grass", "trinium_mapgen:dirt_with_snow", 
-			"trinium_mapgen:dirt_with_podzol", "trinium_mapgen:dirt_with_dry_grass"},
+	place_on = { "trinium_mapgen:dirt_with_grass", "trinium_mapgen:dirt_with_snow",
+	             "trinium_mapgen:dirt_with_podzol", "trinium_mapgen:dirt_with_dry_grass" },
 	sidelen = 8,
 	fill_ratio = 0.008,
-	biomes = {"taiga", "coniferous_forest", "basic_forest", "savanna", "grassland"},
+	biomes = { "taiga", "coniferous_forest", "basic_forest", "savanna", "grassland" },
 	decoration = "trinium_mapgen:rock",
 	height = 1,
 })

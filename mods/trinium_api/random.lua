@@ -4,12 +4,12 @@ local DataMesh = api.DataMesh
 function api.dump(...)
 	local string = ""
 	local add
-	for _,x in ipairs{...} do
+	for _, x in ipairs { ... } do
 		add = dump(x)
 		if type(x) == "string" then
 			add = add:sub(2, -2)
 		end
-		string = string..add.."  "
+		string = string .. add .. "  "
 	end
 	minetest.log("warning", string:sub(1, -3))
 end
@@ -25,8 +25,8 @@ end
 
 -- Inventory
 function api.initialize_inventory(inv, def)
-	for k,v in pairs(def) do
-		inv:set_size(k,v)
+	for k, v in pairs(def) do
+		inv:set_size(k, v)
 	end
 end
 
@@ -43,9 +43,9 @@ function api.initializer(def0)
 end
 
 function api.inv_to_itemmap(...)
-	local map, inv = {}, {...}
-	for _,v in pairs(inv) do
-		for _,v1 in pairs(v) do
+	local map, inv = {}, { ... }
+	for _, v in pairs(inv) do
+		for _, v1 in pairs(v) do
 			local name, count = v1:get_name(), v1:get_count()
 			if not map[name] then map[name] = 0 end
 			map[name] = map[name] + count
@@ -59,7 +59,7 @@ function api.advanced_search(begin, serialize, vertex)
 	local dm = DataMesh:new()
 	local dd = dm._data
 	local used = {}
-	local operation = {[begin] = 1}
+	local operation = { [begin] = 1 }
 	local under_operation
 	local step = 0
 	local finished = false
@@ -71,7 +71,7 @@ function api.advanced_search(begin, serialize, vertex)
 			if not used[serialize(v)] then
 				used[serialize(v)] = 1
 				if step > 1 then
-					table.insert(dd, {v, step})
+					table.insert(dd, { v, step })
 				end
 				finished = false
 				for v1 in pairs(vertex(v)) do
@@ -92,7 +92,7 @@ end
 function api.set_defaults(tbl, reserved_tbl)
 	tbl = tbl or {}
 	if not reserved_tbl then return tbl end
-	for k,v in pairs(reserved_tbl) do
+	for k, v in pairs(reserved_tbl) do
 		if not tbl[k] then
 			tbl[k] = v
 		end
@@ -101,7 +101,7 @@ function api.set_defaults(tbl, reserved_tbl)
 end
 
 function api.string_capitalization(str)
-	return str:sub(1,1):upper()..str:sub(2):lower()
+	return str:sub(1, 1):upper() .. str:sub(2):lower()
 end
 
 function api.string_separation(str)
@@ -115,7 +115,7 @@ end
 function api.translate_requirements(tbl)
 	local tbl1 = {}
 	for _, k, v in table.asort(tbl, function(a, b) return tbl[a] > tbl[b] end) do
-		tbl1[#tbl1 + 1] = "\n"..minetest.colorize("#CCC", v.." "..((minetest.registered_nodes[k] or {}).description or "???"))
+		tbl1[#tbl1 + 1] = "\n" .. minetest.colorize("#CCC", v .. " " .. ((minetest.registered_nodes[k] or {}).description or "???"))
 	end
 	return table.concat(tbl1, "")
 end
@@ -132,7 +132,7 @@ function api.sort_by_param(param)
 end
 
 function api.exposed_var()
-	local tbl = {good = true}
+	local tbl = { good = true }
 	return tbl, function() return not tbl.good end
 end
 
@@ -143,7 +143,7 @@ function api.count_stacks(inv, list, disallow_multi_stacks)
 	if not disallow_multi_stacks then
 		dm = dm:map(function(v)
 			return v:get_name()
-		end):unique()
+		end)   :unique()
 	end
 	return dm:count()
 end
@@ -168,8 +168,8 @@ end
 
 function api.get_fs_texture(...)
 	local textures = {}
-	for _,v in pairs{...} do
-		table.insert(textures, table.concat{"(", api.get_texture(v), ")^[brighten"})
+	for _, v in pairs { ... } do
+		table.insert(textures, table.concat { "(", api.get_texture(v), ")^[brighten" })
 	end
 	return unpack(textures)
 end
@@ -177,7 +177,7 @@ end
 function api.process_color(color)
 	if type(color) == "string" then return color end
 	color = ("%xB0"):format(color[1] * 256 * 256 + color[2] * 256 + color[3])
-	color = ("0"):rep(8 - #color)..color
+	color = ("0"):rep(8 - #color) .. color
 	return color
 end
 
@@ -190,13 +190,14 @@ function api.adder()
 	return x, function(name, def) x[name] = def end
 end
 
-function api.recolor_facedir(pos, n) -- n from 0 to 7
+function api.recolor_facedir(pos, n)
+	-- n from 0 to 7
 	local node = minetest.get_node(pos)
 	node.param2 = (node.param2 % 32) + (n * 32)
 	minetest.swap_node(pos, node)
 end
 
-function api.assert(x,y,z,t)
+function api.assert(x, y, z, t)
 	return assert(x, "\n" .. y .. " requested nonexistent " .. z .. " " .. t)
 end
 

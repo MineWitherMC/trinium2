@@ -31,14 +31,14 @@ minetest.register_on_generated(function(min_pos, _, seed)
 		end
 		table.sort(n)
 		for i = 2, #n do
-			vb[n[i].."_"..n[i - 1]] = {}
-			wb[n[i].."_"..n[i - 1]] = 0
+			vb[n[i] .. "_" .. n[i - 1]] = {}
+			wb[n[i] .. "_" .. n[i - 1]] = 0
 		end
-		for k,v in pairs(registered_veins) do
+		for k, v in pairs(registered_veins) do
 			for i = 2, #n do
 				if v.max_height >= n[i] and v.min_height <= n[i - 1] then
-					vb[n[i].."_"..n[i - 1]][k] = v.weight
-					wb[n[i].."_"..n[i - 1]] = wb[n[i].."_"..n[i - 1]] + v.weight
+					vb[n[i] .. "_" .. n[i - 1]][k] = v.weight
+					wb[n[i] .. "_" .. n[i - 1]] = wb[n[i] .. "_" .. n[i - 1]] + v.weight
 				end
 			end
 		end
@@ -56,8 +56,8 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	for i = 2, #vbs do
 		j = 0
 		if yc >= vbs[i - 1] and yc <= vbs[i] then
-			weight = rand:next(1, wb[vbs[i].."_"..vbs[i - 1]])
-			for y,w in pairs(vb[vbs[i].."_"..vbs[i - 1]]) do
+			weight = rand:next(1, wb[vbs[i] .. "_" .. vbs[i - 1]])
+			for y, w in pairs(vb[vbs[i] .. "_" .. vbs[i - 1]]) do
 				j = j + w
 				if j >= weight then
 					vein = y
@@ -72,14 +72,14 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	if not vein then return end -- something went wrong
 	local v = registered_veins[vein]
 
-	local vm, emin, emax = minetest.get_mapgen_object"voxelmanip"
-	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax }
+	local vm, emin, emax = minetest.get_mapgen_object "voxelmanip"
+	local area = VoxelArea:new { MinEdge = emin, MaxEdge = emax }
 	vm:get_data(data)
 	local choice, x, y, w
 	local noise_params = {
-		offset = 5/6 * (v.density - 50),
+		offset = 5 / 6 * (v.density - 50),
 		scale = 50,
-		spread = {x = 1, y = 1.2, z = 1},
+		spread = { x = 1, y = 1.2, z = 1 },
 		seed = seed + 232,
 		octaves = 1,
 		persist = 0.5,
@@ -109,7 +109,7 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	end
 
 	vm:set_data(data)
-	vm:set_lighting{day=0, night=0}
+	vm:set_lighting { day = 0, night = 0 }
 	vm:calc_lighting()
 	vm:write_to_map()
 end)

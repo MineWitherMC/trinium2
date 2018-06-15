@@ -10,8 +10,8 @@ end
 
 function table.filter(array, callable)
 	array = table.copy(array)
-	for k,v in pairs(array) do
-		if not callable(v,k) then
+	for k, v in pairs(array) do
+		if not callable(v, k) then
 			array[k] = nil
 		end
 	end
@@ -19,8 +19,8 @@ function table.filter(array, callable)
 end
 
 function table.exists(array, callable)
-	for k,v in pairs(array) do
-		if callable(v,k) then
+	for k, v in pairs(array) do
+		if callable(v, k) then
 			return k or true
 		end
 	end
@@ -28,29 +28,29 @@ function table.exists(array, callable)
 end
 
 function table.every(array, callable)
-	return not table.exists(array, function(v,k) return not callable(v,k) end)
+	return not table.exists(array, function(v, k) return not callable(v, k) end)
 end
 
 function table.walk(array, callable, cond)
 	cond = cond or api.functions.const(false)
-	for k,v in pairs(array) do
-		callable(v,k)
+	for k, v in pairs(array) do
+		callable(v, k)
 		if cond() then break end
 	end
 end
 
 function table.iwalk(array, callable, cond)
 	cond = cond or api.functions.const(false)
-	for k,v in ipairs(array) do
-		callable(v,k)
+	for k, v in ipairs(array) do
+		callable(v, k)
 		if cond() then break end
 	end
 end
 
 function table.map(array, callable)
 	array = table.copy(array)
-	for k,v in pairs(array) do
-		array[k] = callable(v,k)
+	for k, v in pairs(array) do
+		array[k] = callable(v, k)
 	end
 	return array
 end
@@ -86,12 +86,12 @@ end
 function table.f_concat(t, x)
 	x = x or ""
 	local str = ""
-	table.walk(t, function(v) str = str..x..v end)
+	table.walk(t, function(v) str = str .. x .. v end)
 	return str:sub(x:len() + 1)
 end
 
 function table.tail(t)
-	local function helper(_, ...) return #{...} > 0 and {...} or nil end
+	local function helper(_, ...) return #{ ... } > 0 and { ... } or nil end
 	return helper(unpack(t)) or {}
 end
 
@@ -112,22 +112,22 @@ function table.random_map(tbl)
 end
 
 function vector.stringify(v)
-	return v.x..","..v.y..","..v.z
+	return v.x .. "," .. v.y .. "," .. v.z
 end
 
 function vector.destringify(v)
-	local s = v:split","
-	return {x = s[1], y = s[2], z = s[3]}
+	local s = v:split ","
+	return { x = s[1], y = s[2], z = s[3] }
 end
 
 local mt_register_item_old = minetest.register_item
 function minetest.register_item(name, def, ...)
-	assert(not def.max_stack, name.." uses max_stack instead of stack_max")
+	assert(not def.max_stack, name .. " uses max_stack instead of stack_max")
 	def.stack_max = def.stack_max or 72
 	if def.drop and def.drop ~= "" then
-		trinium.recipes.add("drop", {name},
-			type(def.drop) == "table" and def.drop.items or {def.drop},
-			{max_items = type(def.drop) == "table" and def.drop.max_items or 99}
+		trinium.recipes.add("drop", { name },
+				type(def.drop) == "table" and def.drop.items or { def.drop },
+				{ max_items = type(def.drop) == "table" and def.drop.max_items or 99 }
 		)
 	end
 	return mt_register_item_old(name, def, ...)

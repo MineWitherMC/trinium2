@@ -13,9 +13,9 @@ end)
 
 local function get_book_fs(pn)
 	local buttons = ""
-	for k,v in pairs(research.chapters) do
-		if table.every(v.requirements, function(b,a) return research.check(pn, a) end) then
-			buttons = buttons..([=[
+	for k, v in pairs(research.chapters) do
+		if table.every(v.requirements, function(b, a) return research.check(pn, a) end) then
+			buttons = buttons .. ([=[
 				item_image_button[%s,%s;1,1;%s;open_chapter~%s;]
 				tooltip[open_chapter~%s;%s]
 			]=]):format(v.x, v.y, v.texture, k, k, v.name)
@@ -36,17 +36,41 @@ local function cut_coordinates(x1, x2, y1, y2)
 	]]--
 	local k, b = (y2 - y1) / (x2 - x1), (x2 * y1 - x1 * y2) / (x2 - x1)
 	-- then, intersect y = kx + b with line x = -0.5, then y = -0.5k + b
-	if x1 < -0.5 then x1 = -0.5; y1 = -0.5 * k + b end
-	if x2 < -0.5 then x2 = -0.5; y2 = -0.5 * k + b end
+	if x1 < -0.5 then
+		x1 = -0.5;
+		y1 = -0.5 * k + b
+	end
+	if x2 < -0.5 then
+		x2 = -0.5;
+		y2 = -0.5 * k + b
+	end
 	-- then, with x = 8, then y = 8k + b
-	if x1 > 8 then x1 = 8; y1 = 8 * k + b end
-	if x2 > 8 then x2 = 8; y2 = 8 * k + b end
+	if x1 > 8 then
+		x1 = 8;
+		y1 = 8 * k + b
+	end
+	if x2 > 8 then
+		x2 = 8;
+		y2 = 8 * k + b
+	end
 	-- then, with y = -0.5, then x = -(b+0.5)/k
-	if y1 < -0.5 then y1 = -0.5; x1 = -(b + 0.5) / k end
-	if y2 < -0.5 then y2 = -0.5; x2 = -(b + 0.5) / k end
+	if y1 < -0.5 then
+		y1 = -0.5;
+		x1 = -(b + 0.5) / k
+	end
+	if y2 < -0.5 then
+		y2 = -0.5;
+		x2 = -(b + 0.5) / k
+	end
 	-- finally, with y = 8, then x = (8-b)/k
-	if y1 > 8 then y1 = 8; x1 = (8 - b) / k end
-	if y2 > 8 then y2 = 8; x2 = (8 - b) / k end
+	if y1 > 8 then
+		y1 = 8;
+		x1 = (8 - b) / k
+	end
+	if y2 > 8 then
+		y2 = 8;
+		x2 = (8 - b) / k
+	end
 
 	return x1, x2, y1, y2
 end
@@ -68,21 +92,21 @@ local function draw_connection(x1, y1, x2, y2)
 	elseif (x1 > x2) == (y1 > y2) then
 		if x1 > x2 then x1, x2, y1, y2 = x2, x1, y2, y1 end
 		return ("background[%s,%s;%s,%s;trinium_research_gui.connector_normal.png]")
-			:format(x1 + 0.5, y1 + 0.5, x2 - x1, y2 - y1)
+				:format(x1 + 0.5, y1 + 0.5, x2 - x1, y2 - y1)
 	else
 		if x1 > x2 then
 			x1, x2 = x2, x1
 			y1, y2 = y2, y1
 		end
 		return ("background[%s,%s;%s,%s;trinium_research_gui.connector_reverse.png]")
-			:format(x1 + 0.5, y2 + 0.5, x2 - x1, y1 - y2)
+				:format(x1 + 0.5, y2 + 0.5, x2 - x1, y1 - y2)
 	end
 end
 
 local function get_book_chapter_fs(chapter_id, pn, cx, cy)
-	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(S"Back")
+	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(S "Back")
 	if research.chapters[chapter_id].create_map then
-		buttons = buttons..("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
+		buttons = buttons .. ("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
 				:format(buttons, S "Get Research Map", S "This chapter uses Secret researches discovered via Sheet Infuser")
 	end
 	if not research.researches_by_chapter[chapter_id] then
@@ -104,12 +128,12 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 			for v1 in pairs(v.requirements) do
 				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
-					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
+					buttons = buttons .. draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
 				end
 			end
 
 			if frc[k] then
-				buttons = buttons..([=[
+				buttons = buttons .. ([=[
 					item_image_button[%s,%s;1,1;%s;open_research~%s;]
 					tooltip[open_research~%s;%s]
 				]=]):format(v.x - cx, v.y - cy, v.texture, k, k, desc)
@@ -121,13 +145,13 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 			for v1 in pairs(v.requirements) do
 				if research.researches_by_chapter[chapter_id][v1] then
 					local v2 = research.researches[v1]
-					buttons = buttons..draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
+					buttons = buttons .. draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
 				end
 			end
 
 			if frc[k] then
 				texture = v.texture:gsub(":", "__")
-				buttons = buttons..([=[
+				buttons = buttons .. ([=[
 						background[%s,%s;1,1;trinium_research_gui.glowing.png]
 						item_image_button[%s,%s;1,1;%s;get_sheet~%s;]
 						tooltip[get_sheet~%s;%s]
@@ -137,7 +161,7 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 		end
 
 		if enable and v.important then
-			buttons = buttons..([=[
+			buttons = buttons .. ([=[
 				background[%s,%s;1.5,1.5;trinium_research_gui.important.png]
 			]=]):format(v.x - cx - 0.25, v.y - cy - 0.25)
 		end
@@ -147,7 +171,7 @@ end
 
 -- Returns text, size
 local function get_book_research_fs(pn, context)
-	local split = context.book:split"~"
+	local split = context.book:split "~"
 	local res, key = split[2], tonumber(split[3])
 	local def = research.researches[res]
 	local text = def.text[key]
@@ -156,7 +180,7 @@ local function get_book_research_fs(pn, context)
 		text = { form = "textarea[0.25,1;7.75,7;;;" .. text .. "]", w = 8, h = 8, locked = false }
 	end
 	if type(text[1]) == "table" then
-		for k,v in pairs(text[1]) do
+		for k, v in pairs(text[1]) do
 			if not text[k] then
 				text[k] = v
 			end
@@ -218,7 +242,7 @@ end
 local function get_book_bg(pn)
 	local w = research.dp1[pn]
 	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]")
-		:format(w.CognFission and 4 or w.CognVoid and 3 or w.CognWarp and 2 or 1)
+			:format(w.CognFission and 4 or w.CognVoid and 3 or w.CognWarp and 2 or 1)
 end
 
 local function get_book_chapter_bg(chapter_id)
@@ -226,18 +250,19 @@ local function get_book_chapter_bg(chapter_id)
 	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
 end
 
-local book = {description = S"Research Book"}
+local book = { description = S "Research Book" }
 function book.getter(player, context)
 	local pn = player:get_player_name()
 	context.book = context.book or "default_bg"
 	context.book_y = context.book_y or 0
-	local split = context.book:split"~"
+	local split = context.book:split "~"
 	if split[1] == "default_bg" then
 		return betterinv.generate_formspec(player, get_book_fs(pn), false, get_book_bg(pn), false)
 	elseif split[1] == "chapter" then
 		local fs = get_book_chapter_fs(split[2], pn, 0, context.book_y)
 		return betterinv.generate_formspec(player, fs, false, get_book_chapter_bg(split[2]), false)
-	elseif split[1] == "research" then -- research~SomeTestResearch~3 (3rd page)
+	elseif split[1] == "research" then
+		-- research~SomeTestResearch~3 (3rd page)
 		local fs, s = get_book_research_fs(pn, context)
 		return betterinv.generate_formspec(player, fs, s, false, false)
 	end
@@ -248,10 +273,10 @@ function book.processor(player, context, fields)
 	local pn = player:get_player_name()
 	local inv = player:get_inventory()
 
-	for k,v in pairs(fields) do
+	for k, v in pairs(fields) do
 		if k == "key_up" then
 			context.book_y = context.book_y - 1
-		elseif k == "key_down" and context.book:split"~"[1] == "chapter" then
+		elseif k == "key_down" and context.book:split "~"[1] == "chapter" then
 			context.book_y = context.book_y + 1
 		else
 			local k_split = k:split "~" -- Module, action, parameters
@@ -281,7 +306,7 @@ function book.processor(player, context, fields)
 					research.dp2[pn].aspects[k] = research.dp2[pn].aspects[k] - v
 				end)
 
-				research.dp1[pn][cs[2].."-"..cs[3]] = 1
+				research.dp1[pn][cs[2] .. "-" .. cs[3]] = 1
 			elseif a == "get_sheet" then
 				local stack = ItemStack("trinium_research:notes_2")
 				local meta = stack:get_meta()
@@ -293,10 +318,10 @@ function book.processor(player, context, fields)
 					cmsg.push_message_player(player, S "You already have this research!")
 					return
 				elseif research.dp2[pn].ink < 3 then
-					cmsg.push_message_player(player, S"Insufficient Ink!")
+					cmsg.push_message_player(player, S "Insufficient Ink!")
 					return
 				elseif research.dp2[pn].paper < 1 then
-					cmsg.push_message_player(player, S"Insufficient Paper!")
+					cmsg.push_message_player(player, S "Insufficient Paper!")
 					return
 				end
 
@@ -312,15 +337,15 @@ function book.processor(player, context, fields)
 				meta:set_string("chapter_id", cs[2])
 
 				if inv:contains_item("main", stack, true) then
-					cmsg.push_message_player(player, S"You already have this research map!")
+					cmsg.push_message_player(player, S "You already have this research map!")
 					return
 				elseif research.dp2[pn].ink < 500 then
-					cmsg.push_message_player(player, S"Insufficient Ink!")
+					cmsg.push_message_player(player, S "Insufficient Ink!")
 					return
 				end
 
 				if not inv:contains_item("main", M.diamond:get("dust", 16)) then
-					cmsg.push_message_player(player, S"Insufficient Diamond Dust!")
+					cmsg.push_message_player(player, S "Insufficient Diamond Dust!")
 					return
 				end
 

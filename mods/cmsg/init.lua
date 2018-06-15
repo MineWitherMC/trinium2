@@ -20,15 +20,15 @@ end
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
-	huds[pn] = player:hud_add{
+	huds[pn] = player:hud_add {
 		hud_elem_type = "text",
 		text = "",
 		number = tonumber(cmsg.color, 16),
-		position = {x = 0.75, y = 0.475},
-		offset = {x = -0, y = -256},
+		position = { x = 0.75, y = 0.475 },
+		offset = { x = -0, y = -256 },
 		direction = 3,
-		alignment = {x = 0, y = 1},
-		scale = {x = 800, y = 20 * cmsg.max_messages},
+		alignment = { x = 0, y = 1 },
+		scale = { x = 800, y = 20 * cmsg.max_messages },
 	}
 	messages[pn] = {}
 end)

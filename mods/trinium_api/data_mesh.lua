@@ -2,7 +2,7 @@ trinium.api.DataMesh = {}
 local DataMesh = trinium.api.DataMesh
 
 function DataMesh:new()
-	local dm = setmetatable({}, {__index = DataMesh})
+	local dm = setmetatable({}, { __index = DataMesh })
 	dm._data = {}
 	return dm
 end
@@ -64,7 +64,7 @@ end
 
 function DataMesh:unique()
 	local cache = {}
-	for k,v in pairs(self._data) do
+	for k, v in pairs(self._data) do
 		if cache[v] then
 			self._data[k] = nil
 		else

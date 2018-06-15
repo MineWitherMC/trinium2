@@ -23,8 +23,8 @@ function research.add_req(child, parent)
 	research.researches[child].requirements[parent] = 1
 end
 
-research.dp1 = api.get_data_pointers"researches" -- unordered set
-research.dp2 = api.get_data_pointers"researches_data" -- unordered map
+research.dp1 = api.get_data_pointers "researches" -- unordered set
+research.dp2 = api.get_data_pointers "researches_data" -- unordered map
 function research.check(pn, name)
 	return research.dp1[pn][name]
 end
@@ -50,7 +50,7 @@ end
 function research.grant(pn, name)
 	local s = research.get_tree(name):filter(function(k) return not research.check(pn, k) end)
 	if s:count() > 0 then
-		minetest.chat_send_player(pn, S"Unknown Research!")
+		minetest.chat_send_player(pn, S "Unknown Research!")
 		return false
 	else
 		research.basic_grant(pn, name)
@@ -75,10 +75,10 @@ function research.add_aspect(name, def)
 	table.insert(research.aspect_list, name)
 	table.sort(research.aspect_list)
 
-	minetest.register_tool("trinium_research:aspect_"..name, {
+	minetest.register_tool("trinium_research:aspect_" .. name, {
 		description = def.name,
 		inventory_image = def.texture,
-		groups = {hidden_from_irp = 1},
+		groups = { hidden_from_irp = 1 },
 	})
 end
 

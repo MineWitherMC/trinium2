@@ -1,2 +1,0 @@
-#	0 for navigation on top, 1 for left, etc.; 4 for sfinv-like
-betterinv_tab_position (Navigation Position) int 1 0 4

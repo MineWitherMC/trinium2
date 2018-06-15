@@ -18,18 +18,18 @@ function recipes.stringify(size, inputs)
 	return table.concat(inputs, ";")
 end
 
-local split = function(k) return k:split" " end
+local split = function(k) return k:split " " end
 local concat = function(k) return table.concat(k, " ") end
 function recipes.divide(a, b)
-	a = dm:new():data(a):map(split):map(function(x) return {x[1], tonumber(x[2])} end)
-	b = dm:new():data(b):map(split):map(function(x) return {x[1], tonumber(x[2])} end)
+	a = dm:new():data(a):map(split):map(function(x) return { x[1], tonumber(x[2]) } end)
+	b = dm:new():data(b):map(split):map(function(x) return { x[1], tonumber(x[2]) } end)
 	local gcd = 0
 	if not gcd then return a:map(concat):data(), b:map(concat):data() end
 	a:forEach(function(r) gcd = math.gcd(r[2], gcd) end)
 	b:forEach(function(r) gcd = math.gcd(r[2], gcd) end)
 	if not gcd then return a:map(concat):data(), b:map(concat):data() end
-	a = a:map(function(x) return {x[1], x[2] / gcd} end):map(concat):data()
-	b = b:map(function(x) return {x[1], x[2] / gcd} end):map(concat):data()
+	a = a:map(function(x) return { x[1], x[2] / gcd } end):map(concat):data()
+	b = b:map(function(x) return { x[1], x[2] / gcd } end):map(concat):data()
 	return a, b
 end
 
@@ -42,7 +42,7 @@ function recipes.add(method, inputs, outputs, data)
 	if inputs == -1 or outputs == -1 or data == -1 then return end
 
 	-- Redoing all the redirects
-	local redirects = {method = 1}
+	local redirects = { method = 1 }
 	while type(method_table.callback(inputs, outputs, data)) == "string" do
 		method = method_table.callback(inputs, outputs, data)
 		assert(not redirects[method], "Infinite loop detected!")
@@ -51,8 +51,8 @@ function recipes.add(method, inputs, outputs, data)
 	data.author_mod = minetest.get_current_modname() or "???"
 
 	assert(method_table.recipe_correct(data),
-			"Invalid recipe: "..recipes.stringify(method_table.input_amount, inputs)..
-			" for "..method.." by "..data.author_mod)
+			"Invalid recipe: " .. recipes.stringify(method_table.input_amount, inputs) ..
+					" for " .. method .. " by " .. data.author_mod)
 
 	-- Registering recipe
 	local new_amount = #recipes.recipe_registry + 1
@@ -80,8 +80,8 @@ function recipes.add(method, inputs, outputs, data)
 	local k
 	local cache = {}
 	if not data.secret_recipe and method_table.callback(inputs, outputs, data) then
-		for _,v in pairs(inputs) do
-			k = v:split" "[1]
+		for _, v in pairs(inputs) do
+			k = v:split " "[1]
 			if not cache[k] then
 				cache[k] = 1
 				recipes.usages[k] = recipes.usages[k] or {}
@@ -89,8 +89,8 @@ function recipes.add(method, inputs, outputs, data)
 			end
 		end
 		cache = {}
-		for _,v in pairs(outputs) do
-			k = v:split" "[1]
+		for _, v in pairs(outputs) do
+			k = v:split " "[1]
 			if not cache[k] then
 				cache[k] = 1
 				trinium.recipes.recipes[k] = trinium.recipes.recipes[k] or {}
@@ -109,7 +109,7 @@ function recipes.add_method(method, tbl)
 		process = function(a, b, c)
 			return a, b, c
 		end,
-		formspec_begin = func.const"",
+		formspec_begin = func.const "",
 		can_perform = func.const(true),
 		recipe_correct = func.const(true),
 	})
@@ -129,13 +129,13 @@ end
 
 function recipes.check_inputs(input_map, needed_inputs)
 	return table.every(needed_inputs, function(r)
-		local k = r:split" "
+		local k = r:split " "
 		return input_map[k[1]] and (#k == 1 or (input_map[k[1]] >= tonumber(k[2])))
 	end)
 end
 
 function recipes.remove_inputs(inventory, list, inputs)
-	for _,v in pairs(inputs) do inventory:remove_item(list, v) end
+	for _, v in pairs(inputs) do inventory:remove_item(list, v) end
 end
 
 recipes.add_method("drop", {
@@ -149,7 +149,7 @@ recipes.add_method("drop", {
 	end,
 	formspec_width = 7,
 	formspec_height = 5,
-	formspec_name = api.S"Drop",
+	formspec_name = api.S "Drop",
 	formspec_begin = function(data)
 		return ("textarea[0,4.7;7,1;;;%s]"):format(api.S("Max Drop: @1", data.max_items))
 	end,
@@ -163,8 +163,8 @@ recipes.add_method("drop", {
 				table.insert(outputs1, v)
 			else
 				table.walk(v.items, function(v1)
-					table.insert(outputs1, v1..(#(v1:split(" ")) == 1 and " 1" or "")..
-							" "..math.ceil(10000 / v.rarity) / 100)
+					table.insert(outputs1, v1 .. (#(v1:split(" ")) == 1 and " 1" or "") ..
+							" " .. math.ceil(10000 / v.rarity) / 100)
 				end)
 			end
 		end)

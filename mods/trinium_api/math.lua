@@ -12,7 +12,7 @@ function math.harmonic_distribution(center, tolerance, current, amplitude)
 end
 
 math.ln2 = math.log(2)
-local randomizer = PcgRandom(math.random() * 10^8)
+local randomizer = PcgRandom(math.random() * 10 ^ 8)
 function math.gaussian(a, b)
 	return randomizer:rand_normal_dist(a, b)
 end
@@ -42,16 +42,16 @@ function math.geometrical_avg(tbl)
 	return math.exp(sum / #tbl)
 end
 
-local one = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
-local ten = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
-local hun = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
+local one = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" }
+local ten = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" }
+local hun = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" }
 function api.roman_number(a)
 	local k = a % 1000
 	local str = ("M"):rep(math.floor(a / 1000))
 
-	str = str..hun[(k - k % 100)/100 + 1]
-	str = str..ten[(k % 100 - k % 10)/10 + 1]
-	str = str..one[k % 10 + 1]
+	str = str .. hun[(k - k % 100) / 100 + 1]
+	str = str .. ten[(k % 100 - k % 10) / 10 + 1]
+	str = str .. one[k % 10 + 1]
 	return str
 end
 

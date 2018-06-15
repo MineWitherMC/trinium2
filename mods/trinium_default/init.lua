@@ -6,22 +6,22 @@ local ss = trinium.sounds
 
 -- Reflector Glass
 minetest.register_node("trinium_default:reflector_glass", {
-	tiles = {"trinium_default.reflector_glass.png"},
-	description = S"Reflection Glass",
+	tiles = { "trinium_default.reflector_glass.png" },
+	description = S "Reflection Glass",
 	drawtype = "glasslike_framed_optional",
 	sunlight_propagades = true,
 	paramtype = "light",
-	groups = {cracky = 2},
+	groups = { cracky = 2 },
 	light_source = 7,
 	sounds = ss.default_glass,
 })
 
 -- Lamp Frame
 minetest.register_node("trinium_default:lamp_frame", {
-	tiles = {"trinium_default.lamp_frame_single.png"},
-	description = S"Advanced Lamp Frame",
+	tiles = { "trinium_default.lamp_frame_single.png" },
+	description = S "Advanced Lamp Frame",
 	drawtype = "glasslike",
-	groups = {cracky = 3},
+	groups = { cracky = 3 },
 	sounds = ss.default_glass,
 })
 
@@ -38,10 +38,10 @@ minetest.register_node("trinium_default:forcillium_lamp", {
 			},
 		}
 	},
-	description = S"Forcillium Lamp",
+	description = S "Forcillium Lamp",
 	drawtype = "glasslike",
 	light_source = 14,
-	groups = {cracky = 1, level = 2},
+	groups = { cracky = 1, level = 2 },
 	sounds = ss.default_glass,
 })
 

@@ -5,8 +5,8 @@ local api = trinium.api
 
 minetest.register_node("trinium_research:node_controller", {
 	stack_max = 1,
-	tiles = {"trinium_research.node.png"},
-	description = S"Research Node Controller",
+	tiles = { "trinium_research.node.png" },
+	description = S "Research Node Controller",
 	groups = { cracky = 1, rich_info = 1 },
 	paramtype2 = "facedir",
 	sounds = trinium.sounds.default_stone,
@@ -64,34 +64,34 @@ local node_mb = {
 	depth_f = 0,
 	controller = "trinium_research:node_controller",
 	map = {
-		{x = 0, y = -1, z = 0, name = "trinium_research:casing"},
-		{x = 0, y = -1, z = 2, name = "trinium_research:casing"},
-		{x = 1, y = -1, z = 1, name = "trinium_research:casing"},
-		{x = -1, y = -1, z = 1, name = "trinium_research:casing"},
-		{x = 0, y = -1, z = 1, name = "trinium_research:chassis"},
+		{ x = 0, y = -1, z = 0, name = "trinium_research:casing" },
+		{ x = 0, y = -1, z = 2, name = "trinium_research:casing" },
+		{ x = 1, y = -1, z = 1, name = "trinium_research:casing" },
+		{ x = -1, y = -1, z = 1, name = "trinium_research:casing" },
+		{ x = 0, y = -1, z = 1, name = "trinium_research:chassis" },
 
-		{x = 1, y = -1, z = 2, name = "trinium_research:chassis"},
-		{x = -1, y = -1, z = 2, name = "trinium_research:chassis"},
-		{x = 1, y = -1, z = 0, name = "trinium_research:chassis"},
-		{x = -1, y = -1, z = 0, name = "trinium_research:chassis"},
+		{ x = 1, y = -1, z = 2, name = "trinium_research:chassis" },
+		{ x = -1, y = -1, z = 2, name = "trinium_research:chassis" },
+		{ x = 1, y = -1, z = 0, name = "trinium_research:chassis" },
+		{ x = -1, y = -1, z = 0, name = "trinium_research:chassis" },
 
-		{x = 0, y = -1, z = 3, name = "trinium_research:chassis"},
-		{x = 0, y = -1, z = 4, name = "trinium_research:chassis"},
+		{ x = 0, y = -1, z = 3, name = "trinium_research:chassis" },
+		{ x = 0, y = -1, z = 4, name = "trinium_research:chassis" },
 
-		{x = 2, y = -1, z = 1, name = "trinium_research:chassis"},
-		{x = 3, y = -1, z = 1, name = "trinium_research:chassis"},
-		{x = -2, y = -1, z = 1, name = "trinium_research:chassis"},
-		{x = -3, y = -1, z = 1, name = "trinium_research:chassis"},
+		{ x = 2, y = -1, z = 1, name = "trinium_research:chassis" },
+		{ x = 3, y = -1, z = 1, name = "trinium_research:chassis" },
+		{ x = -2, y = -1, z = 1, name = "trinium_research:chassis" },
+		{ x = -3, y = -1, z = 1, name = "trinium_research:chassis" },
 
-		{x = -1, y = 0, z = 1, name = "trinium_research:chassis"},
-		{x = 1, y = 0, z = 1, name = "trinium_research:chassis"},
-		{x = 0, y = 0, z = 2, name = "trinium_research:chassis"},
+		{ x = -1, y = 0, z = 1, name = "trinium_research:chassis" },
+		{ x = 1, y = 0, z = 1, name = "trinium_research:chassis" },
+		{ x = 0, y = 0, z = 2, name = "trinium_research:chassis" },
 
-		{x = -1, y = 1, z = 1, name = "trinium_research:casing"},
-		{x = 1, y = 1, z = 1, name = "trinium_research:casing"},
-		{x = 0, y = 1, z = 2, name = "trinium_research:casing"},
-		{x = 0, y = 1, z = 0, name = "trinium_research:casing"},
-		{x = 0, y = 1, z = 1, name = "trinium_research:chassis"}
+		{ x = -1, y = 1, z = 1, name = "trinium_research:casing" },
+		{ x = 1, y = 1, z = 1, name = "trinium_research:casing" },
+		{ x = 0, y = 1, z = 2, name = "trinium_research:casing" },
+		{ x = 0, y = 1, z = 0, name = "trinium_research:casing" },
+		{ x = 0, y = 1, z = 1, name = "trinium_research:chassis" }
 	},
 }
 

@@ -7,8 +7,8 @@ A(M.iron, {
 	base_speed = 6,
 	level = 2,
 	rod_durability = 1.25,
-	traits = {magnetic = 1},
-	description = S"Iron",
+	traits = { magnetic = 1 },
+	description = S "Iron",
 })
 
 A(M.bronze, {
@@ -16,8 +16,8 @@ A(M.bronze, {
 	base_speed = 5.5,
 	level = 1,
 	rod_durability = 1.4,
-	traits = {dense = 1},
-	description = S"Bronze",
+	traits = { dense = 1 },
+	description = S "Bronze",
 })
 
 A(M.titanium, {
@@ -25,8 +25,8 @@ A(M.titanium, {
 	base_speed = 9.6,
 	level = 3,
 	rod_durability = 1.85,
-	traits = {active = 1, reinforced = 1},
-	description = S"Titanium",
+	traits = { active = 1, reinforced = 1 },
+	description = S "Titanium",
 })
 
 A(M.rhenium_alloy, {
@@ -34,8 +34,8 @@ A(M.rhenium_alloy, {
 	base_speed = 7.6,
 	level = 2,
 	rod_durability = 0.45,
-	traits = {reinforced = 1},
-	description = S"Rhenium Alloy",
+	traits = { reinforced = 1 },
+	description = S "Rhenium Alloy",
 })
 
 A(M.forcillium, {
@@ -43,8 +43,8 @@ A(M.forcillium, {
 	base_speed = 14,
 	level = 1,
 	rod_durability = 6,
-	traits = {active = 2, electric = 1},
-	description = S"Forcillium",
+	traits = { active = 2, electric = 1 },
+	description = S "Forcillium",
 })
 
 A(M.imbued_forcillium, {
@@ -52,8 +52,8 @@ A(M.imbued_forcillium, {
 	base_speed = 17,
 	level = 3,
 	rod_durability = 5,
-	traits = {active = 2, electric = 2},
-	description = S"Imbued Forcillium",
+	traits = { active = 2, electric = 2 },
+	description = S "Imbued Forcillium",
 })
 
 A(M.endium, {
@@ -61,6 +61,6 @@ A(M.endium, {
 	base_speed = 10,
 	level = 2,
 	rod_durability = 1.8,
-	traits = {alien = 1},
-	description = S"Endium",
+	traits = { alien = 1 },
+	description = S "Endium",
 })

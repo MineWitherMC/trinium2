@@ -21,15 +21,15 @@ end
 -- Default player appearance
 pm.player_register_model("character.b3d", {
 	animation_speed = 30,
-	textures = {"character.png", },
+	textures = { "character.png", },
 	animations = {
 		-- Standard animations.
-		stand     = { x=  0, y= 79, },
-		lay       = { x=162, y=166, },
-		walk      = { x=168, y=187, },
-		mine      = { x=189, y=198, },
-		walk_mine = { x=200, y=219, },
-		sit       = { x= 81, y=160, },
+		stand = { x = 0, y = 79, },
+		lay = { x = 162, y = 166, },
+		walk = { x = 168, y = 187, },
+		mine = { x = 189, y = 198, },
+		walk_mine = { x = 200, y = 219, },
+		sit = { x = 81, y = 160, },
 	},
 })
 
@@ -61,7 +61,7 @@ function pm.player_set_model(player, model_name)
 			mesh = model_name,
 			textures = player_textures[name] or model.textures,
 			visual = "mesh",
-			visual_size = model.visual_size or {x=1, y=1},
+			visual_size = model.visual_size or { x = 1, y = 1 },
 		})
 		pm.player_set_animation(player, "stand")
 	else
@@ -76,7 +76,7 @@ end
 function pm.player_set_textures(player, textures)
 	local name = player:get_player_name()
 	player_textures[name] = textures
-	player:set_properties({textures = textures})
+	player:set_properties({ textures = textures })
 end
 
 function pm.player_set_animation(player, anim_name, speed)
@@ -97,7 +97,7 @@ end
 minetest.register_on_joinplayer(function(player)
 	pm.player_attached[player:get_player_name()] = false
 	pm.player_set_model(player, "character.b3d")
-	player:set_local_animation({x=0, y=79}, {x=168, y=187}, {x=189, y=198}, {x=200, y=219}, 30)
+	player:set_local_animation({ x = 0, y = 79 }, { x = 168, y = 187 }, { x = 189, y = 198 }, { x = 200, y = 219 }, 30)
 
 	player:hud_set_hotbar_image("gui_hotbar.png")
 	player:hud_set_hotbar_selected_image("gui_hotbar_selected.png")

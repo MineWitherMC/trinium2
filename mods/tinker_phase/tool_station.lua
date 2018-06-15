@@ -17,24 +17,24 @@ local function recalculate(pos)
 		local c, count = v.components, api.count_stacks(inv, "inputs", true)
 		if count ~= #c then return end
 		if not table.every(c, function(c1)
-			return inv:contains_item("inputs", "tinker_phase:part_"..c1.name)
+			return inv:contains_item("inputs", "tinker_phase:part_" .. c1.name)
 		end) then return end
 
-		local stack = ItemStack("tinker_phase:tool_"..k)
+		local stack = ItemStack("tinker_phase:tool_" .. k)
 		local meta2 = stack:get_meta()
 
 		local durability, level, times, traits = 0, v.level_boost, {}, {}
 		local color
 		table.walk(c, function(c1)
 			if c1.type == 1 then
-				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
+				local x = inv:remove_item("inputs", "tinker_phase:part_" .. c1.name)
 				inv:add_item("inputs", x)
 				local data = x:get_meta():get_string("material_data"):data()
 				durability = durability + data.base_durability
 				if level < data.level then
 					level = data.level
 				end
-				for k,v in pairs(data.traits) do
+				for k, v in pairs(data.traits) do
 					traits[k] = math.max(traits[k] or 0, v)
 				end
 
@@ -47,11 +47,11 @@ local function recalculate(pos)
 		level = level + v.level_boost
 		table.walk(c, function(c1)
 			if c1.type == 2 then
-				local x = inv:remove_item("inputs", "tinker_phase:part_"..c1.name)
+				local x = inv:remove_item("inputs", "tinker_phase:part_" .. c1.name)
 				inv:add_item("inputs", x)
 				local data = x:get_meta():get_string("material_data"):data()
 				durability = durability * data.rod_durability
-				for k,v in pairs(data.traits) do
+				for k, v in pairs(data.traits) do
 					traits[k] = math.max(traits[k] or 0, v)
 				end
 			end
@@ -77,8 +77,8 @@ local function recalculate(pos)
 
 		meta2:set_int("max_durability", durability * v.durability_mult)
 		meta2:set_int("current_durability", durability * v.durability_mult)
-		meta2:set_string("color", "#"..color)
-		meta2:set_tool_capabilities{
+		meta2:set_string("color", "#" .. color)
+		meta2:set_tool_capabilities {
 			full_punch_interval = 1.0,
 			max_drop_level = level,
 			groupcaps = times2,
@@ -86,7 +86,7 @@ local function recalculate(pos)
 		meta2:set_int("modifiers_left", 3)
 		meta2:set_string("modifiers", minetest.serialize(traits))
 
-		for k,v in pairs(traits) do
+		for k, v in pairs(traits) do
 			if tinker.modifiers[k] and tinker.modifiers[k].after_create then
 				tinker.modifiers[k].after_create(v, meta2)
 			end
@@ -99,29 +99,29 @@ local function recalculate(pos)
 end
 
 minetest.register_node("tinker_phase:tool_station", {
-	description = S"Tool Station",
-	tiles = {"tinker_phase.assembly_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png"},
+	description = S "Tool Station",
+	tiles = { "tinker_phase.assembly_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png" },
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
-			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
-			{-0.5, -0.5, 0.5, -0.25, 0.25, 0.25},
-			{0.5, -0.5, 0.5, 0.25, 0.25, 0.25},
-			{-0.5, 0.25, -0.5, 0.5, 0.5, 0.5},
+			{ -0.5, -0.5, -0.5, -0.25, 0.25, -0.25 },
+			{ 0.5, -0.5, -0.5, 0.25, 0.25, -0.25 },
+			{ -0.5, -0.5, 0.5, -0.25, 0.25, 0.25 },
+			{ 0.5, -0.5, 0.5, 0.25, 0.25, 0.25 },
+			{ -0.5, 0.25, -0.5, 0.5, 0.5, 0.5 },
 		}
 	},
-	groups = {choppy = 2},
+	groups = { choppy = 2 },
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, {inputs = 6, output = 1})
+		api.initialize_inventory(inv, { inputs = 6, output = 1 })
 		meta:set_string("formspec", tool_station_formspec)
 	end,
 	allow_metadata_inventory_put = function(_, list_name, _, stack)
 		return list_name == "inputs" and minetest.get_item_group(stack:get_name(), "_tinker_phase_part") ~= 0
-			and stack:get_count() or 0
+				and stack:get_count() or 0
 	end,
 	allow_metadata_inventory_move = function(_, from_list, _, to_list, _, count)
 		return from_list == "inputs" and to_list == "inputs" and count or 0

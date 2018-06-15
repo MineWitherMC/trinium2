@@ -25,21 +25,21 @@ function betterinv.generate_buttons(size, filter, selected)
 		if filter(v) then
 			i = i + 1
 			if betterinv.tab_position == 0 then
-				str = str..("button[%s,0;2,1;betterinv~%s;%s]"):format((i - 1) * 2, k, v.description)
+				str = str .. ("button[%s,0;2,1;betterinv~%s;%s]"):format((i - 1) * 2, k, v.description)
 			elseif betterinv.tab_position == 1 then
-				str = str..("button[0,%s;2,1;betterinv~%s;%s]"):format((i - 1) * 7/10, k, v.description)
+				str = str .. ("button[0,%s;2,1;betterinv~%s;%s]"):format((i - 1) * 7 / 10, k, v.description)
 			elseif betterinv.tab_position == 2 then
-				str = str..("button[%s,%s;2,1;betterinv~%s;%s]"):format(i - 1, size.y - 1, k, v.description)
+				str = str .. ("button[%s,%s;2,1;betterinv~%s;%s]"):format(i - 1, size.y - 1, k, v.description)
 			elseif betterinv.tab_position == 3 then
-				str = str..("button[%s,%s;2,1;betterinv~%s;%s]"):format(size.x - 2, (i - 1) * 7/10, k, v.description)
+				str = str .. ("button[%s,%s;2,1;betterinv~%s;%s]"):format(size.x - 2, (i - 1) * 7 / 10, k, v.description)
 			else
 				if k == selected then select = i end
-				if i > 1 then str = str.."," end
-				str = str..v.description
+				if i > 1 then str = str .. "," end
+				str = str .. v.description
 			end
 		end
 	end
-	if betterinv.tab_position == 4 then str = str..";"..select..";true;false]" end
+	if betterinv.tab_position == 4 then str = str .. ";" .. select .. ";true;false]" end
 	return str
 end
 
@@ -62,10 +62,10 @@ function betterinv.generate_formspec(player, fs, size, bg, inv)
 	end
 
 	local fs1 = ("size[%s,%s]container[%s,%s]%s"):format(size.x, size.y, x, y, bg or "")
-	fs1 = fs1..fs
+	fs1 = fs1 .. fs
 	if inv then fs1 = fs1 .. betterinv.theme_inv end
-	fs1 = fs1.."container_end[]"
-	fs1 = fs1..betterinv.generate_buttons(size, function(tab)
+	fs1 = fs1 .. "container_end[]"
+	fs1 = fs1 .. betterinv.generate_buttons(size, function(tab)
 		return tab.available == nil or tab.available(player)
 	end, betterinv.selections[player:get_player_name()])
 	return fs1
@@ -87,10 +87,10 @@ minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	betterinv.contexts[pn] = {}
 	for k in pairs(betterinv.tabs) do betterinv.contexts[pn][k] = {} end
-	betterinv.selections[pn] = betterinv.default
+	betterinv.selections[pn] = betterinv.tabs[betterinv.default] and betterinv.default or "inventory"
 	if betterinv.default then
 		minetest.after(0.01, function()
-			player:set_inventory_formspec(betterinv.tabs[betterinv.default].getter(player, betterinv.contexts[pn]))
+			player:set_inventory_formspec((betterinv.tabs[betterinv.selections[pn]]).getter(player, betterinv.contexts[pn]))
 		end)
 	end
 end)
@@ -148,7 +148,8 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 	end
 end)
 
-if not minetest.get_modpath"sfinv" then -- todo: cleanup this
+if not minetest.get_modpath "sfinv" then
+	-- todo: cleanup this
 	sfinv = {}
 	function sfinv.register_page(name, def)
 		def.getter = function(...)
@@ -164,13 +165,13 @@ if not minetest.get_modpath"sfinv" then -- todo: cleanup this
 	end
 	function sfinv.make_formspec(player, _, fs, inv, size, bg)
 		if not size then size = "size[8,8.6]" end
-		size = size:split"["[2]
-		size = size:split"]"[1]
-		size = size:split","
+		size = size:split "["[2]
+		size = size:split "]"[1]
+		size = size:split ","
 
 		if not bg then bg = betterinv.prepend end
 
-		return betterinv.generate_formspec(player, fs, {x = tonumber(size[1]), y = tonumber(size[2])}, bg, inv)
+		return betterinv.generate_formspec(player, fs, { x = tonumber(size[1]), y = tonumber(size[2]) }, bg, inv)
 	end
 	function sfinv.get_or_create_context(player)
 		local pn = player:get_player_name()

@@ -2,23 +2,21 @@ local api = trinium.api
 local S = trinium.player_S
 local recipes = trinium.recipes
 
-trinium.nei = {}
 local nei = trinium.nei
 nei.player_stuff = {}
 
-
-local S1 = {S"Recipe", S"Usage", S"Cheat"}
+local S1 = { S "Recipe", S "Usage", S "Cheat" }
 
 local function get_formspec_array(search_string, mode)
 	local ss, items = search_string:lower()
-	local formspec, width, height, cell_size, i, j = {}, 8, 9, 1, 0, 1
+	local formspec, width, height, cell_size, i, j = {}, 8, nei.integrate and 9 or 7, 1, 0, 1
 	local length_per_page = width * height
 	items = table.filter(minetest.registered_items, function(v)
 		return (
-			v.mod_origin ~= "*builtin*" and
-			not (v.groups or {}).hidden_from_nei and
-			not (v.groups or {}).hidden_from_irp and
-			((v.description and v.description:lower():find(ss)) or v.name:lower():find(ss) or v.mod_origin:lower():find(ss))
+				v.mod_origin ~= "*builtin*" and
+						not (v.groups or {}).hidden_from_nei and
+						not (v.groups or {}).hidden_from_irp and
+						((v.description and v.description:lower():find(ss)) or v.name:lower():find(ss) or v.mod_origin:lower():find(ss))
 		)
 	end)
 	local x, y
@@ -45,12 +43,12 @@ local function get_formspec_array(search_string, mode)
 	for _, z in pairs(items) do
 		tbl[#tbl + 1] = z
 	end
-	table.sort(tbl, api.sort_by_param"name")
-	for _,v in ipairs(tbl) do
+	table.sort(tbl, api.sort_by_param "name")
+	for _, v in ipairs(tbl) do
 		if v.type ~= "none" then
 			x = i % width
 			y = (i - x) / width
-			formspec[j] = formspec[j]..([=[
+			formspec[j] = formspec[j] .. ([=[
 				item_image_button[%s,%s;%s,%s;%s;view_recipe~%s;]
 				tooltip[view_recipe~%s;%s]
 			]=]):format(x * cell_size, y * cell_size + 1, cell_size, cell_size, v.name, v.name, v.name,
@@ -98,19 +96,19 @@ function nei.absolute_draw_recipe(l_recipes, rec_id)
 	local method = recipes.methods[recipe.type]
 
 	local formspec = ("%s label[0,0;%s]"):format(method.formspec_begin(recipe.data), method.formspec_name)
-	
+
 	local it, ot = recipe.data.input_tooltips, recipe.data.output_tooltips
 	local item_name, amount, x, y, arr, chance
 	for i = 1, method.input_amount do
 		amount = nil
 		if recipe.inputs[i] then
-			arr = recipe.inputs[i]:split" "
+			arr = recipe.inputs[i]:split " "
 			item_name, amount = unpack(arr)
 		else
 			item_name = ""
 		end
 		x, y = method.get_input_coords(i)
-		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s~i%s;%s]box[%s,%s;0.925,0.95;#0000FF]")
+		formspec = formspec .. ("item_image_button[%s,%s;1,1;%s;view_recipe~%s~i%s;%s]box[%s,%s;0.925,0.95;#0000FF]")
 				:format(x, y, item_name, item_name, i, amount ~= "1" and amount or "", x - 1 / 20, y - 1 / 20)
 
 		if it and it[i] then
@@ -121,15 +119,15 @@ function nei.absolute_draw_recipe(l_recipes, rec_id)
 	for i = 1, method.output_amount do
 		chance, amount = nil, nil
 		if recipe.outputs[i] then
-			arr = recipe.outputs[i]:split" "
+			arr = recipe.outputs[i]:split " "
 			item_name, amount, chance = unpack(arr)
 		else
 			item_name = ""
 		end
 		x, y = method.get_output_coords(i)
-		formspec = formspec..("item_image_button[%s,%s;1,1;%s;view_recipe~%s~o%s;%s]box[%s,%s;0.925,0.95;#FFA500]")
+		formspec = formspec .. ("item_image_button[%s,%s;1,1;%s;view_recipe~%s~o%s;%s]box[%s,%s;0.925,0.95;#FFA500]")
 				:format(x, y, item_name, item_name, i, table.f_concat(
-					{amount ~= "1" and amount or nil, chance and chance.." %"}, "\n"), x - 1/20, y - 1/20)
+				{ amount ~= "1" and amount or nil, chance and chance .. " %" }, "\n"), x - 1 / 20, y - 1 / 20)
 
 		if ot and ot[i] then
 			formspec = formspec .. ("tooltip[view_recipe~%s~o%s;%s]"):format(item_name, i, ot[i])
@@ -151,7 +149,7 @@ end
 
 function nei.draw_research_recipe(recipe_id)
 	local x = { nei.absolute_draw_recipe(false, recipe_id) }
-	return {form = x[1], w = x[2], h = x[3]}
+	return { form = x[1], w = x[2], h = x[3] }
 end
 
 local function get_formspec(pn, id, item, mode)
@@ -166,7 +164,7 @@ local function get_formspec(pn, id, item, mode)
 				formspec, height + 0.2, S(("%s @1 of @2"):format(mode == 1 and "Recipe" or "Usage"), new_id, number))
 
 		if number > 1 then
-			formspec = formspec..([=[
+			formspec = formspec .. ([=[
 				button[%s,0;1,0.5;view_recipe~%s~%s;<]
 				button[%s,0;1,0.5;view_recipe~%s~%s;>]
 			]=]):format(width - 2, item, new_id - 1, width - 1, item, new_id + 1)
@@ -176,7 +174,7 @@ local function get_formspec(pn, id, item, mode)
 	else
 		local stack = minetest.registered_items[item].stack_max
 		local player = minetest.get_player_by_name(pn)
-		player:get_inventory():add_item("main", item.." "..stack)
+		player:get_inventory():add_item("main", item .. " " .. stack)
 		cmsg.push_message_player(player, S("Given @1 @2 to @3", stack, item, pn))
 	end
 end

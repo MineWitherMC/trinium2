@@ -37,7 +37,7 @@ end)
 mat.add_data_generator("melting_point", function(name)
 	local formula = mat.materials_reg[name].formula
 	formula = table.map(formula, function(v)
-		return {mat.materials_reg[v[1]].data.melting_point, v[2]}
+		return { mat.materials_reg[v[1]].data.melting_point, v[2] }
 	end)
 	return math.floor(0.5 + math.weighted_avg(formula))
 end)
@@ -45,7 +45,7 @@ end)
 mat.add_recipe_generator("crude_alloyer", function(self)
 	local name = self.name
 	local formula = mat.materials_reg[name].formula
-	assert(#formula == 2, "Cannot register crude_alloyer for "..name)
+	assert(#formula == 2, "Cannot register crude_alloyer for " .. name)
 
 	local inputs = {}
 	local count = 0
@@ -59,7 +59,7 @@ mat.add_recipe_generator("crude_alloyer", function(self)
 			count = count - (formula[i][2] + 1)
 		end
 		if formula[i][2] > 1 then
-			x = x.." "..formula[i][2]
+			x = x .. " " .. formula[i][2]
 		end
 		count = count + (formula[i][2] + 1)
 		inputs[#inputs + 1] = x
@@ -73,15 +73,15 @@ end)
 mat.add_recipe_generator("crude_blast_furnace", function(self)
 	local name = self.name
 	local formula = trinium.api.DataMesh:new():data(mat.materials_reg[name].formula)
-			:filter(function(v)
-				return mat.getter(v[1], "ingot")
-			end)
+	                       :filter(function(v)
+		return mat.getter(v[1], "ingot")
+	end)
 
 	local sum = 0
 	formula:forEach(function(v) sum = sum + v[2] end)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
 			{ self:get("dust", sum), mat.force_getter("coal", "dust", 1 + math.floor(sum * 2 / 3)) },
-		formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data(),
-		{divisible = true})
+			formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data(),
+			{ divisible = true })
 end)

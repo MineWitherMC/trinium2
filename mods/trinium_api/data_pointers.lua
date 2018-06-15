@@ -13,31 +13,31 @@ function api.get_data_pointer(player, file)
 		storage:set_string(self._key, minetest.serialize(self._strings))
 	end
 
-	setmetatable(x, {__newindex = function(t,k,v) t._strings[k] = v end, __index = x._strings})
+	setmetatable(x, { __newindex = function(t, k, v) t._strings[k] = v end, __index = x._strings })
 	return x
 end
 
 function api.get_data_pointers(id)
 	local dps = {}
-	setmetatable(dps, {__index = function(t, k)
+	setmetatable(dps, { __index = function(t, k)
 		t[k] = api.get_data_pointer(k, id)
 		return t[k]
-	end})
+	end })
 	return dps
 end
 
 minetest.register_on_leaveplayer(function(player)
 	local pn = player:get_player_name()
 	if datas[pn] then
-		for _,v in pairs(datas[pn]) do
+		for _, v in pairs(datas[pn]) do
 			v:save()
 		end
 	end
 end)
 
 minetest.register_on_shutdown(function()
-	for _,v in pairs(datas) do
-		for _,v2 in pairs(v) do
+	for _, v in pairs(datas) do
+		for _, v2 in pairs(v) do
 			v2:save()
 		end
 	end

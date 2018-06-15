@@ -1,11 +1,11 @@
 local nei = trinium.nei
 
-local integrator = { description = "Integrator" }
+local integrator = { description = trinium.player_S "Integrated Inventory" }
 function integrator.getter(player)
 	local pn = player:get_player_name()
 	local ps = nei.player_stuff[pn]
 
-	local w_i, h_i, w_n, h_n = 8, 8.6, ps.size.x, ps.size.y
+	local w_i, h_i, w_n, h_n = 9, 8.6, ps.size.x, ps.size.y
 	local dx_i, dy_i, dx_n, dy_n = 0, math.max(0, 1 / 2 * (h_n - h_i)), w_i, math.max(0, 1 / 2 * (h_i - h_n))
 
 	local fs_inv = betterinv.extract_formspec(betterinv.tabs.inventory.getter(player))
@@ -21,7 +21,6 @@ function integrator.getter(player)
 		container[%s,%s]
 		%s
 		container_end[]
-
 	]=]):format(dx_i, dy_i, fs_inv, pn, dx_n, dy_n, fs_nei)
 
 	return betterinv.generate_formspec(player, fs_base, { x = w_i + w_n, y = math.max(h_i, h_n) }, false, false)

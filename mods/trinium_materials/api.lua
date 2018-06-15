@@ -20,11 +20,11 @@ function mat.getter(name, kind, amount)
 	local x = ("trinium_materials:%s_%s"):format(kind, name)
 	if not minetest.registered_items[x] then return false end
 	if not amount or amount == 1 then return x end
-	return x.." "..amount
+	return x .. " " .. amount
 end
 
 function mat.force_getter(name, kind, amount)
-	return ("trinium_materials:%s_%s%s"):format(kind, name, amount and amount ~= 1 and " "..amount or "")
+	return ("trinium_materials:%s_%s%s"):format(kind, name, amount and amount ~= 1 and " " .. amount or "")
 end
 
 function mat.add(name, def)
@@ -37,9 +37,9 @@ function mat.add(name, def)
 			api.assert(n, name, "component", def.formula[i][1])
 			local add = n.formula_string or n.formula or ""
 			if def.formula[i][2] > 1 and is_complex(n.formula) then
-				add = "("..add..")"
+				add = "(" .. add .. ")"
 			end
-			fs = fs..add..(def.formula[i][2] == 1 and "" or def.formula[i][2])
+			fs = fs .. add .. (def.formula[i][2] == 1 and "" or def.formula[i][2])
 		end
 		def.formula_string = fs
 	end
@@ -48,12 +48,12 @@ function mat.add(name, def)
 		def.color_string = api.color_string(def.color)
 	elseif not def.color_string and def.formula then
 		local formula1 = table.map(def.formula, function(x)
-				return {(mat.materials_reg[x[1]] or mat.elements[x[1]]).color or {0, 0, 0}, x[2]}
-			end)
+			return { (mat.materials_reg[x[1]] or mat.elements[x[1]]).color or { 0, 0, 0 }, x[2] }
+		end)
 		local r, g, b
-		r = math.weighted_avg(table.map(formula1, function(x) return {x[1][1], x[2]} end))
-		g = math.weighted_avg(table.map(formula1, function(x) return {x[1][2], x[2]} end))
-		b = math.weighted_avg(table.map(formula1, function(x) return {x[1][3], x[2]} end))
+		r = math.weighted_avg(table.map(formula1, function(x) return { x[1][1], x[2] } end))
+		g = math.weighted_avg(table.map(formula1, function(x) return { x[1][2], x[2] } end))
+		b = math.weighted_avg(table.map(formula1, function(x) return { x[1][3], x[2] } end))
 
 		def.color_string = api.color_string { r, g, b }
 	end
@@ -75,7 +75,7 @@ function mat.add(name, def)
 		name = def.description,
 		color = def.color_string,
 		color_tbl = def.color,
-		formula = def.formula_string and "\n"..minetest.colorize("#CCC", def.formula_string) or "",
+		formula = def.formula_string and "\n" .. minetest.colorize("#CCC", def.formula_string) or "",
 		formula_tbl = def.formula,
 		data = def.data or {},
 		types = def.types,
@@ -102,7 +102,7 @@ function mat.add(name, def)
 	end
 
 	function object:generate_interactions()
-		for _,v in pairs(mat.material_interactions) do
+		for _, v in pairs(mat.material_interactions) do
 			if table.every(v.requirements, function(x) return table.exists(def.types, function(a) return a == x end) end) then
 				-- v.apply(name, def2.data or {})
 			end

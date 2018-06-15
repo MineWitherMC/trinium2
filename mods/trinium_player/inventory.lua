@@ -5,7 +5,7 @@ local S = trinium.player_S
 function api.try_craft(player)
 	local pn = player:get_player_name()
 	local inv = bi[pn]
-	local list = inv:get_list"crafting"
+	local list = inv:get_list "crafting"
 	for i = 1, 9 do
 		list[i] = list[i]:get_name()
 	end
@@ -25,7 +25,7 @@ end
 
 -- Crafting
 betterinv.register_tab("inventory", {
-	description = S"Crafting",
+	description = S "Crafting",
 	getter = function(player)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
@@ -57,7 +57,7 @@ betterinv.register_tab("inventory", {
 					local s = inv2:get_stack("output", 1):to_string()
 					if s ~= "" then
 						if not inv1:room_for_item("main", s) then
-							cmsg.push_message_player(player, S"Inventory is full!")
+							cmsg.push_message_player(player, S "Inventory is full!")
 						else
 							inv1:add_item("main", s)
 							for i = 1, 9 do

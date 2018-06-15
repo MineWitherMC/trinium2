@@ -1,0 +1,5 @@
+#	0 for navigation on top, 1 for left, etc.; 4 for sfinv-like
+betterinv.tab_position (Navigation Position) int 1 0 4
+
+#	Integrates Utility, Crafting and Recipe into one tab
+trinium.integrated_inventory (Integrated Inventory) bool true
