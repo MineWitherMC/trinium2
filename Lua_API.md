@@ -1,5 +1,5 @@
 # Trinium API Additions
-* More information at <https://gitlab.com/MineWitherMC/trinium>
+* More information at <https://gitlab.com/MultiDragon/trinium>
 
 
 ## Introduction
@@ -719,3 +719,6 @@ Inventory Tab Definition is a table with following elements:
 * `processor` - function of `player`, `context` and `fields`.
 	* Called when element is activated in formspec.
 	* `fields` can be empty.
+* `available` - function of `player`.
+	* Should return true if the tab is available to the player.
+	* All tabs are available to all players by default.

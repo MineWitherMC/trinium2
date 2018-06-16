@@ -4,6 +4,9 @@
 Work-in-Progress technological and magical (sub)game for
 [Minetest](https://github.com/minetest/minetest).
 
+***Warning**: GitHub Repository is readonly. Actual repository is located on
+ [GitLab](https://gitlab.com/MultiDragon/trinium).* 
+
 Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 
 ## This game is not finished
@@ -13,14 +16,15 @@ Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
 * Please report any bugs (debug.txt is sometimes useful).
 
 ## Compatibility
-Requires Minetest `5.0.0-ddd03c3` or higher.
+Requires Minetest `5.0.0-ddd03c3` or higher. Probably some older builds work too,
+ but it's not guaranteed.
 
 ## Features
 * Fantastic Ore and Map Generation System (WIP)
 * Realistic (petro)chemistry
 * Research system
-* Pulse Network, my approach to storage systems (not done yet)
-* Some kind of Tinkers' Construct port
+* Pulse Network, my approach to storage systems (not finished yet)
+* Some kind of Tinkers' Construct port (cannot be finished for now)
 * Multiblocks
 * **Feature-Requests are always welcome, and most of them will be implemented!**
 
