@@ -1,5 +1,5 @@
 # Trinium API Additions
-* More information at <https://github.com/MineWitherMC/trinium2>
+* More information at <https://gitlab.com/MineWitherMC/trinium>
 
 
 ## Introduction
@@ -13,19 +13,20 @@ These require `trinium_api` as a dependency.
 
 ### Constants
 * `math.ln2` - natural logarithm of 2 to be used in calculations.
-* #### Sounds
-	All of these tables are in `trinium.sounds` table.
-	* `default`
-	* `default_stone`
-	* `default_dirt`
-	* `default_gravel`
-	* `default_sand`
-	* `default_wood`
-	* `default_leaves`
-	* `default_glass`
-	* `default_water`
-	* `default_metal`
-	* `default_snow`
+
+#### Sounds
+All of these tables are in `trinium.sounds` table.
+* `default`
+* `default_stone`
+* `default_dirt`
+* `default_gravel`
+* `default_sand`
+* `default_wood`
+* `default_leaves`
+* `default_glass`
+* `default_water`
+* `default_metal`
+* `default_snow`
 
 ### Table Helpers
 All of these functions are in `table` table.
