@@ -4,7 +4,7 @@
 Work-in-Progress technological and magical (sub)game for
 [Minetest](https://github.com/minetest/minetest).
 
-***Warning**: GitHub Repository is readonly. Actual repository is located on
+***Warning***: *GitHub Repository is readonly. Actual repository is located on
  [GitLab](https://gitlab.com/MultiDragon/trinium).* 
 
 Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.

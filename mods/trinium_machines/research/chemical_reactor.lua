@@ -14,7 +14,7 @@ research.add("OilDesulf", {
 		S [[You found some interesting dark brown liquid a long time ago. It looked like it contained a lot of power at the beginning, but it was poisonous and power couldn't be used due to this.@
 
 But you've just discovered the way to purify it from useless and dangerous brimstone hydride. You think it is possible to capture it using oxygen, which should burn the former, resulting in pure brimstone if temperature is low enough, which will then precitipate...]],
-		{ nei.draw_research_recipe(R.desulf) },
+		{ nei.draw_recipe_raw(R.desulf) },
 		research.label_escape(
 				S [[You think that for oil researches a diamond lens will be useful - no material has such complicated carbon structure...
 
@@ -41,9 +41,9 @@ research.add("SteamCracking", {
 However, it only looks like that on first glance. You managed to find a way to heat these fluids to incredible temperature of almost 1200 Kelvins with steam, separating them into compounds and extracting hydrogen from those in process, only leaving precious unsaturated hydrocarbons!
 
 Unfortunately, the hydrogen is lost in process, however, this is already a huge jump forward!]],
-		{ nei.draw_research_recipe(R.sc_gas) },
-		{ nei.draw_research_recipe(R.sc_ether) },
-		{ nei.draw_research_recipe(R.sc_naphtha) },
+		{ nei.draw_recipe_raw(R.sc_gas) },
+		{ nei.draw_recipe_raw(R.sc_ether) },
+		{ nei.draw_recipe_raw(R.sc_naphtha) },
 	},
 	requires_lens = {
 		requirement = true,
@@ -72,11 +72,11 @@ research.add("HydrogenCracking", {
 And several sleepless nights were worth it. You found a way to hydrate most fractions at very high temperatures, leaving mostly saturated hydrocarbons, which are an excellent choice to be used as fuel! Furthermore, oil seems to be multiplied again!
 
 This project will definitely solve your fueling issues.]],
-		{ nei.draw_research_recipe(R.hc_gas) },
-		{ nei.draw_research_recipe(R.hc_ether) },
-		{ nei.draw_research_recipe(R.hc_naphtha) },
-		{ nei.draw_research_recipe(R.hc_kerosene) },
-		{ nei.draw_research_recipe(R.hc_diesel) },
+		{ nei.draw_recipe_raw(R.hc_gas) },
+		{ nei.draw_recipe_raw(R.hc_ether) },
+		{ nei.draw_recipe_raw(R.hc_naphtha) },
+		{ nei.draw_recipe_raw(R.hc_kerosene) },
+		{ nei.draw_recipe_raw(R.hc_diesel) },
 	},
 	requires_lens = {
 		requirement = true,
@@ -105,12 +105,12 @@ research.add("HydrocarbonDehydration", {
 But what can be done with, e.g., butane, absolutely useless gas, obtained in huge quantities when hydro-cracking Naphtha?..
 
 You found an answer. It can be cracked with usage of steam and high temperature to form butadiene, which is definitely useful.]],
-		{ nei.draw_research_recipe(R.butane_cracking) },
+		{ nei.draw_recipe_raw(R.butane_cracking) },
 		{ w = 8, h = 8, name = "Styrene Production",
 		  requirements = { Ethylbenzene = 1 }, locked = true,
 		  required_aspects = { potentia = 12, interitum = 15, aqua = 18, sententia = 24, ratus = 21 },
 		  text = S [[After some more researching, you found a similar way to produce Styrene.]] },
-		{ nei.draw_research_recipe(R.styrene), w = 8, h = 8, name = "Styrene Production",
+		{ nei.draw_recipe_raw(R.styrene), w = 8, h = 8, name = "Styrene Production",
 		  requirements = { ["HydrocarbonDehydration-3"] = 1 } },
 	},
 	requires_lens = {
@@ -136,7 +136,7 @@ research.add("Ethylbenzene", {
 	chapter = "Chemistry2",
 	text = {
 		S [[(WIP Text)]],
-		{ nei.draw_research_recipe(R.ethylbenzene) },
+		{ nei.draw_recipe_raw(R.ethylbenzene) },
 	},
 	requires_lens = {
 		requirement = true,
@@ -164,7 +164,7 @@ research.add("Ammonia", {
 		S [[You were tired of using Nitrate ores whenever you need Nitrogen, because they're rare and mostly used up so you just had a little of them.
 
 You suddenly found a way to break the Nitrogen triple bond, giving you the unique possibility to extract Nitrogen out of air! This sounds very cheap and useful, and you hope you'll find more uses for resulting material, Ammonia... However, it requires very high pressures, very high temperature, etcetera, however, it doesn't stop you...]],
-		{ nei.draw_research_recipe(R.ammonia) },
+		{ nei.draw_recipe_raw(R.ammonia) },
 	},
 	requires_lens = {
 		requirement = true,
@@ -187,7 +187,7 @@ research.add("Acrylonitrile", {
 	chapter = "Chemistry2",
 	text = {
 		S [[(WIP Text)]],
-		{ nei.draw_research_recipe(R.acrylonitrile) },
+		{ nei.draw_recipe_raw(R.acrylonitrile) },
 	},
 	requires_lens = {
 		requirement = true,

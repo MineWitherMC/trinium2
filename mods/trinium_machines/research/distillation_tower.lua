@@ -16,7 +16,7 @@ research.add("OilDistillation", {
 You think that oil is not powerful enough until it is separated into components, which is what the distillation tower is used for. It should give a handful of each fraction on average - Refinery Gas, Petroleum Ether, Naphtha, Kerosene, Diesel and useless Mazut.
 
 But after a slight research, you realize, that this structure actually DOUBLES the oil!]],
-		{ nei.draw_research_recipe(R.oil_dist) }
+		{ nei.draw_recipe_raw(R.oil_dist) }
 	},
 	requires_lens = {
 		requirement = true,

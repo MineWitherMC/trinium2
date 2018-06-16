@@ -1,6 +1,7 @@
 local bi = trinium.bound_inventories
 local api = trinium.api
 local S = trinium.player_S
+local recipes = trinium.recipes
 
 function api.try_craft(player)
 	local pn = player:get_player_name()
@@ -9,9 +10,10 @@ function api.try_craft(player)
 	for i = 1, 9 do
 		list[i] = list[i]:get_name()
 	end
-	list = trinium.recipe_stringify(9, list)
-	local rr = trinium.recipes.recipe_registry
-	local rbm = trinium.recipes.recipes_by_method.crafting
+	list = recipes.stringify(9, list)
+	local rr = recipes.recipe_registry
+	local rbm = recipes.recipes_by_method.crafting
+	if not rbm then return end
 
 	local recipe, output = table.exists(rbm, function(v) return rr[v].inputs_string == list end)
 	if not recipe then

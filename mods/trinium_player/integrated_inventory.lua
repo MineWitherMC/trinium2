@@ -28,7 +28,7 @@ end
 
 function integrator.processor(player, context, fields)
 	betterinv.tabs.inventory.processor(player, context, fields)
-	betterinv.tabs.item_panel.processor(player, betterinv.get_external_context(player, "item_panel"), fields)
+	betterinv.tabs.item_panel.processor(player, context, fields)
 end
 
 betterinv.register_tab("default", integrator)

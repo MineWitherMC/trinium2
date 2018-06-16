@@ -1,5 +1,6 @@
 # Trinium API Additions
 * More information at <https://gitlab.com/MultiDragon/trinium>
+* Last API breakage at 16.06.2018
 
 
 ## Introduction
@@ -429,18 +430,20 @@ All of these functions are stored in `trinium.api` table.
 
 ### NEI
 All of these functions are stored in `trinium.nei` table.
-* `nei.absolute_draw_recipe(table, id)`
+* `nei.draw_recipe_raw(id)`
 	* Draws recipe by Registry ID.
-	* In case `table` is `false`, `id` is Registry ID.
-	* Otherwise, `table` must be formatted as `[recipe ID] => registry ID`.
-	* Returns a sequence with `formspec, width, height, count, id`.
+	* Returns a table formatted as `{form = formspec, w = width, h = height}`.
 	* In case `id` is higher than amount of items in `table`, it is taken by
 	 modulo.
-* `nei.draw_research_recipe(recipe_id)`
-	* Draws recipe regardless of player being able to perform it.
-	* `recipe_id` is obtained from `trinium.recipes.add`.
-	* Returns table formatted as `{form = ..., w = ..., h = ...}`.
-
+	* Can be directly used for drawing research.
+* `nei.draw_recipe_wrapped(item, player, id, type)`
+	* Draws recipe by item, returning formspec directly.
+	* `item` is ItemString.
+	* `id` is integer.
+		* Number of recipe/usage of given item.
+		* In case `id` is higher than amount of recipes, it is taken by modulo.
+	* `type` is integer.
+		* `1` draws recipes creating item, `2` draws recipes using item.
 
 ## Various Objects
 ### DataMesh
@@ -569,7 +572,7 @@ Research Definition is a table with following elements:
 			* Only has effect if `locked` is true.
 		* `text` - localized string.
 	* Also see `research.label_escape`.
-	* Also see `nei.draw_research_recipe`.
+	* Also see `nei.draw_recipe_raw`.
 * `pre_unlock` - boolean, `false` by default.
 * `requires_lens` - table with following elements:
 	* `requirement` - boolean.
