@@ -104,7 +104,7 @@ local function draw_connection(x1, y1, x2, y2)
 end
 
 local function get_book_chapter_fs(chapter_id, pn, cx, cy)
-	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(S "Back")
+	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(trinium.api.S "Back")
 	if research.chapters[chapter_id].create_map then
 		buttons = buttons .. ("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
 				:format(buttons, S "Get Research Map", S "This chapter uses Secret researches discovered via Sheet Infuser")

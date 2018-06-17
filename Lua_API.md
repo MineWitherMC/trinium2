@@ -385,8 +385,13 @@ These require `trinium_hud` and are stored in `trinium.hud` table.
 * `steps` - table formatted as `[[globalstep ID] => definition]`.
 
 ### Methods
-* `register_globalstep`
+* `register_globalstep(def)`
 	* Globalstep wrapper. See **Globalstep Wrapper** for more information.
+* `configurator(id, x, y, desc)`
+	* Registers HUD Configuration Tab.
+	* `x` is integer from 0 to 1 inclusively, changes horizontal button position.
+	* `y` is integer from 0 to 7 inclusively, changes vertical button position.
+	* Returns Configurator Handle. See **HUD Configurator** for more information.
 	
 ### Node Definitions
 * Rich Info
@@ -395,10 +400,12 @@ These require `trinium_hud` and are stored in `trinium.hud` table.
 	 * The callback can return `nil` in order to hide the Rich Info window.
 	 
 
-## BetterInventory
+## Inventory
+Mods can either depend on `trinium_inventory` modpack or individual mods to work.
+
+### BetterInventory
 This mod is mostly backwards-compatible with `sfinv`, however, it has its own
- API. Its methods require `better_inventory` and are stored in `betterinv`
- table.
+ API. Its methods require modified `sfinv` and are stored in `betterinv` table.
 * `register_tab(name, def)`
 	* Registers an inventory tab.
 	* See **Inventory Tab Definition** for more information.
@@ -419,17 +426,9 @@ This mod is mostly backwards-compatible with `sfinv`, however, it has its own
 	* Makes a tab invisible. Its callbacks still can be fired externally.
 * `get_external_context(player, tab)`
 	* Returns requested context.
-	
-## Player Utilities
-These functions require `trinium_player` as a dependency.
-
-### General
-All of these functions are stored in `trinium.api` table.
-* `try_craft(player)`
-	* Updates player's recipe output.
 
 ### NEI
-All of these functions are stored in `trinium.nei` table.
+All of these functions are stored in `trinium.nei` table and require `nei`.
 * `nei.draw_recipe_raw(id)`
 	* Draws recipe by Registry ID.
 	* Returns a table formatted as `{form = formspec, w = width, h = height}`.
@@ -444,6 +443,14 @@ All of these functions are stored in `trinium.nei` table.
 		* In case `id` is higher than amount of recipes, it is taken by modulo.
 	* `type` is integer.
 		* `1` draws recipes creating item, `2` draws recipes using item.
+	
+## Player Utilities
+These functions require `trinium_player` as a dependency.
+
+### General
+All of these functions are stored in `trinium.api` table.
+* `try_craft(player)`
+	* Updates player's recipe output.
 
 ## Various Objects
 ### DataMesh
@@ -469,6 +476,13 @@ Existing methods:
 	* Inserts variable into internal table.
 	* Only works when internal table is a list.
 * `dm:unique()`
+
+### HUD Configurator
+HUD Configuration Window. Created via `trinium.hud.configurator(...)`. Requires
+ `trinium_hud` as a dependency.
+ 
+Existing methods:
+* `conf:add(id, y, desc, func(player, data))`
 
 
 ## Various Definitions

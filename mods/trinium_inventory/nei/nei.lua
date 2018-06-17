@@ -1,8 +1,8 @@
 local api = trinium.api
-local S = trinium.player_S
 local recipes = trinium.recipes
 
 local nei = trinium.nei
+local S = nei.S
 nei.player_stuff = {}
 
 local function get_formspec_array(search_string, mode)

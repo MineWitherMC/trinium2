@@ -1,14 +1,12 @@
 betterinv = {}
-betterinv.tab_position = tonumber(minetest.settings:get("betterinv.tab_position") or "1")
+betterinv.tab_position = tonumber(minetest.settings:get "betterinv.tab_position" or "4")
 
 betterinv.tabs = {}
 betterinv.tab_list = {}
 betterinv.contexts = {}
 betterinv.selections = {}
 betterinv.default = "default"
-betterinv.prepend = "background[5,5;1,1;trinium_gui_background.png;true]"
 function betterinv.register_tab(name, def)
-	def.processor = def.processor or trinium.api.functions.empty
 	betterinv.tabs[name] = def
 	table.insert(betterinv.tab_list, name)
 	def.name = name
@@ -66,7 +64,7 @@ function betterinv.generate_formspec(player, fs, size, bg, inv)
 	if inv then fs1 = fs1 .. betterinv.theme_inv end
 	fs1 = fs1 .. "container_end[]"
 	fs1 = fs1 .. betterinv.generate_buttons(size, function(tab)
-		return tab.available == nil or tab.available(player)
+		return tab.available == nil or (tab.available and tab.available(player))
 	end, betterinv.selections[player:get_player_name()])
 	return fs1
 end
@@ -100,7 +98,9 @@ function betterinv.redraw_for_player(player, fields)
 	local selection = betterinv.selections[pn]
 	local tab = betterinv.tabs[selection]
 
-	tab.processor(player, betterinv.contexts[pn][selection], fields or {})
+	if tab.processor then
+		tab.processor(player, betterinv.contexts[pn][selection], fields or {})
+	end
 	player:set_inventory_formspec(tab.getter(player, betterinv.contexts[pn][selection]))
 end
 
@@ -109,7 +109,7 @@ function betterinv.get_external_context(player, tab)
 end
 
 function betterinv.disable_tab(tab)
-	betterinv.tabs[tab].available = trinium.api.functions.const(false)
+	betterinv.tabs[tab].available = false
 end
 
 minetest.register_on_player_receive_fields(function(player, form_name, fields)
@@ -126,10 +126,14 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 		local id = tonumber(fields.betterinv_tabs)
 		good = betterinv.selections[pn] ~= betterinv.tab_list[id]
 		if good then
-			local good_tabs = table.remap(table.filter(betterinv.tab_list, function(idx)
+			local good_tabs = {}
+			for i = 1, #betterinv.tab_list do
+				local idx = betterinv.tab_list[i]
 				local c_tab = betterinv.tabs[idx]
-				return c_tab.available == nil or c_tab.available(player)
-			end))
+				if c_tab.available == nil or (c_tab.available and c_tab.available(player)) then
+					good_tabs[#good_tabs + 1] = idx
+				end
+			end
 			betterinv.selections[pn] = good_tabs[id]
 			player:set_inventory_formspec(betterinv.tabs[good_tabs[id]].getter(player, betterinv.contexts[pn][selection]))
 		end
@@ -169,7 +173,7 @@ if not minetest.get_modpath "sfinv" then
 		size = size:split "]"[1]
 		size = size:split ","
 
-		if not bg then bg = betterinv.prepend end
+		if not bg then bg = "" end
 
 		return betterinv.generate_formspec(player, fs, { x = tonumber(size[1]), y = tonumber(size[2]) }, bg, inv)
 	end

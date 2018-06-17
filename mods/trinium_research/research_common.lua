@@ -138,3 +138,44 @@ minetest.register_craftitem("trinium_research:knowledge_crystal", {
 		return item
 	end,
 })
+
+-- Reflector Glass
+minetest.register_node("trinium_research:reflector_glass", {
+	tiles = { "trinium_research.reflector_glass.png" },
+	description = S "Reflection Glass",
+	drawtype = "glasslike_framed_optional",
+	sunlight_propagades = true,
+	paramtype = "light",
+	groups = { cracky = 2 },
+	light_source = 7,
+	sounds = ss.default_glass,
+})
+
+-- Lamp Frame
+minetest.register_node("trinium_research:lamp_frame", {
+	tiles = { "trinium_research.lamp_frame_single.png" },
+	description = S "Advanced Lamp Frame",
+	drawtype = "glasslike",
+	groups = { cracky = 3 },
+	sounds = ss.default_glass,
+})
+
+-- Forcillium Lamp
+minetest.register_node("trinium_research:forcillium_lamp", {
+	tiles = {
+		{
+			name = "(trinium_research.lamp_core.png^[multiply:#DCEF04)^trinium_research.lamp_frame.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 32,
+				aspect_h = 32,
+				length = 2.5,
+			},
+		}
+	},
+	description = S "Forcillium Lamp",
+	drawtype = "glasslike",
+	light_source = 14,
+	groups = { cracky = 1, level = 2 },
+	sounds = ss.default_glass,
+})

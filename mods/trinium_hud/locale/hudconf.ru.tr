@@ -1,0 +1,12 @@
+# textdomain: trinium_hud
+
+HUD Configuration=Настройка HUD
+
+Block Info=Информация о блоках
+Block Info Window Width=Ширина информационного окна
+Block Info Horizontal Position=Горизонтальная позиция инфоокна
+Block Info Vertical Position=Вертикальная позиция инфоокна
+Rich Info Width=Ширина RNP-окна
+Rich Info Height=Высота RNP-окна
+Rich Info Horizontal Position=Горизонтальная позиция RNP-окна
+Rich Info Vertical Position=Вертикальная позиция RNP-окна

@@ -1,7 +1,7 @@
-# textdomain: trinium_player
+# textdomain: nei
 
-Recipe=Рецепты
-Usage=Применения
+Recipes=Рецепты
+Usages=Применения
 Cheat=Читы
 
 Page @1 of @2=Страница @1 из @2
@@ -9,7 +9,6 @@ Change Mode=Сменить режим
 Current mode: @1=Текущий режим: @1
 Given @1 @2 to @3=@3 получил @1 @2
 Recipe @1 of @2=Рецепт @1 из @2
-Usage @1 of @2=Рецепт @1 из @2
 
 Utility=Утилиты
 NeverEnoughItems=Браузер рецептов
@@ -17,3 +16,7 @@ Crafting=Создание
 Integrated Inventory=Интегрированный инвентарь
 
 Inventory is full!=Инвентарь заполнен!
+
+No @1 found for this item.=Для этого предмета не найдено @1.
+recipes=рецептов
+usages=применений

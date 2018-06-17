@@ -7,7 +7,7 @@ minetest.register_on_joinplayer(function(player)
 	local dp = api.get_data_pointer(pn, "bound_inventories")
 	bi[pn] = minetest.create_detached_inventory("bound~" .. pn, {
 		allow_move = function(_, from_list, _, to_list, _, count)
-			return to_list == "crafting" and from_list ~= "trash" and count or 0
+			return from_list ~= "trash" and count or 0
 		end,
 
 		allow_take = function(_, _, _, stack)
@@ -15,25 +15,29 @@ minetest.register_on_joinplayer(function(player)
 		end,
 
 		on_move = function(inv, from_list, from_index, to_list, to_index, _, player)
-			if not dp[from_list] then dp[from_list] = {} end
-			if not dp[to_list] then dp[to_list] = {} end
+			dp[from_list] = dp[from_list] or {}
+			dp[to_list] = dp[to_list] or {}
+
+			if to_list == "crafting" then
+				api.try_craft(player)
+			elseif to_list == "trash" then
+				inv:set_stack("trash", 1, "")
+			end
+
 			dp[from_list][from_index] = inv:get_stack(from_list, from_index):to_string()
 			dp[to_list][to_index] = inv:get_stack(to_list, to_index):to_string()
-			if to_list == "crafting" then api.try_craft(player)
-			end
 		end,
 
 		on_put = function(inv, list_name, index, _, player)
-			if not dp[list_name] then
-				dp[list_name] = {}
-			end
-			dp[list_name][index] = inv:get_stack(list_name, index):to_string()
+			dp[list_name] = dp[list_name] or {}
+
 			if list_name == "trash" then
 				inv:set_stack("trash", 1, "")
-				dp.trash = {}
 			elseif list_name == "crafting" then
 				api.try_craft(player)
 			end
+
+			dp[list_name][index] = inv:get_stack(list_name, index):to_string()
 		end,
 
 		on_take = function(inv, list_name, index, _, player)

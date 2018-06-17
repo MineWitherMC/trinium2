@@ -1,6 +1,6 @@
 local nei = trinium.nei
 
-local integrator = { description = trinium.player_S "Integrated Inventory" }
+local integrator = { description = trinium.nei.S "Integrated Inventory" }
 function integrator.getter(player)
 	local pn = player:get_player_name()
 	local ps = nei.player_stuff[pn]

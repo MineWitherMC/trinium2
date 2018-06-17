@@ -78,7 +78,7 @@ minetest.register_node("trinium_machines:creative_heat_gen", {
 		local meta = minetest.get_meta(pos)
 		local n = tonumber(fields.force_temp)
 		if not n then
-			cmsg.push_message_player(player, "Input is invalid: " .. tostring(fields.force_temp))
+			cmsg.push_message_player(player, api.S("Couldn't parse number: @1", tostring(fields.force_temp)))
 		else
 			meta:set_int("forced_temp", n)
 			meta:set_string("formspec", chg_formspec(n))
