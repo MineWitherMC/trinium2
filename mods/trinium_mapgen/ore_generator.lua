@@ -44,6 +44,8 @@ minetest.register_on_generated(function(min_pos, _, seed)
 		end
 
 		vbs = n
+
+		veins_by_breakpoints, vein_breakpoints_s, vein_breakpoint_w = vb, vbs, wb
 	end
 
 	if rand:next(1, 1000000) / 1000000 > 0.92 then return end
@@ -51,7 +53,7 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	local xs, ys, zs = rand:next(34, 66), rand:next(9, 12), rand:next(34, 66)
 	local dx, dy, dz = rand:next(0, 80 - xs), rand:next(0, 80 - ys), rand:next(0, 80 - zs)
 	local xc, yc, zc = min_pos.x + dx, min_pos.y + dy, min_pos.z + dz
-	local j, vein_name, weight, vein
+	local j, weight, vein
 
 	for i = 2, #vbs do
 		j = 0
@@ -72,14 +74,14 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	if not vein then return end -- something went wrong
 	local v = registered_veins[vein]
 
-	local vm, emin, emax = minetest.get_mapgen_object "voxelmanip"
-	local area = VoxelArea:new { MinEdge = emin, MaxEdge = emax }
+	local vm, emin, emax = minetest.get_mapgen_object"voxelmanip"
+	local area = VoxelArea:new{MinEdge = emin, MaxEdge = emax}
 	vm:get_data(data)
 	local choice, x, y, w
 	local noise_params = {
 		offset = 5 / 6 * (v.density - 50),
 		scale = 50,
-		spread = { x = 1, y = 1.2, z = 1 },
+		spread = {x = 1, y = 1.2, z = 1},
 		seed = seed + 232,
 		octaves = 1,
 		persist = 0.5,
@@ -109,7 +111,7 @@ minetest.register_on_generated(function(min_pos, _, seed)
 	end
 
 	vm:set_data(data)
-	vm:set_lighting { day = 0, night = 0 }
+	vm:set_lighting{day = 0, night = 0}
 	vm:calc_lighting()
 	vm:write_to_map()
 end)

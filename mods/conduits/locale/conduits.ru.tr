@@ -1,0 +1,12 @@
+# textdomain: conduits
+
+Signal Cable=Сигнальный провод
+Signal Emitter=Сигнализатор
+Item Buffer=Предметный буфер
+Item Conduit=Предметная труба
+Item Pump=Предметная помпа
+
+Power: @1=Мощность: @1
+Signal Enabled=Сигнал включен
+Signal Disabled=Сигнал отключен
+Next operation in @1 seconds=Следующая операция через @1 секунды

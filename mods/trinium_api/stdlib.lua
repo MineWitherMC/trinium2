@@ -71,7 +71,7 @@ end
 
 function table.remap(array)
 	local array2 = {}
-	for i, k, v in table.asort(array) do
+	for _, _, v in table.asort(array) do
 		table.insert(array2, v)
 	end
 	return array2

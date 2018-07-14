@@ -21,7 +21,7 @@ function api.register_fluid(src_name, flow_name, src_description, flow_descripti
 	def.drawtype = "liquid"
 	def.tiles = {
 		{
-			name = "fluid_source.png^[colorize:#" .. color .. "C0",
+			name = "fluid_source.png^[multiply:#" .. color,
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 32,
@@ -37,10 +37,10 @@ function api.register_fluid(src_name, flow_name, src_description, flow_descripti
 	def2.drawtype = "flowingliquid"
 	def2.paramtype2 = "flowingliquid"
 	def2.groups.hidden_from_irp = 1
-	def2.tiles = { "fluid_basic.png^[colorize:#" .. color .. "C0" }
+	def2.tiles = {"fluid_basic.png^[multiply:#" .. color}
 	def2.special_tiles = {
 		{
-			name = "fluid_flowing.png^[colorize:#" .. color .. "C0",
+			name = "fluid_flowing.png^[multiply:#" .. color,
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -50,7 +50,7 @@ function api.register_fluid(src_name, flow_name, src_description, flow_descripti
 			backface_culling = false,
 		},
 		{
-			name = "fluid_flowing.png^[colorize:#" .. color .. "C0",
+			name = "fluid_flowing.png^[multiply:#" .. color,
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,

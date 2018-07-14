@@ -2,7 +2,7 @@ trinium.api.DataMesh = {}
 local DataMesh = trinium.api.DataMesh
 
 function DataMesh:new()
-	local dm = setmetatable({}, { __index = DataMesh })
+	local dm = setmetatable({}, {__index = DataMesh})
 	dm._data = {}
 	return dm
 end
@@ -32,10 +32,25 @@ function DataMesh:map(func)
 	return self
 end
 
-function DataMesh:forEach(func)
-	for k, v in pairs(self._data) do
+function DataMesh:forEach(sorted, func)
+	if not func then
+		func = sorted
+		sorted = false
+	end
+
+	for k, v in (sorted and ipairs or pairs)(self._data) do
 		func(v, k)
 	end
+	return self
+end
+
+function DataMesh:remap()
+	self._data = table.remap(self._data)
+	return self
+end
+
+function DataMesh:sort(func)
+	table.sort(self._data, func)
 	return self
 end
 

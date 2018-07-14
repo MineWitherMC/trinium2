@@ -18,7 +18,7 @@ function recipes.stringify(size, inputs)
 	return table.concat(inputs, ";")
 end
 
-local split = function(k) return k:split " " end
+local split = function(k) return k:split" " end
 local concat = function(k) return table.concat(k, " ") end
 function recipes.divide(a, b)
 	a = dm:new():data(a):map(split):map(function(x) return { x[1], tonumber(x[2]) } end)
@@ -34,7 +34,7 @@ function recipes.divide(a, b)
 end
 
 function recipes.add(method, inputs, outputs, data)
-	local method_table = trinium.recipes.methods[method]
+	local method_table = assert(trinium.recipes.methods[method], "Method "..method.." not registered!")
 	data = data or {}
 
 	-- Processing inputs (e.g., MC method of creating workbench recipes)
@@ -81,7 +81,7 @@ function recipes.add(method, inputs, outputs, data)
 	local cache = {}
 	if not data.secret_recipe and method_table.callback(inputs, outputs, data) then
 		for _, v in pairs(inputs) do
-			k = v:split " "[1]
+			k = v:split" "[1]
 			if not cache[k] then
 				cache[k] = 1
 				recipes.usages[k] = recipes.usages[k] or {}
@@ -90,7 +90,7 @@ function recipes.add(method, inputs, outputs, data)
 		end
 		cache = {}
 		for _, v in pairs(outputs) do
-			k = v:split " "[1]
+			k = v:split" "[1]
 			if not cache[k] then
 				cache[k] = 1
 				trinium.recipes.recipes[k] = trinium.recipes.recipes[k] or {}
@@ -109,7 +109,7 @@ function recipes.add_method(method, tbl)
 		process = function(a, b, c)
 			return a, b, c
 		end,
-		formspec_begin = func.const "",
+		formspec_begin = func.const"",
 		can_perform = func.const(true),
 		recipe_correct = func.const(true),
 	})
@@ -129,7 +129,7 @@ end
 
 function recipes.check_inputs(input_map, needed_inputs)
 	return table.every(needed_inputs, function(r)
-		local k = r:split " "
+		local k = r:split" "
 		return input_map[k[1]] and (#k == 1 or (input_map[k[1]] >= tonumber(k[2])))
 	end)
 end
@@ -149,7 +149,7 @@ recipes.add_method("drop", {
 	end,
 	formspec_width = 7,
 	formspec_height = 5,
-	formspec_name = api.S "Drop",
+	formspec_name = api.S"Drop",
 	formspec_begin = function(data)
 		return ("textarea[0,4.7;7,1;;;%s]"):format(api.S("Max Drop: @1", data.max_items))
 	end,

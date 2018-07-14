@@ -34,8 +34,8 @@ local function recalculate(pos)
 				if level < data.level then
 					level = data.level
 				end
-				for k, v in pairs(data.traits) do
-					traits[k] = math.max(traits[k] or 0, v)
+				for k1, v1 in pairs(data.traits) do
+					traits[k1] = math.max(traits[k1] or 0, v1)
 				end
 
 				table.insert(times, data.base_speed)
@@ -51,17 +51,17 @@ local function recalculate(pos)
 				inv:add_item("inputs", x)
 				local data = x:get_meta():get_string("material_data"):data()
 				durability = durability * data.rod_durability
-				for k, v in pairs(data.traits) do
-					traits[k] = math.max(traits[k] or 0, v)
+				for k1, v1 in pairs(data.traits) do
+					traits[k1] = math.max(traits[k1] or 0, v1)
 				end
 			end
 		end)
 
 		if level < 0 then return end
 
-		traits = table.filter(traits, function(_, k)
-			if tinker.modifiers[k] and tinker.modifiers[k].incompat then
-				local x = tinker.modifiers[k].incompat
+		traits = table.filter(traits, function(_, k1)
+			if tinker.modifiers[k1] and tinker.modifiers[k1].incompat then
+				local x = tinker.modifiers[k1].incompat
 				return table.every(x, function(v1) return not traits[v1] end)
 			end
 			return true
@@ -86,9 +86,9 @@ local function recalculate(pos)
 		meta2:set_int("modifiers_left", 3)
 		meta2:set_string("modifiers", minetest.serialize(traits))
 
-		for k, v in pairs(traits) do
-			if tinker.modifiers[k] and tinker.modifiers[k].after_create then
-				tinker.modifiers[k].after_create(v, meta2)
+		for k1, v1 in pairs(traits) do
+			if tinker.modifiers[k1] and tinker.modifiers[k1].after_create then
+				tinker.modifiers[k1].after_create(v1, meta2)
 			end
 		end
 
@@ -99,17 +99,18 @@ local function recalculate(pos)
 end
 
 minetest.register_node("tinker_phase:tool_station", {
-	description = S "Tool Station",
-	tiles = { "tinker_phase.assembly_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png" },
+	description = S"Tool Station",
+	tiles = {"tinker_phase.assembly_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png"},
+	sounds = trinium.sounds.default_wood,
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -0.5, -0.5, -0.5, -0.25, 0.25, -0.25 },
-			{ 0.5, -0.5, -0.5, 0.25, 0.25, -0.25 },
-			{ -0.5, -0.5, 0.5, -0.25, 0.25, 0.25 },
-			{ 0.5, -0.5, 0.5, 0.25, 0.25, 0.25 },
-			{ -0.5, 0.25, -0.5, 0.5, 0.5, 0.5 },
+			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
+			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
+			{-0.5, -0.5, 0.5, -0.25, 0.25, 0.25},
+			{0.5, -0.5, 0.5, 0.25, 0.25, 0.25},
+			{-0.5, 0.25, -0.5, 0.5, 0.5, 0.5},
 		}
 	},
 	groups = { choppy = 2 },

@@ -23,8 +23,8 @@ function research.add_req(child, parent)
 	research.researches[child].requirements[parent] = 1
 end
 
-research.dp1 = api.get_data_pointers "researches" -- unordered set
-research.dp2 = api.get_data_pointers "researches_data" -- unordered map
+research.dp1 = api.get_data_pointers"researches" -- unordered set
+research.dp2 = api.get_data_pointers"researches_data" -- unordered map
 function research.check(pn, name)
 	return research.dp1[pn][name]
 end
@@ -39,8 +39,8 @@ end
 
 function research.get_tree(name)
 	return api.search(name, api.functions.returner, function(c_res)
-		if c_res:find "%-" then
-			return { [c_res:split "-"[1]] = 1 }
+		if c_res:find"%-" then
+			return {[c_res:split"-"[1]] = 1}
 		else
 			return research.researches[c_res].requirements
 		end
@@ -50,7 +50,7 @@ end
 function research.grant(pn, name)
 	local s = research.get_tree(name):filter(function(k) return not research.check(pn, k) end)
 	if s:count() > 0 then
-		minetest.chat_send_player(pn, S "Unknown Research!")
+		minetest.chat_send_player(pn, S"Unknown Research!")
 		return false
 	else
 		research.basic_grant(pn, name)
@@ -78,7 +78,7 @@ function research.add_aspect(name, def)
 	minetest.register_tool("trinium_research:aspect_" .. name, {
 		description = def.name,
 		inventory_image = def.texture,
-		groups = { hidden_from_irp = 1 },
+		groups = {hidden_from_irp = 1},
 	})
 end
 
@@ -104,6 +104,6 @@ function research.random_aspects(pn, num, arr)
 end
 
 function research.label_escape(text, desc, asp)
-	return { form = "textarea[0.25,1;7.75,7;;;" .. text .. "]",
-	         w = 8, h = 8, locked = true, required_aspects = asp, name = desc }
+	return {form = "textarea[0.25,1;7.75,7;;;" .. text .. "]",
+			w = 8, h = 8, locked = true, required_aspects = asp, name = desc}
 end

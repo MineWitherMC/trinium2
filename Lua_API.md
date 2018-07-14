@@ -163,10 +163,10 @@ All of these functions are in `trinium.api` table.
 * `initializer(def0)`
 	* Returns a function that initializes inventory and optionally `formspec` at
 	 given position. Useful for `on_construct`.
-* `inv_to_itemmap(list)`
-	* Converts inventory list obtained via `inv:get_list"listname"` to item map.
+* `inv_to_itemmap(...)`
+	* Converts inventory lists obtained via `inv:get_list"listname"` to item map.
 	* Item map is a table formatted as `[ItemString] => amount`.
-	* Does not properly work with `metadata`.
+	* Does not properly work with `ItemMetaRef`.
 * `recolor_facedir(pos, n)`
 	* Given a node with `paramtype2 = colorfacedir`, changes its color.
 	* `n` is integer between 0 and 7.

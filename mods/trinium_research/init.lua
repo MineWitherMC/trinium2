@@ -1,7 +1,7 @@
-local path = minetest.get_modpath "trinium_research"
+local path = minetest.get_modpath"trinium_research"
 
 trinium.research = {}
-trinium.research.S = minetest.get_translator "trinium_research"
+trinium.research.S = minetest.get_translator"trinium_research"
 
 dofile(path .. "/api.lua")
 dofile(path .. "/commands.lua")

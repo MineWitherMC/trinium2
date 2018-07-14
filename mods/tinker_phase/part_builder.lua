@@ -25,7 +25,7 @@ local part_builder_formspec_chest = [[
 local function recalculate(pos)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
-	local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split "_", 2), "_")
+	local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split"_", 2), "_")
 	local def = tinker.patterns[pattern]
 	local count = inv:get_stack("inputs", 1):get_count() + inv:get_stack("inputs", 2):get_count()
 	if not def or count < def.cost then
@@ -67,9 +67,9 @@ local function on_take(pos, list_name)
 	if list_name == "output" then
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split "_", 2), "_")
+		local pattern = table.concat(table.multi_tail(inv:get_stack("pattern", 1):get_name():split"_", 2), "_")
 		local def = tinker.patterns[pattern]
-		local c, l = def.cost, inv:get_list "inputs"
+		local c, l = def.cost, inv:get_list"inputs"
 
 		if l[1]:get_count() >= c then
 			l[1]:take_item(c)
@@ -85,25 +85,26 @@ local function on_take(pos, list_name)
 end
 
 minetest.register_node("tinker_phase:part_builder", {
-	description = S "Part Builder",
-	tiles = { "tinker_phase.parting_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png" },
+	description = S"Part Builder",
+	tiles = {"tinker_phase.parting_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png"},
+	sounds = trinium.sounds.default_wood,
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -0.5, -0.5, -0.5, -0.25, 0.25, -0.25 },
-			{ 0.5, -0.5, -0.5, 0.25, 0.25, -0.25 },
-			{ -0.5, -0.5, 0.5, -0.25, 0.25, 0.25 },
-			{ 0.5, -0.5, 0.5, 0.25, 0.25, 0.25 },
-			{ -0.5, 0.25, -0.5, 0.5, 0.5, 0.5 },
+			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
+			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
+			{-0.5, -0.5, 0.5, -0.25, 0.25, 0.25},
+			{0.5, -0.5, 0.5, 0.25, 0.25, 0.25},
+			{-0.5, 0.25, -0.5, 0.5, 0.5, 0.5},
 		}
 	},
-	groups = { choppy = 2 },
+	groups = {choppy = 2},
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, { pattern = 1, inputs = 2, output = 1 })
+		api.initialize_inventory(inv, {pattern = 1, inputs = 2, output = 1})
 		meta:set_string("formspec", part_builder_formspec_basic)
 	end,
 	allow_metadata_inventory_put = allow_put,
@@ -117,33 +118,35 @@ minetest.register_node("tinker_phase:part_builder", {
 })
 
 minetest.register_node("tinker_phase:part_builder_with_chest", {
-	description = S "Part Builder with Chest",
-	tiles = { "tinker_phase.parting_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png" },
+	description = S"Part Builder with Chest",
+	tiles = {"tinker_phase.parting_table.png", "tinker_phase.table_bottom.png", "tinker_phase.table_side.png"},
+	sounds = trinium.sounds.default_wood,
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -0.5, -0.5, -0.5, -0.25, 0.25, -0.25 },
-			{ 0.5, -0.5, -0.5, 0.25, 0.25, -0.25 },
-			{ -0.5, -0.5, 0.5, -0.25, 0.25, 0.25 },
-			{ 0.5, -0.5, 0.5, 0.25, 0.25, 0.25 },
-			{ -0.5, 0.25, -0.5, 0.5, 0.5, 0.5 },
-			{ -0.25, -0.25, -0.25, 0.25, 0.25, 0.25 },
+			{-0.5, -0.5, -0.5, -0.25, 0.25, -0.25},
+			{0.5, -0.5, -0.5, 0.25, 0.25, -0.25},
+			{-0.5, -0.5, 0.5, -0.25, 0.25, 0.25},
+			{0.5, -0.5, 0.5, 0.25, 0.25, 0.25},
+			{-0.5, 0.25, -0.5, 0.5, 0.5, 0.5},
+			{-0.25, -0.25, -0.25, 0.25, 0.25, 0.25},
 		}
 	},
-	groups = { choppy = 2 },
+	groups = {choppy = 2},
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, { pattern = 31, inputs = 2, output = 1 })
+		api.initialize_inventory(inv, {pattern = 31, inputs = 2, output = 1})
 		meta:set_string("formspec", part_builder_formspec_chest)
 	end,
 	allow_metadata_inventory_put = allow_put,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		return (from_list == to_list or minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinker_phase_pattern") > 0)
+		return (from_list == to_list or
+						minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinker_phase_pattern") > 0)
 				and count or 0
 	end,
 

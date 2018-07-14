@@ -37,7 +37,7 @@ end)
 mat.add_data_generator("melting_point", function(name)
 	local formula = mat.materials_reg[name].formula
 	formula = table.map(formula, function(v)
-		return { mat.materials_reg[v[1]].data.melting_point, v[2] }
+		return {mat.materials_reg[v[1]].data.melting_point, v[2]}
 	end)
 	return math.floor(0.5 + math.weighted_avg(formula))
 end)
@@ -81,7 +81,7 @@ mat.add_recipe_generator("crude_blast_furnace", function(self)
 	formula:forEach(function(v) sum = sum + v[2] end)
 
 	api.delayed_call("trinium_machines", recipes.add, "crude_blast_furnace",
-			{ self:get("dust", sum), mat.force_getter("coal", "dust", 1 + math.floor(sum * 2 / 3)) },
+			{self:get("dust", sum), mat.force_getter("coal", "dust", 1 + math.floor(sum * 2 / 3))},
 			formula:map(function(v) return mat.getter(v[1], "ingot", v[2]) end):data(),
-			{ divisible = true })
+			{divisible = true})
 end)

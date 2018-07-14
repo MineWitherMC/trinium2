@@ -4,10 +4,12 @@ Crude Blast Furnace Controller=Контроллер примитивной до�
 Chemical Reactor Controller=Контроллер химического реактора
 Distillation Layer Core=Ядро слоя рекрификации
 Distillation Tower Controller=Контроллер рекрификационной колонны
+Precision Assembler Controller=Контроллер точного сборщика
 
 Chemical Casing=Химический корпус
 Distillation Grate=Дистилляционная труба
 Heat-Proof Brick Block=Теплоустойчивый кирпич
+Pressure Resistant Casing=Устойчивый к давлению корпус
 
 Item Input Hatch=Шина входа предметов
 Crude Item Input Hatch=Примитивная шина входа предметов
@@ -32,6 +34,7 @@ GT Multiblock=Модульная структура
 Crude Blast Furnace=Примитивная доменная печь
 Chemical Reactor=Химический реактор
 Distillation=Рекрификация
+Precision Assembler=Сборщик
 
 Heat Input=Нагрев
 Pressure Input=Вход давления

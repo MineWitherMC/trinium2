@@ -1,7 +1,7 @@
 local block_descriptions = {}
 local huds = {}
 local api = trinium.api
-local huds_data = api.get_data_pointers "hud_block_info"
+local huds_data = api.get_data_pointers"hud_block_info"
 local hud = trinium.hud
 
 minetest.register_on_joinplayer(function(player)
@@ -11,52 +11,52 @@ minetest.register_on_joinplayer(function(player)
 	huds_data[pn].bg = huds_data[pn].bg or {
 		hud_elem_type = "image",
 		text = "",
-		scale = { x = -40, y = -15 },
-		alignment = { x = 0, y = 0 },
-		position = { x = 0.5, y = 0.1 },
+		scale = {x = -40, y = -15},
+		alignment = {x = 0, y = 0},
+		position = {x = 0.5, y = 0.1},
 	}
 
 	huds_data[pn].bg_info = huds_data[pn].bg_info or {
 		hud_elem_type = "image",
 		text = "",
-		scale = { x = -20, y = -30 },
-		alignment = { x = 0, y = 0 },
-		position = { x = 0.125, y = 0.5 },
+		scale = {x = -20, y = -30},
+		alignment = {x = 0, y = 0},
+		position = {x = 0.125, y = 0.5},
 	}
 
 	huds_data[pn].node = huds_data[pn].node or {
 		hud_elem_type = "text",
 		text = "",
 		number = 0xffffff,
-		alignment = { x = 1, y = 0 },
-		position = { x = 0.3, y = 0.1 },
-		offset = { x = 48, y = -12 },
+		alignment = {x = 1, y = 0},
+		position = {x = 0.3, y = 0.1},
+		offset = {x = 48, y = -12},
 	}
 
 	huds_data[pn].rich = huds_data[pn].rich or {
 		hud_elem_type = "text",
 		text = "",
 		number = 0xffffff,
-		alignment = { x = 0, y = 0 },
-		position = { x = 0.125, y = 0.5 },
+		alignment = {x = 0, y = 0},
+		position = {x = 0.125, y = 0.5},
 	}
 
 	huds_data[pn].mod = huds_data[pn].mod or {
 		hud_elem_type = "text",
 		text = "",
 		number = 0x003267,
-		alignment = { x = 1, y = 0 },
-		position = { x = 0.3, y = 0.1 },
-		offset = { x = 48, y = 12 },
+		alignment = {x = 1, y = 0},
+		position = {x = 0.3, y = 0.1},
+		offset = {x = 48, y = 12},
 	}
 
 	huds_data[pn].image = huds_data[pn].image or {
 		hud_elem_type = "image",
 		text = "",
-		scale = { x = 1, y = 1 },
+		scale = {x = 1, y = 1},
 		alignment = 0,
-		position = { x = 0.7, y = 0.1 },
-		offset = { x = -56, y = 0 },
+		position = {x = 0.7, y = 0.1},
+		offset = {x = -56, y = 0},
 	}
 
 	huds[pn].bg = player:hud_add(huds_data[pn].bg)
@@ -84,29 +84,36 @@ local function generate_inv_cube(node)
 	if #tiles == 0 then return "" end
 
 	for i = 1, 6 do
-		if not tiles[i] then tiles[i] = tiles[i - 1] end
+		if not tiles[i] then
+			if type(tiles[i - 1]) ~= "table" then
+				tiles[i] = tiles[i - 1]
+			else
+				tiles[i] = table.copy(tiles[i - 1])
+			end
+		end
 		if overlay_tiles and not overlay_tiles[i] then overlay_tiles[i] = overlay_tiles[i - 1] end
 
-		for _, v in pairs { tiles, overlay_tiles } do
+		for _, v in pairs{tiles, overlay_tiles} do
 			if v and type(v[i]) == "table" then
-				if v[i].name and v[i].color then
+				if v[i].name and v[i].color and v[i].color ~= "white" then
 					v[i] = ("(%s)^[multiply:%s"):format(v[i].name, v[i].color)
 				elseif v[i].name then
 					v[i] = v[i].name
 				end
 			end
 		end
-		if overlay_tiles then
-			tiles = table.map(tiles, function(v, k)
-				local q = overlay_tiles[k]
-				if q.name and q.color then
-					q = ("(%s)^[multiply:%s"):format(q.name, q.color)
-				elseif q.name then
-					q = q.name
-				end
-				return ("(%s)^(%s)"):format(v, q)
-			end)
-		end
+	end
+
+	if overlay_tiles then
+		tiles = table.map(tiles, function(v, k)
+			local q = overlay_tiles[k]
+			if q.name and q.color then
+				q = ("(%s)^[multiply:%s"):format(q.name, q.color)
+			elseif q.name then
+				q = q.name
+			end
+			return q ~= "" and ("(%s)^(%s)"):format(v, q) or v
+		end)
 	end
 
 	if #tiles == 1 then
@@ -128,7 +135,7 @@ end
 
 local function get_pointed_node(player)
 	local dir = vector.multiply(player:get_look_dir(), 5)
-	local begin = vector.add(player:get_pos(), { x = 0, y = 13 / 8, z = 0 })
+	local begin = vector.add(player:get_pos(), {x = 0, y = 13 / 8, z = 0})
 	local rc = Raycast(begin, vector.add(begin, dir))
 	for i in rc do
 		if i.type == "node" and minetest.get_node(i.under).name ~= "air" then
@@ -146,13 +153,13 @@ hud.register_globalstep("block_info", {
 			local player = players[i]
 			local pn, pos = player:get_player_name(), get_pointed_node(player)
 			if pos then
-				local def = minetest.registered_items[minetest.get_node(pos).name] or { groups = {} }
+				local def = minetest.registered_items[minetest.get_node(pos).name] or {groups = {}}
 				if def.description ~= block_descriptions[pn] or def.groups.rich_info == 1 then
 					if block_descriptions[pn] == "" then
 						player:hud_change(huds[pn].bg, "text", "trinium_hud.background.png")
 					end
 					block_descriptions[pn] = def.description
-					player:hud_change(huds[pn].node, "text", (def.description or "???"):split "\n"[1])
+					player:hud_change(huds[pn].node, "text", (def.description or "???"):split"\n"[1])
 					player:hud_change(huds[pn].mod, "text", api.string_superseparation(def.mod_origin or "???"))
 					player:hud_change(huds[pn].image, "text", generate_inv_cube(def))
 
@@ -180,41 +187,41 @@ hud.register_globalstep("block_info", {
 })
 
 local S = hud.S
-local conf = hud.configurator("block_info", 0, 0, S "Block Info")
+local conf = hud.configurator("block_info", 0, 0, S"Block Info")
 
 local function update_position_x(player, v)
 	local pn = player:get_player_name()
 	huds_data[pn].node.position.x = huds_data[pn].bg.position.x - v / 200
 	player:hud_change(huds[pn].node, "position",
-			{ x = huds_data[pn].bg.position.x - v / 200, y = huds_data[pn].node.position.y })
+			{x = huds_data[pn].bg.position.x - v / 200, y = huds_data[pn].node.position.y})
 	huds_data[pn].mod.position.x = huds_data[pn].bg.position.x - v / 200
 	player:hud_change(huds[pn].mod, "position",
-			{ x = huds_data[pn].bg.position.x - v / 200, y = huds_data[pn].mod.position.y })
+			{x = huds_data[pn].bg.position.x - v / 200, y = huds_data[pn].mod.position.y})
 	huds_data[pn].image.position.x = huds_data[pn].bg.position.x + v / 200
 	player:hud_change(huds[pn].image, "position",
-			{ x = huds_data[pn].bg.position.x + v / 200, y = huds_data[pn].image.position.y })
+			{x = huds_data[pn].bg.position.x + v / 200, y = huds_data[pn].image.position.y})
 end
 local function update_rich_position(player)
 	local pn = player:get_player_name()
 	huds_data[pn].rich.position = huds_data[pn].bg_info.position
 	player:hud_change(huds[pn].rich, "position",
-			{ x = huds_data[pn].rich.position.x, y = huds_data[pn].rich.position.y })
+			{x = huds_data[pn].rich.position.x, y = huds_data[pn].rich.position.y})
 end
 
 local function update_position_y(player)
 	local pn = player:get_player_name()
 	huds_data[pn].node.position.y = huds_data[pn].bg.position.y
 	player:hud_change(huds[pn].node, "position",
-			{ y = huds_data[pn].bg.position.y, x = huds_data[pn].node.position.x })
+			{y = huds_data[pn].bg.position.y, x = huds_data[pn].node.position.x})
 	huds_data[pn].mod.position.y = huds_data[pn].bg.position.y
 	player:hud_change(huds[pn].mod, "position",
-			{ y = huds_data[pn].bg.position.y, x = huds_data[pn].mod.position.x })
+			{y = huds_data[pn].bg.position.y, x = huds_data[pn].mod.position.x})
 	huds_data[pn].image.position.y = huds_data[pn].bg.position.y
 	player:hud_change(huds[pn].image, "position",
-			{ y = huds_data[pn].bg.position.y, x = huds_data[pn].image.position.x })
+			{y = huds_data[pn].bg.position.y, x = huds_data[pn].image.position.x})
 end
 
-conf:add("size_hor", 0, S "Block Info Window Width", function(player, v)
+conf:add("size_hor", 0, S"Block Info Window Width", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -223,12 +230,12 @@ conf:add("size_hor", 0, S "Block Info Window Width", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg.scale.x = -v
-	player:hud_change(huds[pn].bg, "scale", { x = -v, y = huds_data[pn].bg.scale.y })
+	player:hud_change(huds[pn].bg, "scale", {x = -v, y = huds_data[pn].bg.scale.y})
 
 	update_position_x(player, v)
 end)
 
-conf:add("pos_hor", 1, S "Block Info Horizontal Position", function(player, v)
+conf:add("pos_hor", 1, S"Block Info Horizontal Position", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -237,12 +244,12 @@ conf:add("pos_hor", 1, S "Block Info Horizontal Position", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg.position.x = v
-	player:hud_change(huds[pn].bg, "position", { x = v, y = huds_data[pn].bg.position.y })
+	player:hud_change(huds[pn].bg, "position", {x = v, y = huds_data[pn].bg.position.y})
 
 	update_position_x(player, v)
 end)
 
-conf:add("pos_ver", 2, S "Block Info Vertical Position", function(player, v)
+conf:add("pos_ver", 2, S"Block Info Vertical Position", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -251,12 +258,12 @@ conf:add("pos_ver", 2, S "Block Info Vertical Position", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg.position.y = v
-	player:hud_change(huds[pn].bg, "position", { y = v, x = huds_data[pn].bg.position.x })
+	player:hud_change(huds[pn].bg, "position", {y = v, x = huds_data[pn].bg.position.x})
 
 	update_position_y(player)
 end)
 
-conf:add("rich_size_hor", 3, S "Rich Info Width", function(player, v)
+conf:add("rich_size_hor", 3, S"Rich Info Width", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -265,9 +272,9 @@ conf:add("rich_size_hor", 3, S "Rich Info Width", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg_info.scale.x = -v
-	player:hud_change(huds[pn].bg_info, "scale", { x = -v, y = huds_data[pn].bg_info.scale.y })
+	player:hud_change(huds[pn].bg_info, "scale", {x = -v, y = huds_data[pn].bg_info.scale.y})
 end)
-conf:add("rich_size_ver", 4, S "Rich Info Height", function(player, v)
+conf:add("rich_size_ver", 4, S"Rich Info Height", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -276,10 +283,10 @@ conf:add("rich_size_ver", 4, S "Rich Info Height", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg_info.scale.y = -v
-	player:hud_change(huds[pn].bg_info, "scale", { y = -v, x = huds_data[pn].bg_info.scale.x })
+	player:hud_change(huds[pn].bg_info, "scale", {y = -v, x = huds_data[pn].bg_info.scale.x})
 end)
 
-conf:add("rich_pos_hor", 5, S "Rich Info Horizontal Position", function(player, v)
+conf:add("rich_pos_hor", 5, S"Rich Info Horizontal Position", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -288,11 +295,11 @@ conf:add("rich_pos_hor", 5, S "Rich Info Horizontal Position", function(player, 
 
 	v = tonumber(v)
 	huds_data[pn].bg_info.position.x = v
-	player:hud_change(huds[pn].bg_info, "position", { x = v, y = huds_data[pn].bg_info.position.y })
+	player:hud_change(huds[pn].bg_info, "position", {x = v, y = huds_data[pn].bg_info.position.y})
 
 	update_rich_position(player)
 end)
-conf:add("rich_pos_ver", 6, S "Rich Info Vertical Position", function(player, v)
+conf:add("rich_pos_ver", 6, S"Rich Info Vertical Position", function(player, v)
 	local pn = player:get_player_name()
 	if not tonumber(v) then
 		cmsg.push_message_player(player, trinium.api.S("Couldn't parse number: @1", v))
@@ -301,7 +308,7 @@ conf:add("rich_pos_ver", 6, S "Rich Info Vertical Position", function(player, v)
 
 	v = tonumber(v)
 	huds_data[pn].bg_info.position.y = v
-	player:hud_change(huds[pn].bg_info, "position", { y = v, x = huds_data[pn].bg_info.position.x })
+	player:hud_change(huds[pn].bg_info, "position", {y = v, x = huds_data[pn].bg_info.position.x})
 
 	update_rich_position(player)
 end)

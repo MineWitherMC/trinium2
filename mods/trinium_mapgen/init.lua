@@ -1,7 +1,7 @@
-local path = minetest.get_modpath "trinium_mapgen"
+local path = minetest.get_modpath"trinium_mapgen"
 
 trinium.mapgen = {}
-trinium.mapgen.S = minetest.get_translator "trinium_mapgen"
+trinium.mapgen.S = minetest.get_translator"trinium_mapgen"
 
 dofile(path .. "/nodes.lua")
 dofile(path .. "/biomes.lua")

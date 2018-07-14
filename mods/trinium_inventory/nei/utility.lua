@@ -14,7 +14,7 @@ minetest.register_on_joinplayer(function(player)
 			return stack:get_count()
 		end,
 
-		on_move = function(inv, from_list, from_index, to_list, to_index, _, player)
+		on_move = function(inv, from_list, from_index, to_list, to_index)
 			dp[from_list] = dp[from_list] or {}
 			dp[to_list] = dp[to_list] or {}
 
@@ -28,7 +28,7 @@ minetest.register_on_joinplayer(function(player)
 			dp[to_list][to_index] = inv:get_stack(to_list, to_index):to_string()
 		end,
 
-		on_put = function(inv, list_name, index, _, player)
+		on_put = function(inv, list_name, index)
 			dp[list_name] = dp[list_name] or {}
 
 			if list_name == "trash" then
@@ -40,7 +40,7 @@ minetest.register_on_joinplayer(function(player)
 			dp[list_name][index] = inv:get_stack(list_name, index):to_string()
 		end,
 
-		on_take = function(inv, list_name, index, _, player)
+		on_take = function(inv, list_name, index)
 			if not dp[list_name] then
 				dp[list_name] = {}
 			end

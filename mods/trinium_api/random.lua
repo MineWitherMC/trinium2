@@ -4,7 +4,7 @@ local DataMesh = api.DataMesh
 function api.dump(...)
 	local string = ""
 	local add
-	for _, x in ipairs { ... } do
+	for _, x in ipairs(table.remap{...}) do
 		add = dump(x)
 		if type(x) == "string" then
 			add = add:sub(2, -2)
@@ -43,7 +43,7 @@ function api.initializer(def0)
 end
 
 function api.inv_to_itemmap(...)
-	local map, inv = {}, { ... }
+	local map, inv = {}, {...}
 	for _, v in pairs(inv) do
 		for _, v1 in pairs(v) do
 			local name, count = v1:get_name(), v1:get_count()
@@ -51,6 +51,7 @@ function api.inv_to_itemmap(...)
 			map[name] = map[name] + count
 		end
 	end
+	map[""] = nil
 	return map
 end
 
@@ -59,10 +60,10 @@ function api.advanced_search(begin, serialize, vertex)
 	local dm = DataMesh:new()
 	local dd = dm._data
 	local used = {}
-	local operation = { [begin] = 1 }
+	local operation = {[begin] = 1}
 	local under_operation
 	local step = 0
-	local finished = false
+	local finished
 	repeat
 		finished = true
 		under_operation = {}
@@ -71,7 +72,7 @@ function api.advanced_search(begin, serialize, vertex)
 			if not used[serialize(v)] then
 				used[serialize(v)] = 1
 				if step > 1 then
-					table.insert(dd, { v, step })
+					table.insert(dd, {v, step})
 				end
 				finished = false
 				for v1 in pairs(vertex(v)) do
@@ -115,7 +116,8 @@ end
 function api.translate_requirements(tbl)
 	local tbl1 = {}
 	for _, k, v in table.asort(tbl, function(a, b) return tbl[a] > tbl[b] end) do
-		tbl1[#tbl1 + 1] = "\n" .. minetest.colorize("#CCC", v .. " " .. ((minetest.registered_nodes[k] or {}).description or "???"))
+		tbl1[#tbl1 + 1] = "\n" ..
+				minetest.colorize("#CCC", v .. " " .. ((minetest.registered_nodes[k] or {}).description or "???"))
 	end
 	return table.concat(tbl1, "")
 end
@@ -132,7 +134,7 @@ function api.sort_by_param(param)
 end
 
 function api.exposed_var()
-	local tbl = { good = true }
+	local tbl = {good = true}
 	return tbl, function() return not tbl.good end
 end
 
@@ -168,8 +170,8 @@ end
 
 function api.get_fs_texture(...)
 	local textures = {}
-	for _, v in pairs { ... } do
-		table.insert(textures, table.concat { "(", api.get_texture(v), ")^[brighten" })
+	for _, v in pairs {...} do
+		table.insert(textures, table.concat {"(", api.get_texture(v), ")^[brighten"})
 	end
 	return unpack(textures)
 end

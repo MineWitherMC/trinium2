@@ -1,5 +1,6 @@
 betterinv = {}
-betterinv.tab_position = tonumber(minetest.settings:get "betterinv.tab_position" or "4")
+betterinv = {}
+betterinv.tab_position = tonumber(minetest.settings:get"betterinv.tab_position" or "4")
 
 betterinv.tabs = {}
 betterinv.tab_list = {}
@@ -48,7 +49,7 @@ betterinv.theme_inv = [[
 ]]
 
 function betterinv.generate_formspec(player, fs, size, bg, inv)
-	if not size then size = { x = 8, y = 8.6 } end
+	if not size then size = {x = 8, y = 8.6} end
 	local p = betterinv.tab_position
 	if p == 2 or p == 0 then size.y = size.y + 1
 	elseif p == 1 or p == 3 then size.x = size.x + 2
@@ -139,7 +140,7 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 		end
 	else
 		for k in pairs(fields) do
-			local k_split = k:split "~"
+			local k_split = k:split"~"
 			if k_split[1] == "betterinv" then
 				good = true
 				player:set_inventory_formspec(betterinv.tabs[k_split[2]].getter(player, betterinv.contexts[pn][selection]))
@@ -152,7 +153,7 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 	end
 end)
 
-if not minetest.get_modpath "sfinv" then
+if not minetest.get_modpath"sfinv" then
 	-- todo: cleanup this
 	sfinv = {}
 	function sfinv.register_page(name, def)
@@ -169,13 +170,13 @@ if not minetest.get_modpath "sfinv" then
 	end
 	function sfinv.make_formspec(player, _, fs, inv, size, bg)
 		if not size then size = "size[8,8.6]" end
-		size = size:split "["[2]
-		size = size:split "]"[1]
-		size = size:split ","
+		size = size:split"["[2]
+		size = size:split"]"[1]
+		size = size:split","
 
 		if not bg then bg = "" end
 
-		return betterinv.generate_formspec(player, fs, { x = tonumber(size[1]), y = tonumber(size[2]) }, bg, inv)
+		return betterinv.generate_formspec(player, fs, {x = tonumber(size[1]), y = tonumber(size[2])}, bg, inv)
 	end
 	function sfinv.get_or_create_context(player)
 		local pn = player:get_player_name()

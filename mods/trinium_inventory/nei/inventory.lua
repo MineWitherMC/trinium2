@@ -6,7 +6,7 @@ local recipes = trinium.recipes
 function api.try_craft(player)
 	local pn = player:get_player_name()
 	local inv = bi[pn]
-	local list = inv:get_list "crafting"
+	local list = inv:get_list"crafting"
 	for i = 1, 9 do
 		list[i] = list[i]:get_name()
 	end
@@ -15,19 +15,15 @@ function api.try_craft(player)
 	local rbm = recipes.recipes_by_method.crafting
 	if not rbm then return end
 
-	local recipe, output = table.exists(rbm, function(v) return rr[v].inputs_string == list end)
-	if not recipe then
-		output = ""
-	else
-		output = rr[rbm[recipe]].outputs[1]
-	end
+	local recipe = table.exists(rbm, function(v) return rr[v].inputs_string == list end)
+	local output = recipe and rr[rbm[recipe]].outputs[1] or ""
 	inv:set_stack("output", 1, output)
 	betterinv.redraw_for_player(player)
 end
 
 -- Crafting
 betterinv.register_tab("inventory", {
-	description = S "Crafting",
+	description = S"Crafting",
 	getter = function(player)
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
@@ -52,14 +48,14 @@ betterinv.register_tab("inventory", {
 		local pn = player:get_player_name()
 		local inv1, inv2 = player:get_inventory(), bi[pn]
 		for k in pairs(fields) do
-			local k_split = k:split "~" -- Module, action, parameters
+			local k_split = k:split"~" -- Module, action, parameters
 			if k_split[1] == "inventory" then
 				local a = k_split[2]
 				if a == "craft" then
 					local s = inv2:get_stack("output", 1):to_string()
 					if s ~= "" then
 						if not inv1:room_for_item("main", s) then
-							cmsg.push_message_player(player, S "Inventory is full!")
+							cmsg.push_message_player(player, S"Inventory is full!")
 						else
 							inv1:add_item("main", s)
 							for i = 1, 9 do

@@ -9,7 +9,7 @@ minetest.register_privilege("research_grant", {
 minetest.register_chatcommand("research_me", {
 	params = "<research>",
 	description = "Give research to activator",
-	privs = { research_grant = 1 },
+	privs = {research_grant = 1},
 	func = function(name, param)
 		if research.researches[param] then
 			research.force_grant(name, param)

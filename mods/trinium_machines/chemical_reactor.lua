@@ -3,16 +3,16 @@ local machines = trinium.machines
 local S = machines.S
 local recipes = trinium.recipes
 
-local def, destruct, r_input, r_output, r_data = machines.parse_multiblock {
+local def, destruct, r_input, r_output, r_data = machines.parse_multiblock{
 	controller = "trinium_machines:controller_chemical_reactor",
 	casing = "trinium_machines:casing_chemical",
-	size = { front = 0, back = 2, up = 1, down = 1, sides = 1 },
+	size = {front = 0, back = 2, up = 1, down = 1, sides = 1},
 	min_casings = 19,
 	addon_map = {
-		{ x = 0, z = 1, y = 0, name = "air" },
+		{x = 0, z = 1, y = 0, name = "air"},
 	},
 	color = 179,
-	hatches = { "input.pressure", "input.item", "output.item", "input.heat" },
+	hatches = {"input.pressure", "input.item", "output.item", "input.heat"},
 }
 
 recipes.add_method("chemical_reactor", {
@@ -22,7 +22,7 @@ recipes.add_method("chemical_reactor", {
 	get_output_coords = recipes.coord_getter(2, 3, 0),
 	formspec_width = 7,
 	formspec_height = 5,
-	formspec_name = S "Chemical Reactor",
+	formspec_name = S"Chemical Reactor",
 	formspec_begin = function(data)
 		local tbl = {}
 		if data.catalyst then
@@ -44,10 +44,11 @@ recipes.add_method("chemical_reactor", {
 })
 
 minetest.register_node("trinium_machines:controller_chemical_reactor", {
-	description = S "Chemical Reactor Controller",
-	groups = { cracky = 1 },
-	tiles = { { name = "trinium_machines.casing.png", color = "#5575ff" } },
-	overlay_tiles = { "", "", "", "", "", "trinium_machines.chemical_reactor_overlay.png" },
+	description = S"Chemical Reactor Controller",
+	groups = {cracky = 1},
+	sounds = trinium.sounds.default_metal,
+	tiles = {{name = "trinium_machines.casing.png", color = "#5575ff"}},
+	overlay_tiles = {"", "", "", "", "", "trinium_machines.chemical_reactor_overlay.png"},
 	palette = "trinium_api.palette8.png",
 	paramtype2 = "colorfacedir",
 	color = "white",
@@ -55,13 +56,13 @@ minetest.register_node("trinium_machines:controller_chemical_reactor", {
 
 	on_timer = function(pos)
 		local meta, timer = minetest.get_meta(pos), minetest.get_node_timer(pos)
-		local hatches = meta:get_string "hatches":data()
+		local hatches = meta:get_string"hatches":data()
 		if not hatches or not hatches["input.item"][1] then return end
 
-		local output = meta:get_string "output"
+		local output = meta:get_string"output"
 		if output ~= "" then
 			meta:set_string("output", "")
-			output = output:split ";"
+			output = output:split";"
 			local outputs = table.map(hatches["output.item"], function(x) return minetest.get_meta(x):get_inventory() end)
 
 			local good
@@ -81,10 +82,10 @@ minetest.register_node("trinium_machines:controller_chemical_reactor", {
 		end
 
 		local input = minetest.get_meta(hatches["input.item"][1]):get_inventory()
-		local input_map = api.inv_to_itemmap(input:get_list "input")
+		local input_map = api.inv_to_itemmap(input:get_list"input")
 		local temp, pressure = hatches["input.heat"][1], hatches["input.pressure"][1]
-		temp = temp and minetest.get_meta(temp):get_int "temperature" or -1
-		pressure = pressure and minetest.get_meta(pressure):get_int "pressure" or -1
+		temp = temp and minetest.get_meta(temp):get_int"temperature" or -1
+		pressure = pressure and minetest.get_meta(pressure):get_int"pressure" or -1
 
 		local cr_recipes = recipes.recipes_by_method.chemical_reactor
 		local vars, func = api.exposed_var()
@@ -94,7 +95,7 @@ minetest.register_node("trinium_machines:controller_chemical_reactor", {
 			local data = rec.data
 			local time_div = 1
 
-			if data.catalyst and not recipes.check_inputs(input_map, { "trinium_materials:catalyst_" .. data.catalyst }) then
+			if data.catalyst and not recipes.check_inputs(input_map, {"trinium_materials:catalyst_" .. data.catalyst}) then
 				return
 			end
 
@@ -121,4 +122,4 @@ minetest.register_node("trinium_machines:controller_chemical_reactor", {
 
 api.register_multiblock("chemical reactor", def)
 recipes.add("greggy_multiblock", r_input, r_output, r_data)
-api.multiblock_rich_info "trinium_machines:controller_chemical_reactor"
+api.multiblock_rich_info"trinium_machines:controller_chemical_reactor"

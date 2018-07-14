@@ -5,24 +5,24 @@ local api = trinium.api
 
 minetest.register_node("trinium_research:node_controller", {
 	stack_max = 1,
-	tiles = { "trinium_research.node.png" },
-	description = S "Research Node Controller",
-	groups = { cracky = 1, rich_info = 1 },
+	tiles = {"trinium_research.node.png"},
+	description = S"Research Node Controller",
+	groups = {cracky = 1, rich_info = 1},
 	paramtype2 = "facedir",
 	sounds = trinium.sounds.default_stone,
 	on_rightclick = function(_, _, player, itemstack)
 		local pn = player:get_player_name()
 		local item = itemstack:get_name()
-		if item == M.paper:get "sheet" then
+		if item == M.paper:get"sheet" then
 			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count()
 			itemstack:take_item(99)
-		elseif item == M.carton:get "sheet" then
+		elseif item == M.carton:get"sheet" then
 			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 4
 			itemstack:take_item(99)
-		elseif item == M.parchment:get "sheet" then
+		elseif item == M.parchment:get"sheet" then
 			research.dp2[pn].paper = research.dp2[pn].paper + itemstack:get_count() * 16
 			itemstack:take_item(99)
-		elseif item == M.ink:get "cell" then
+		elseif item == M.ink:get"cell" then
 			research.dp2[pn].ink = research.dp2[pn].ink + itemstack:get_count() * 100
 			itemstack:take_item(99)
 		elseif item == "trinium_research:charm1" then
@@ -34,8 +34,8 @@ minetest.register_node("trinium_research:node_controller", {
 			research.random_aspects(pn, 100 * itemstack:get_count())
 			itemstack:take_item(99)
 		elseif item == "trinium_research:charm3" then
-			if itemstack:get_meta():get_string "focus" ~= "" then
-				research.random_aspects(pn, 150, { itemstack:get_meta():get_string "focus" })
+			if itemstack:get_meta():get_string"focus" ~= "" then
+				research.random_aspects(pn, 150, {itemstack:get_meta():get_string"focus"})
 			end
 			itemstack:take_item(1)
 		elseif item == "trinium_research:abacus" then
@@ -64,37 +64,37 @@ local node_mb = {
 	depth_f = 0,
 	controller = "trinium_research:node_controller",
 	map = {
-		{ x = 0, y = -1, z = 0, name = "trinium_research:casing" },
-		{ x = 0, y = -1, z = 2, name = "trinium_research:casing" },
-		{ x = 1, y = -1, z = 1, name = "trinium_research:casing" },
-		{ x = -1, y = -1, z = 1, name = "trinium_research:casing" },
-		{ x = 0, y = -1, z = 1, name = "trinium_research:chassis" },
+		{x = 0, y = -1, z = 0, name = "trinium_research:casing"},
+		{x = 0, y = -1, z = 2, name = "trinium_research:casing"},
+		{x = 1, y = -1, z = 1, name = "trinium_research:casing"},
+		{x = -1, y = -1, z = 1, name = "trinium_research:casing"},
+		{x = 0, y = -1, z = 1, name = "trinium_research:chassis"},
 
-		{ x = 1, y = -1, z = 2, name = "trinium_research:chassis" },
-		{ x = -1, y = -1, z = 2, name = "trinium_research:chassis" },
-		{ x = 1, y = -1, z = 0, name = "trinium_research:chassis" },
-		{ x = -1, y = -1, z = 0, name = "trinium_research:chassis" },
+		{x = 1, y = -1, z = 2, name = "trinium_research:chassis"},
+		{x = -1, y = -1, z = 2, name = "trinium_research:chassis"},
+		{x = 1, y = -1, z = 0, name = "trinium_research:chassis"},
+		{x = -1, y = -1, z = 0, name = "trinium_research:chassis"},
 
-		{ x = 0, y = -1, z = 3, name = "trinium_research:chassis" },
-		{ x = 0, y = -1, z = 4, name = "trinium_research:chassis" },
+		{x = 0, y = -1, z = 3, name = "trinium_research:chassis"},
+		{x = 0, y = -1, z = 4, name = "trinium_research:chassis"},
 
-		{ x = 2, y = -1, z = 1, name = "trinium_research:chassis" },
-		{ x = 3, y = -1, z = 1, name = "trinium_research:chassis" },
-		{ x = -2, y = -1, z = 1, name = "trinium_research:chassis" },
-		{ x = -3, y = -1, z = 1, name = "trinium_research:chassis" },
+		{x = 2, y = -1, z = 1, name = "trinium_research:chassis"},
+		{x = 3, y = -1, z = 1, name = "trinium_research:chassis"},
+		{x = -2, y = -1, z = 1, name = "trinium_research:chassis"},
+		{x = -3, y = -1, z = 1, name = "trinium_research:chassis"},
 
-		{ x = -1, y = 0, z = 1, name = "trinium_research:chassis" },
-		{ x = 1, y = 0, z = 1, name = "trinium_research:chassis" },
-		{ x = 0, y = 0, z = 2, name = "trinium_research:chassis" },
+		{x = -1, y = 0, z = 1, name = "trinium_research:chassis"},
+		{x = 1, y = 0, z = 1, name = "trinium_research:chassis"},
+		{x = 0, y = 0, z = 2, name = "trinium_research:chassis"},
 
-		{ x = -1, y = 1, z = 1, name = "trinium_research:casing" },
-		{ x = 1, y = 1, z = 1, name = "trinium_research:casing" },
-		{ x = 0, y = 1, z = 2, name = "trinium_research:casing" },
-		{ x = 0, y = 1, z = 0, name = "trinium_research:casing" },
-		{ x = 0, y = 1, z = 1, name = "trinium_research:chassis" }
+		{x = -1, y = 1, z = 1, name = "trinium_research:casing"},
+		{x = 1, y = 1, z = 1, name = "trinium_research:casing"},
+		{x = 0, y = 1, z = 2, name = "trinium_research:casing"},
+		{x = 0, y = 1, z = 0, name = "trinium_research:casing"},
+		{x = 0, y = 1, z = 1, name = "trinium_research:chassis"}
 	},
 }
 
 api.register_multiblock("research node", node_mb)
 api.multiblock_rename(node_mb)
-api.multiblock_rich_info "trinium_research:node_controller"
+api.multiblock_rich_info"trinium_research:node_controller"

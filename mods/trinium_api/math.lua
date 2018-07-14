@@ -70,3 +70,7 @@ function math.gcd(a, b)
 	end
 	return a + b
 end
+
+function math.round(num, level)
+	return math.floor(num / level + 0.5) * level
+end

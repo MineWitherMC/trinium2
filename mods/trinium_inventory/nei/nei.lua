@@ -6,10 +6,10 @@ local S = nei.S
 nei.player_stuff = {}
 
 local function get_formspec_array(search_string, mode)
-	local ss, items = search_string:lower()
-	local formspec, width, height, cell_size, i, j = {}, 8, nei.integrate and 9 or 7, 1, 0, 1
+	local ss = search_string:lower()
+	local formspec, width, height, cell_size, i = {}, 8, nei.integrate and 9 or 7, 1, 0
 	local length_per_page = width * height
-	items = table.filter(minetest.registered_items, function(v)
+	local items = table.filter(minetest.registered_items, function(v)
 		return (
 				v.mod_origin ~= "*builtin*" and
 						not (v.groups or {}).hidden_from_nei and
@@ -37,15 +37,15 @@ local function get_formspec_array(search_string, mode)
 			formspec[j] = formspec[j] .. ([=[
 				button[%s,0.2;3,0.5;change_mode;%s]
 				tooltip[change_mode;%s]
-			]=]):format(width * cell_size - 4, S "Change Mode", S("Current mode: @1", mode == 0 and S "Recipes" or S "Cheat"))
+			]=]):format(width * cell_size - 4, S"Change Mode", S("Current mode: @1", mode == 0 and S"Recipes" or S"Cheat"))
 		end
 	end
-	j = 1
+	local j = 1
 	local tbl = {}
 	for _, z in pairs(items) do
 		tbl[#tbl + 1] = z
 	end
-	table.sort(tbl, api.sort_by_param "name")
+	table.sort(tbl, api.sort_by_param"name")
 	for _, v in ipairs(tbl) do
 		if v.type ~= "none" then
 			x = i % width
@@ -66,7 +66,7 @@ local function get_formspec_array(search_string, mode)
 	end
 
 	if i == 0 then j = j - 1 end
-	return formspec, j, { x = width * cell_size, y = height * cell_size + 1.6 }
+	return formspec, j, {x = width * cell_size, y = height * cell_size + 1.6}
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -79,7 +79,7 @@ minetest.register_on_joinplayer(function(player)
 	ps.mode = 0
 end)
 
-local item_panel = { description = S "NeverEnoughItems" }
+local item_panel = {description = S"NeverEnoughItems"}
 
 function item_panel.getter(player)
 	local pn = player:get_player_name()
@@ -99,7 +99,7 @@ function nei.draw_recipe_raw(id)
 	for i = 1, method.input_amount do
 		amount = nil
 		if recipe.inputs[i] then
-			arr = recipe.inputs[i]:split " "
+			arr = recipe.inputs[i]:split" "
 			item_name, amount = unpack(arr)
 		else
 			item_name = ""
@@ -116,7 +116,7 @@ function nei.draw_recipe_raw(id)
 	for i = 1, method.output_amount do
 		chance, amount = nil, nil
 		if recipe.outputs[i] then
-			arr = recipe.outputs[i]:split " "
+			arr = recipe.outputs[i]:split" "
 			item_name, amount, chance = unpack(arr)
 		else
 			item_name = ""
@@ -124,14 +124,14 @@ function nei.draw_recipe_raw(id)
 		x, y = method.get_output_coords(i)
 		formspec = formspec .. ("item_image_button[%s,%s;1,1;%s;view_recipe~%s~1~1~o%s;%s]box[%s,%s;0.925,0.95;#FFA500]")
 				:format(x, y, item_name, item_name, i, table.f_concat(
-				{ amount ~= "1" and amount or nil, chance and chance .. " %" }, "\n"), x - 1 / 20, y - 1 / 20)
+				{amount ~= "1" and amount or nil, chance and chance .. " %"}, "\n"), x - 1 / 20, y - 1 / 20)
 
 		if ot and ot[i] then
 			formspec = formspec .. ("tooltip[view_recipe~%s~1~1~o%s;%s]"):format(item_name, i, ot[i])
 		end
 	end
 
-	return { form = formspec, w = method.formspec_width, h = method.formspec_height }
+	return {form = formspec, w = method.formspec_width, h = method.formspec_height}
 end
 
 function nei.draw_recipe_wrapped(item, player, id, type)
@@ -154,13 +154,13 @@ function nei.draw_recipe_wrapped(item, player, id, type)
 			form = ([=[
 				label[0,0.5;%s]
 				item_image[2,1.5;2,2;%s]
-			]=]):format(S("No @1 found for this item.", type == 1 and S "recipes" or S "usages"), item),
+			]=]):format(S("No @1 found for this item.", type == 1 and S"recipes" or S"usages"), item),
 		}
 	end
 
 	local actual_formspec = {
 		("size[%s,%s]"):format(fs_base.w, fs_base.h + 1),
-		("tabheader[0,0;change_nei_mode~%s;%s,%s;%s;true;false]"):format(item, S "Recipes", S "Usages", type),
+		("tabheader[0,0;change_nei_mode~%s;%s,%s;%s;true;false]"):format(item, S"Recipes", S"Usages", type),
 		fs_base.form,
 		("label[1,%s;%s]"):format(fs_base.h + 0.5, S("Recipe @1 of @2", id, #tbl)),
 		("button[0,%s;1,1;view_recipe~%s~%s~%s;<]"):format(fs_base.h + 0.3, item, id - 1, type),
@@ -210,7 +210,7 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 	local fs = false
 
 	for k, v in pairs(fields) do
-		local k_split = k:split "~" -- Module, action, parameters
+		local k_split = k:split"~" -- Module, action, parameters
 		local a = k_split[1]
 		if a == "change_nei_mode" then
 			fs = nei.draw_recipe_wrapped(k_split[2], player, 1, tonumber(v))

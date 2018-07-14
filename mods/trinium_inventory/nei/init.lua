@@ -1,8 +1,8 @@
-local path = minetest.get_modpath "nei"
+local path = minetest.get_modpath"nei"
 trinium.bound_inventories = {}
 
 trinium.nei = {}
-trinium.nei.S = minetest.get_translator "nei"
+trinium.nei.S = minetest.get_translator"nei"
 trinium.nei.integrate = minetest.settings:get_bool("trinium.integrated_inventory", true)
 
 dofile(path .. "/utility.lua")

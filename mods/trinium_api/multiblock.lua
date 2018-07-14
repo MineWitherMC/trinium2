@@ -13,7 +13,7 @@ for i = 3, 13, 2 do
 			end,
 			formspec_width = i + 2,
 			formspec_height = j + 2,
-			formspec_name = S "Multiblock",
+			formspec_name = S"Multiblock",
 			formspec_begin = function(data)
 				return ("label[0,%s;%s]"):format(j + 1, S("Current Height: @1", data.h))
 			end,
@@ -63,12 +63,13 @@ function api.register_multiblock(name, def)
 		chance = 1,
 		action = function(pos, node)
 			local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-			local x_min, x_max, y_min, y_max, z_min, z_max = dir.x == 0 and -def.width or dir.x == 1 and -def.depth_b or -def.depth_f,
-			dir.x == 0 and def.width or dir.x == 1 and def.depth_f or def.depth_b,
-			-def.height_d,
-			def.height_u,
-			dir.z == 0 and -def.width or dir.z == 1 and -def.depth_b or -def.depth_f,
-			dir.z == 0 and def.width or dir.z == 1 and def.depth_f or def.depth_b
+			local x_min, x_max, y_min, y_max, z_min, z_max =
+					dir.x == 0 and -def.width or dir.x == 1 and -def.depth_b or -def.depth_f,
+					dir.x == 0 and def.width or dir.x == 1 and def.depth_f or def.depth_b,
+					-def.height_d,
+					def.height_u,
+					dir.z == 0 and -def.width or dir.z == 1 and -def.depth_b or -def.depth_f,
+					dir.z == 0 and def.width or dir.z == 1 and def.depth_f or def.depth_b
 
 			local rg = { region = {}, counts = {} }
 
@@ -125,12 +126,12 @@ function api.multiblock_rich_info(node)
 		groups = groups,
 		get_rich_info = function(pos, player)
 			local meta = minetest.get_meta(pos)
-			if meta:get_int "assembled" == 1 then
+			if meta:get_int"assembled" == 1 then
 				if old_rich_info then
 					return old_rich_info(pos, player)
 				end
 			else
-				return S "Multiblock is not assembled!"
+				return S"Multiblock is not assembled!"
 			end
 		end,
 	})

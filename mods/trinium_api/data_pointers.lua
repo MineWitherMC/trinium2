@@ -13,16 +13,16 @@ function api.get_data_pointer(player, file)
 		storage:set_string(self._key, minetest.serialize(self._strings))
 	end
 
-	setmetatable(x, { __newindex = function(t, k, v) t._strings[k] = v end, __index = x._strings })
+	setmetatable(x, {__newindex = function(t, k, v) t._strings[k] = v end, __index = x._strings})
 	return x
 end
 
 function api.get_data_pointers(id)
 	local dps = {}
-	setmetatable(dps, { __index = function(t, k)
+	setmetatable(dps, {__index = function(t, k)
 		t[k] = api.get_data_pointer(k, id)
 		return t[k]
-	end })
+	end})
 	return dps
 end
 

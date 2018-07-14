@@ -104,10 +104,10 @@ local function draw_connection(x1, y1, x2, y2)
 end
 
 local function get_book_chapter_fs(chapter_id, pn, cx, cy)
-	local buttons, texture = ("button[7,8;1,1;open_book;%s]"):format(trinium.api.S "Back")
+	local buttons = ("button[7,8;1,1;open_book;%s]"):format(trinium.api.S"Back")
 	if research.chapters[chapter_id].create_map then
 		buttons = buttons .. ("button[5,8;2,1;research~get_map;%s]tooltip[research~get_map;%s]")
-				:format(buttons, S "Get Research Map", S "This chapter uses Secret researches discovered via Sheet Infuser")
+				:format(buttons, S"Get Research Map", S"This chapter uses Secret researches discovered via Sheet Infuser")
 	end
 	if not research.researches_by_chapter[chapter_id] then
 		return
@@ -150,7 +150,6 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 			end
 
 			if frc[k] then
-				texture = v.texture:gsub(":", "__")
 				buttons = buttons .. ([=[
 						background[%s,%s;1,1;trinium_research_gui.glowing.png]
 						item_image_button[%s,%s;1,1;%s;get_sheet~%s;]
@@ -177,7 +176,7 @@ local function get_book_research_fs(pn, context)
 	local text = def.text[key]
 
 	if type(text) == "string" then
-		text = { form = "textarea[0.25,1;7.75,7;;;" .. text .. "]", w = 8, h = 8, locked = false }
+		text = {form = "textarea[0.25,1;7.75,7;;;" .. text .. "]", w = 8, h = 8, locked = false}
 	end
 	if type(text[1]) == "table" then
 		for k, v in pairs(text[1]) do
@@ -198,7 +197,7 @@ local function get_book_research_fs(pn, context)
 			button[7,0.25;1,0.5;turn_forward;>]
 			textarea[0,1;8,7;;;%s]
 			button[7,8;1,1;open_chapter~%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S "This page is not found yet", def.chapter, S "Back")
+		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S"This page is not found yet", def.chapter, S"Back")
 	elseif text.locked and not research.check(pn, res .. "-" .. key) then
 		local good = true
 		local r = 0
@@ -225,7 +224,7 @@ local function get_book_research_fs(pn, context)
 			button[7,8;1,1;open_chapter~%s;%s]
 			button[0,7;8,1;%s;%s]
 		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text),
-				reqs, def.chapter, S "Back", good and "unlock" or "", S "Unlock")
+				reqs, def.chapter, S"Back", good and "unlock" or "", S"Unlock")
 	else
 		local w, h = math.max(text.w, 8), math.max(text.h, 8) + 0.6
 		return ([=[
@@ -235,7 +234,7 @@ local function get_book_research_fs(pn, context)
 			%s
 			button[%s,%s;1,1;open_chapter~%s;%s]
 		]=]):format(h - 0.4, S("@1 - page @2/@3", def.name, key, #def.text),
-				w - 2, w - 1, text.form, w - 1, h - 0.6, def.chapter, S "Back"), { x = w, y = h }
+				w - 2, w - 1, text.form, w - 1, h - 0.6, def.chapter, S"Back"), {x = w, y = h}
 	end
 end
 
@@ -250,12 +249,12 @@ local function get_book_chapter_bg(chapter_id)
 	return ("background[0,0;1,1;trinium_research_gui.background_%s.png;true]"):format(w.tier)
 end
 
-local book = { description = S "Research Book" }
+local book = {description = S"Research Book"}
 function book.getter(player, context)
 	local pn = player:get_player_name()
 	context.book = context.book or "default_bg"
 	context.book_y = context.book_y or 0
-	local split = context.book:split "~"
+	local split = context.book:split"~"
 	if split[1] == "default_bg" then
 		return betterinv.generate_formspec(player, get_book_fs(pn), false, get_book_bg(pn), false)
 	elseif split[1] == "chapter" then
@@ -276,10 +275,10 @@ function book.processor(player, context, fields)
 	for k, v in pairs(fields) do
 		if k == "key_up" then
 			context.book_y = context.book_y - 1
-		elseif k == "key_down" and context.book:split "~"[1] == "chapter" then
+		elseif k == "key_down" and context.book:split"~"[1] == "chapter" then
 			context.book_y = context.book_y + 1
 		else
-			local k_split = k:split "~" -- Module, action, parameters
+			local k_split = k:split"~" -- Module, action, parameters
 			local a = k_split[1]
 			if a == "open_chapter" then
 				context.book = "chapter~" .. k_split[2]
@@ -302,8 +301,8 @@ function book.processor(player, context, fields)
 				local res = research.researches[cs[2]]
 
 				cs[3] = tonumber(cs[3])
-				table.walk(res.text[cs[3]].required_aspects, function(v, k)
-					research.dp2[pn].aspects[k] = research.dp2[pn].aspects[k] - v
+				table.walk(res.text[cs[3]].required_aspects, function(v1, k1)
+					research.dp2[pn].aspects[k1] = research.dp2[pn].aspects[k1] - v1
 				end)
 
 				research.dp1[pn][cs[2] .. "-" .. cs[3]] = 1
@@ -315,13 +314,13 @@ function book.processor(player, context, fields)
 				meta:set_string("research_id", k_split[2])
 
 				if inv:contains_item("main", stack, true) or research.check(pn, k_split[2]) then
-					cmsg.push_message_player(player, S "You already have this research!")
+					cmsg.push_message_player(player, S"You already have this research!")
 					return
 				elseif research.dp2[pn].ink < 3 then
-					cmsg.push_message_player(player, S "Insufficient Ink!")
+					cmsg.push_message_player(player, S"Insufficient Ink!")
 					return
 				elseif research.dp2[pn].paper < 1 then
-					cmsg.push_message_player(player, S "Insufficient Paper!")
+					cmsg.push_message_player(player, S"Insufficient Paper!")
 					return
 				end
 
@@ -337,15 +336,15 @@ function book.processor(player, context, fields)
 				meta:set_string("chapter_id", cs[2])
 
 				if inv:contains_item("main", stack, true) then
-					cmsg.push_message_player(player, S "You already have this research map!")
+					cmsg.push_message_player(player, S"You already have this research map!")
 					return
 				elseif research.dp2[pn].ink < 500 then
-					cmsg.push_message_player(player, S "Insufficient Ink!")
+					cmsg.push_message_player(player, S"Insufficient Ink!")
 					return
 				end
 
 				if not inv:contains_item("main", M.diamond:get("dust", 16)) then
-					cmsg.push_message_player(player, S "Insufficient Diamond Dust!")
+					cmsg.push_message_player(player, S"Insufficient Diamond Dust!")
 					return
 				end
 

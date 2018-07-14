@@ -16,26 +16,26 @@ local compressor_formspec = ([=[
 	image[3,3.5;1,1;trinium_research.upgrade2.png^[brighten]
 	list[current_player;main;0,5;8,4;]
 	button[0,3.5;2,1;assemble_lens;%s]
-]=]):format(S "Assemble Lens")
+]=]):format(S"Assemble Lens")
 
 minetest.register_node("trinium_research:lens_carver", {
 	stack_max = 1,
-	tiles = { "trinium_research.chassis.png" },
-	description = S "Lens Carver",
-	groups = { cracky = 2 },
+	tiles = {"trinium_research.chassis.png"},
+	description = S"Lens Carver",
+	groups = {cracky = 2},
 	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{ -0.5, -0.5, -0.5, 0.5, -0.3, 0.5 },
-			{ -0.5, 0.4, -0.5, 0.5, 0.5, 0.5 },
-			{ -0.5, -0.3, 0.35, 0.5, 0.4, 0.5 },
-			{ -0.5, -0.3, -0.5, -0.35, 0.4, 0.35 },
-			{ 0.35, -0.3, -0.5, 0.5, 0.4, 0.35 },
-			{ -0.15, -0.3, -0.15, 0.15, -0.22, -0.1 },
-			{ -0.15, -0.3, 0.15, 0.15, -0.22, 0.1 },
-			{ -0.025, -0.3, -0.1, 0.025, -0.18, 0.1 },
+			{-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
+			{-0.5, 0.4, -0.5, 0.5, 0.5, 0.5},
+			{-0.5, -0.3, 0.35, 0.5, 0.4, 0.5},
+			{-0.5, -0.3, -0.5, -0.35, 0.4, 0.35},
+			{0.35, -0.3, -0.5, 0.5, 0.4, 0.35},
+			{-0.15, -0.3, -0.15, 0.15, -0.22, -0.1},
+			{-0.15, -0.3, 0.15, 0.15, -0.22, 0.1},
+			{-0.025, -0.3, -0.1, 0.025, -0.18, 0.1},
 		}
 	},
 	sounds = trinium.sounds.default_stone,
@@ -43,7 +43,7 @@ minetest.register_node("trinium_research:lens_carver", {
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, { lens = 1, gem = 4, metal = 4, press = 1, upgrade = 1 })
+		api.initialize_inventory(inv, {lens = 1, gem = 4, metal = 4, press = 1, upgrade = 1})
 	end,
 
 	allow_metadata_inventory_move = function(_, list1, _, list2, _, stack_size)
@@ -85,21 +85,21 @@ minetest.register_node("trinium_research:lens_carver", {
 		local inv = meta:get_inventory()
 		local old_lens, press, upgrade = inv:get_stack("lens", 1), inv:get_stack("press", 1), inv:get_stack("upgrade", 1)
 		if not old_lens:is_empty() then
-			cmsg.push_message_player(player, S "Extract Lens to continue!")
+			cmsg.push_message_player(player, S"Extract Lens to continue!")
 			return
 		end
 		if press:is_empty() then
-			cmsg.push_message_player(player, S "Insert Press to continue!")
+			cmsg.push_message_player(player, S"Insert Press to continue!")
 			return
 		end
 		local press_meta = press:get_meta()
-		local base_tier = press_meta:get_int "tier"
+		local base_tier = press_meta:get_int"tier"
 		local material_mult = math.max(minetest.get_item_group(upgrade:get_name(), "lens_upgrade") + 1 - base_tier, 1)
 		local actual_tier = math.min(5, base_tier + minetest.get_item_group(upgrade:get_name(), "lens_upgrade"))
 
-		local req_gem, req_metal, shape = press_meta:get_int "gem" * material_mult,
-		press_meta:get_int "metal" * material_mult,
-		press_meta:get_string "shape"
+		local req_gem, req_metal, shape = press_meta:get_int"gem" * material_mult,
+		press_meta:get_int"metal" * material_mult,
+		press_meta:get_string"shape"
 		local stored_gem, stored_metal = 0, 0
 		local meta_tbl = meta:to_table().inventory
 		table.walk(meta_tbl.gem, function(x)
@@ -109,7 +109,7 @@ minetest.register_node("trinium_research:lens_carver", {
 			stored_metal = stored_metal + ItemStack(x):get_count()
 		end)
 		if stored_gem < req_gem or stored_metal < req_metal then
-			cmsg.push_message_player(player, S "Insufficient Resources!")
+			cmsg.push_message_player(player, S"Insufficient Resources!")
 			return
 		end
 		local item_gem, item_metal
@@ -142,14 +142,14 @@ minetest.register_node("trinium_research:lens_carver", {
 			end
 		end, function() return req_metal == 0 end)
 
-		local item_gem1 = minetest.registered_items[item_gem].description:split "\n"[1]
-		local item_metal1 = minetest.registered_items[item_metal].description:split "\n"[1]
+		local item_gem1 = minetest.registered_items[item_gem].description:split"\n"[1]
+		local item_metal1 = minetest.registered_items[item_metal].description:split"\n"[1]
 
 		local item_gem2 = table.exists(research.lens_data.gems, function(x) return x == item_gem end)
 		local item_metal2 = table.exists(research.lens_data.metals, function(x) return x == item_metal end)
 
 		local ss = api.string_superseparation(shape)
-		local lens = ItemStack "trinium_research:lens"
+		local lens = ItemStack"trinium_research:lens"
 		local lens_meta = lens:get_meta()
 		lens_meta:set_string("gem", item_gem2)
 		lens_meta:set_string("metal", item_metal2)
@@ -173,27 +173,27 @@ local lens_carver_mb = {
 	depth_f = 0,
 	controller = "trinium_research:lens_carver",
 	map = {
-		{ x = -1, z = 1, y = -1, name = "trinium_research:casing" },
-		{ x = -1, z = 0, y = -1, name = "trinium_research:casing" },
-		{ x = 1, z = 1, y = -1, name = "trinium_research:casing" },
-		{ x = 1, z = 0, y = -1, name = "trinium_research:casing" },
-		{ x = 0, z = 1, y = -1, name = "trinium_research:chassis" },
-		{ x = 0, z = 0, y = -1, name = "trinium_research:chassis" },
+		{x = -1, z = 1, y = -1, name = "trinium_research:casing"},
+		{x = -1, z = 0, y = -1, name = "trinium_research:casing"},
+		{x = 1, z = 1, y = -1, name = "trinium_research:casing"},
+		{x = 1, z = 0, y = -1, name = "trinium_research:casing"},
+		{x = 0, z = 1, y = -1, name = "trinium_research:chassis"},
+		{x = 0, z = 0, y = -1, name = "trinium_research:chassis"},
 
-		{ x = -1, z = 1, y = 0, name = "trinium_research:casing" },
-		{ x = -1, z = 0, y = 0, name = "trinium_research:casing" },
-		{ x = 1, z = 1, y = 0, name = "trinium_research:casing" },
-		{ x = 1, z = 0, y = 0, name = "trinium_research:casing" },
-		{ x = 0, z = 1, y = 0, name = "trinium_research:chassis" },
+		{x = -1, z = 1, y = 0, name = "trinium_research:casing"},
+		{x = -1, z = 0, y = 0, name = "trinium_research:casing"},
+		{x = 1, z = 1, y = 0, name = "trinium_research:casing"},
+		{x = 1, z = 0, y = 0, name = "trinium_research:casing"},
+		{x = 0, z = 1, y = 0, name = "trinium_research:chassis"},
 
-		{ x = -1, z = 1, y = 1, name = "trinium_research:chassis" },
-		{ x = -1, z = 0, y = 1, name = "trinium_research:chassis" },
-		{ x = 1, z = 1, y = 1, name = "trinium_research:chassis" },
-		{ x = 1, z = 0, y = 1, name = "trinium_research:chassis" },
-		{ x = 0, z = 1, y = 1, name = "trinium_research:chassis" },
-		{ x = 0, z = 0, y = 1, name = "trinium_research:chassis" },
+		{x = -1, z = 1, y = 1, name = "trinium_research:chassis"},
+		{x = -1, z = 0, y = 1, name = "trinium_research:chassis"},
+		{x = 1, z = 1, y = 1, name = "trinium_research:chassis"},
+		{x = 1, z = 0, y = 1, name = "trinium_research:chassis"},
+		{x = 0, z = 1, y = 1, name = "trinium_research:chassis"},
+		{x = 0, z = 0, y = 1, name = "trinium_research:chassis"},
 
-		{ x = 0, z = 6, y = 0, name = "trinium_research:node_controller" },
+		{x = 0, z = 6, y = 0, name = "trinium_research:node_controller"},
 	},
 	after_construct = function(pos, is_constructed)
 		local meta = minetest.get_meta(pos)
@@ -210,4 +210,4 @@ lens_carver_mb.activator = function(rg)
 end
 
 api.register_multiblock("lens carver", lens_carver_mb)
-api.multiblock_rich_info "trinium_research:lens_carver"
+api.multiblock_rich_info"trinium_research:lens_carver"
