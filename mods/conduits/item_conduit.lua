@@ -110,6 +110,7 @@ local function item_pump_fs(mode)
 		button[6,0.5;2,1;set_mode~2;%s]
 		button[4,1.5;2,1;set_mode~3;%s]
 		button[6,1.5;2,1;set_mode~4;%s]
+		listring[]
 	]=]):format(S("Current mode: @1", mode), strings[1], strings[2], strings[3], strings[4])
 end
 

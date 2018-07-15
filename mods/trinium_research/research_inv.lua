@@ -14,11 +14,17 @@ end)
 local function get_book_fs(pn)
 	local buttons = ""
 	for k, v in pairs(research.chapters) do
-		if table.every(v.requirements, function(b, a) return research.check(pn, a) end) then
+		if table.every(v.requirements, function(_, a) return research.check(pn, a) end) then
 			buttons = buttons .. ([=[
-				item_image_button[%s,%s;1,1;%s;open_chapter~%s;]
-				tooltip[open_chapter~%s;%s]
-			]=]):format(v.x, v.y, v.texture, k, k, v.name)
+				item_image_button[${x},${y};1,1;${texture};open_chapter~${chapter_id};]
+				tooltip[open_chapter~${chapter_id};${description}]
+			]=]):from_table{
+				x = v.x,
+				y = v.y,
+				texture = v.texture,
+				chapter_id = k,
+				description = v.name,
+			}
 		end
 	end
 	return buttons
@@ -120,7 +126,7 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 	for k, v in pairs(research.researches_by_chapter[chapter_id]) do
 		local desc = v.name
 		if v.warp then
-			desc = desc .. "\n" .. minetest.colorize("#663399", S("Forbidden Knowledge: Level @1", v.warp))
+			desc = desc .. "\n" .. minetest.colorize("#CC33FF", S("Forbidden Knowledge: Level @1", v.warp))
 		end
 		enable = false
 		if v.pre_unlock or research.check(pn, k) then
@@ -134,9 +140,15 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 
 			if frc[k] then
 				buttons = buttons .. ([=[
-					item_image_button[%s,%s;1,1;%s;open_research~%s;]
-					tooltip[open_research~%s;%s]
-				]=]):format(v.x - cx, v.y - cy, v.texture, k, k, desc)
+					item_image_button[${x},${y};1,1;${texture};open_research~${research_id};]
+					tooltip[open_research~${research_id};${description}]
+				]=]):from_table{
+					x = v.x - cx,
+					y = v.y - cy,
+					texture = v.texture,
+					research_id = k,
+					description = v.name,
+				}
 				enable = true
 			end
 		elseif table.every(v.requirements, function(_, a) return not research.researches[a] or
@@ -148,13 +160,18 @@ local function get_book_chapter_fs(chapter_id, pn, cx, cy)
 					buttons = buttons .. draw_connection(v.x - cx, v.y - cy, v2.x - cx, v2.y - cy)
 				end
 			end
-
 			if frc[k] then
 				buttons = buttons .. ([=[
-						background[%s,%s;1,1;trinium_research_gui.glowing.png]
-						item_image_button[%s,%s;1,1;%s;get_sheet~%s;]
-						tooltip[get_sheet~%s;%s]
-					]=]):format(v.x - cx, v.y - cy, v.x - cx, v.y - cy, v.texture, k, k, desc)
+					background[${x},${y};1,1;trinium_research_gui.glowing.png]
+					item_image_button[${x},${y};1,1;${texture};get_sheet~${research_id};]
+					tooltip[get_sheet~${research_id};${description}]
+				]=]):from_table{
+					x = v.x - cx,
+					y = v.y - cy,
+					texture = v.texture,
+					research_id = k,
+					description = v.name,
+				}
 				enable = true
 			end
 		end
@@ -189,15 +206,20 @@ local function get_book_research_fs(pn, context)
 		text.form = "textarea[0.25,1;7.75,7;;;" .. (text.text) .. "]"
 	end
 
-	if text.requirements and not table.every(text.requirements, function(v, k) return research.check(pn, k) end) then
+	if text.requirements and not table.every(text.requirements, function(_, k) return research.check(pn, k) end) then
 		-- has requirement
 		return ([=[
-			label[0,8.2;%s]
+			label[0,8.2;${page_num}]
 			button[6,0.25;1,0.5;turn_backward;<]
 			button[7,0.25;1,0.5;turn_forward;>]
-			textarea[0,1;8,7;;;%s]
-			button[7,8;1,1;open_chapter~%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text), S"This page is not found yet", def.chapter, S"Back")
+			textarea[0,1;8,7;;;${not_found}]
+			button[7,8;1,1;open_chapter~${chapter};${chapter_button}]
+		]=]):from_table{
+			page_num = S("@1 - page @2/@3", def.name, key, #def.text),
+			not_found = S"This page is not found yet",
+			chapter = def.chapter,
+			chapter_button = S"Back",
+		}
 	elseif text.locked and not research.check(pn, res .. "-" .. key) then
 		local good = true
 		local r = 0
@@ -210,31 +232,43 @@ local function get_book_research_fs(pn, context)
 			if amount < v then good = false end
 			r = r + 1
 
-			return ("label[0,%s;%s]"):format(
-					(2 + r) / 3,
-					minetest.colorize(color,
-							S("@1 aspect (@2 needed, @3 available)", api.string_capitalization(k), v, amount))
-			)
+			local k1 = api.string_capitalization(k)
+			return ("label[0,%s;%s]"):format((2 + r) / 3,
+					minetest.colorize(color, S("@1 aspect (@2 needed, @3 available)", k1, v, amount)))
 		end))
 		return ([=[
-			label[0,8.2;%s]
+			label[0,8.2;${page_num}]
 			button[6,0.25;1,0.5;turn_backward;<]
 			button[7,0.25;1,0.5;turn_forward;>]
-			%s
-			button[7,8;1,1;open_chapter~%s;%s]
-			button[0,7;8,1;%s;%s]
-		]=]):format(S("@1 - page @2/@3", def.name, key, #def.text),
-				reqs, def.chapter, S"Back", good and "unlock" or "", S"Unlock")
+			${requirement_string}
+			button[7,8;1,1;open_chapter~${chapter};${chapter_button}]
+			button[0,7;8,1;${unlock};${unlock_button}]
+		]=]):from_table{
+			page_num = S("@1 - page @2/@3", def.name, key, #def.text),
+			requirement_string = reqs,
+			chapter = def.chapter,
+			chapter_button = S"Back",
+			unlock = good and "unlock" or "",
+			unlock_button = S"Unlock",
+		}
 	else
 		local w, h = math.max(text.w, 8), math.max(text.h, 8) + 0.6
 		return ([=[
-			label[0,%s;%s]
-			button[%s,0.25;1,0.5;turn_backward;<]
-			button[%s,0.25;1,0.5;turn_forward;>]
-			%s
-			button[%s,%s;1,1;open_chapter~%s;%s]
-		]=]):format(h - 0.4, S("@1 - page @2/@3", def.name, key, #def.text),
-				w - 2, w - 1, text.form, w - 1, h - 0.6, def.chapter, S"Back"), {x = w, y = h}
+			label[0,${page_num_y};${page_num}]
+			button[${back_button},0.25;1,0.5;turn_backward;<]
+			button[${forward_button},0.25;1,0.5;turn_forward;>]
+			${form}
+			button[${forward_button},${chapter_y};1,1;open_chapter~${chapter};${chapter_button}]
+		]=]):from_table{
+			page_num_y = h - 0.4,
+			page_num = S("@1 - page @2/@3", def.name, key, #def.text),
+			back_button = w - 2,
+			forward_button = w - 1,
+			form = text.form,
+			chapter_y = h - 0.6,
+			chapter = def.chapter,
+			chapter_button = S"Back",
+		}, {x = w, y = h}
 	end
 end
 
@@ -271,9 +305,10 @@ function book.processor(player, context, fields)
 	if fields.quit then return end
 	local pn = player:get_player_name()
 	local inv = player:get_inventory()
+	context.book = context.book or "default_bg"
 
-	for k, v in pairs(fields) do
-		if k == "key_up" then
+	for k in pairs(fields) do
+		if k == "key_up" and context.book:split"~"[1] == "chapter" then
 			context.book_y = context.book_y - 1
 		elseif k == "key_down" and context.book:split"~"[1] == "chapter" then
 			context.book_y = context.book_y + 1

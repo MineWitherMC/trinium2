@@ -35,7 +35,7 @@ function api.register_multiblock(name, def)
 				return x.y == i
 			end)
 			if i == 0 then
-				table.insert(new_map, { x = 0, y = 0, z = 0, name = def.controller })
+				table.insert(new_map, {x = 0, y = 0, z = 0, name = def.controller})
 			end
 			local map1, tooltips = {}, {}
 			for k = -def.depth_f, def.depth_b do
@@ -52,7 +52,7 @@ function api.register_multiblock(name, def)
 				end
 			end
 			recipes.add(("multiblock_%s_%s"):format(def.width * 2 + 1, def.depth_b + def.depth_f + 1),
-					map1, { def.controller }, { h = i, input_tooltips = tooltips })
+					map1, {def.controller}, {h = i, input_tooltips = tooltips})
 		end
 	end
 
@@ -71,27 +71,27 @@ function api.register_multiblock(name, def)
 					dir.z == 0 and -def.width or dir.z == 1 and -def.depth_b or -def.depth_f,
 					dir.z == 0 and def.width or dir.z == 1 and def.depth_f or def.depth_b
 
-			local rg = { region = {}, counts = {} }
+			local rg = {region = {}, counts = {}}
 
 			for x = x_min, x_max do
 				for y = y_min, y_max do
 					for z = z_min, z_max do
-						local crd = vector.add(pos, { x = x, y = y, z = z })
+						local crd = vector.add(pos, {x = x, y = y, z = z})
 						local nn = minetest.get_node(crd).name
 						local depth, r_shift = -x * dir.x + -z * dir.z, z * dir.x - x * dir.z
-						table.insert(rg.region, { x = r_shift, y = y, z = depth, name = nn, actual_pos = crd })
+						table.insert(rg.region, {x = r_shift, y = y, z = depth, name = nn, actual_pos = crd})
 						rg.counts[nn] = (rg.counts[nn] or 0) + 1
 					end
 				end
 			end
 
-			setmetatable(rg, { __call = function(reg, def1)
+			setmetatable(rg, {__call = function(reg, def1)
 				return table.every(def1, function(d)
 					return table.exists(reg.region, function(x)
 						return x.x == d.x and x.y == d.y and x.z == d.z and x.name == d.name
 					end)
 				end)
-			end })
+			end})
 
 			local meta = minetest.get_meta(pos)
 			local is_active = def.activator(rg)

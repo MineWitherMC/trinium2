@@ -24,7 +24,7 @@ read_globals = {
 	string = {
 		fields = {
 			"split", "trim",
-			"data"
+			"data", "from_table"
 		}
 	}
 }

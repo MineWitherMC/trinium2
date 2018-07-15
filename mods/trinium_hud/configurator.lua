@@ -14,10 +14,15 @@ function configurator.getter(player, context)
 		local tab_def = cfgs[context.selected_tab]
 		for k, v in pairs(tab_def.fields) do
 			fs_base = fs_base .. ([=[
-				label[0,%s;%s]
-				field[6,%s;2,1;internal~%s~%s;;]
-				field_close_on_enter[internal~%s~%s;false]
-			]=]):format(v.y, v.label, v.y, context.selected_tab, k, context.selected_tab, k)
+				label[0,${coord};${label}]
+				field[6,${coord};2,1;internal~${tab}~${key};;]
+				field_close_on_enter[internal~${tab}~${key};false]
+			]=]):from_table{
+				coord = v.y,
+				label = v.label,
+				tab = context.selected_tab,
+				key = k,
+			}
 		end
 	end
 

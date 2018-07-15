@@ -22,22 +22,32 @@ local function get_formspec_array(search_string, mode)
 	local pa = math.ceil(table.count(items) / length_per_page)
 	for j = 1, page_amount do
 		formspec[j] = ([=[
-			field[0.25,%s;%s,1;search;;%s]
+			field[0.25,${height_search};${width_search},1;search;;${search}]
 			field_close_on_enter[search;false]
-			button[%s,%s;1,1;search_use;>>]
-			button[%s,%s;1,1;search_clear;X]
-			label[1,0.2;%s]
+			button[${width_search},${height_search_buttons};1,1;search_use;>>]
+			button[${width_search2},${height_search_buttons};1,1;search_clear;X]
+			label[1,0.2;${page_number}]
 			button[0,0.2;1,0.5;page_open~-1;<]
-			button[%s,0.2;1,0.5;page_open~+1;>]
-		]=]):format(height * cell_size + 1.3, width * cell_size - 2, search_string,
-				width * cell_size - 2, height * cell_size + 1, width * cell_size - 1, height * cell_size + 1,
-				S("Page @1 of @2", math.min(j, pa), pa), width * cell_size - 1)
+			button[${width_search2},0.2;1,0.5;page_open~+1;>]
+		]=]):from_table{
+			height_search = height * cell_size + 1.3,
+			height_search_buttons = height * cell_size + 1,
+			width_search = width * cell_size - 2,
+			width_search2 = width * cell_size - 1,
+			search = search_string,
+			page_number = S("Page @1 of @2", math.min(j, pa), pa),
+		}
+		api.dump(j, formspec[j])
 
 		if trinium.creative_mode then
 			formspec[j] = formspec[j] .. ([=[
-				button[%s,0.2;3,0.5;change_mode;%s]
-				tooltip[change_mode;%s]
-			]=]):format(width * cell_size - 4, S"Change Mode", S("Current mode: @1", mode == 0 and S"Recipes" or S"Cheat"))
+				button[${change_mode_coord},0.2;3,0.5;change_mode;${change_mode_text}]
+				tooltip[change_mode;${current_mode}]
+			]=]):from_table{
+				change_mode_coord = width * cell_size - 4, 
+				change_mode_text = S"Change Mode",
+				current_mode = S("Current mode: @1", mode == 0 and S"Recipes" or S"Cheat"),
+			}
 		end
 	end
 	local j = 1
@@ -51,12 +61,16 @@ local function get_formspec_array(search_string, mode)
 			x = i % width
 			y = (i - x) / width
 			formspec[j] = formspec[j] .. ([=[
-				item_image_button[%s,%s;%s,%s;%s;%s~%s;]
-				tooltip[view_recipe~%s;%s]
-			]=]):format(x * cell_size, y * cell_size + 1, cell_size, cell_size, v.name,
-					mode == 1 and "give" or "view_recipe", v.name, v.name,
-					api.get_field(v.name, "description") .. "\n" ..
-							minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))))
+				item_image_button[${cell_x},${cell_y};${cell_size},${cell_size};${item_id};${current_mode}~${item_id};]
+				tooltip[${current_mode}~${item_id};${description}]=] .. "\n${mod_origin}]"):from_table{
+				cell_x = x * cell_size,
+				cell_y = y * cell_size + 1,
+				cell_size = cell_size,
+				item_id = v.name,
+				current_mode = mode == 1 and "give" or "view_recipe",
+				description = api.get_field(v.name, "description"),
+				mod_origin = minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))),
+			}
 			i = i + 1
 			if i >= length_per_page then
 				i = 0
@@ -105,8 +119,18 @@ function nei.draw_recipe_raw(id)
 			item_name = ""
 		end
 		x, y = method.get_input_coords(i)
-		formspec = formspec .. ("item_image_button[%s,%s;1,1;%s;view_recipe~%s~1~1~i%s;%s]box[%s,%s;0.925,0.95;#0000FF]")
-				:format(x, y, item_name, item_name, i, amount ~= "1" and amount or "", x - 1 / 20, y - 1 / 20)
+		formspec = formspec .. ([=[
+			item_image_button[${width},${height};1,1;${id};view_recipe~${id}~1~1~i${number};${amount}]
+			box[${box_x},${box_y};0.9375,0.95;#0000FF]
+		]=]):from_table{
+			width = x,
+			height = y,
+			id = item_name,
+			number = i,
+			amount = amount ~= "1" and amount or "",
+			box_x = x - 1 / 20,
+			box_y = y - 1 / 20,
+		}
 
 		if it and it[i] then
 			formspec = formspec .. ("tooltip[view_recipe~%s~1~1~i%s;%s]"):format(item_name, i, it[i])
@@ -122,9 +146,18 @@ function nei.draw_recipe_raw(id)
 			item_name = ""
 		end
 		x, y = method.get_output_coords(i)
-		formspec = formspec .. ("item_image_button[%s,%s;1,1;%s;view_recipe~%s~1~1~o%s;%s]box[%s,%s;0.925,0.95;#FFA500]")
-				:format(x, y, item_name, item_name, i, table.f_concat(
-				{amount ~= "1" and amount or nil, chance and chance .. " %"}, "\n"), x - 1 / 20, y - 1 / 20)
+		formspec = formspec .. ([=[
+			item_image_button[${width},${height};1,1;${id};view_recipe~${id}~1~1~o${number};${amount}]
+			box[${box_x},${box_y};0.9375,0.95;#FFA500]
+		]=]):from_table{
+			width = x,
+			height = y,
+			id = item_name,
+			number = i,
+			amount = table.f_concat({amount ~= "1" and amount or nil, chance and chance .. " %"}, "\n"),
+			box_x = x - 1 / 20,
+			box_y = y - 1 / 20,
+		}
 
 		if ot and ot[i] then
 			formspec = formspec .. ("tooltip[view_recipe~%s~1~1~o%s;%s]"):format(item_name, i, ot[i])

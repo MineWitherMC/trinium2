@@ -7,7 +7,7 @@ Item Conduit=Предметная труба
 Item Pump=Предметная помпа
 
 Item Pump Speed Upgrade=Ускоритель предметной помпы
-Item Pump Speed Downgrade+Замедлитель предметной помпы
+Item Pump Speed Downgrade=Замедлитель предметной помпы
 
 Current mode: @1=Текущий режим: @1
 Power: @1=Мощность: @1
@@ -17,5 +17,5 @@ Signal Enabled=Сигнал включен
 Signal Disabled=Сигнал отключен
 Active with signal=Активен по сигналу
 Active without signal=Активен без сигнала
-Never Active=Отключен
-Always Active=Включен
+Never active=Отключен
+Always active=Включен

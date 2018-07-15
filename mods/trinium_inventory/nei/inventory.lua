@@ -1,6 +1,6 @@
 local bi = trinium.bound_inventories
 local api = trinium.api
-local S = trinium.player_S
+local S = trinium.nei.S
 local recipes = trinium.recipes
 
 function api.try_craft(player)

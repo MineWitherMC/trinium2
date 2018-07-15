@@ -51,14 +51,17 @@ local function get_terminal_formspec(ctrlpos, index, search_string)
 		button[2,5.5;1,1;down;↓]
 		list[current_player;main;0,7;8,4;]
 		listring[]
-		field[0.25,11.33;6,1;search;;%s]
+		field[0.25,11.33;6,1;search;;${search_string}]
 		button[7,11;1,1;empty_search;X]
 		button[6,11;1,1;send_search;>>]
 		field_close_on_enter[search;false]
-		%s
-		textarea[3.25,5.5;5,1.2;;;%s]
-	]]):format(search_string, generate_buttons(ctrlpos, index, search_string),
-			S("Types: @1/@2", UT, CT) .. "\n" .. S("Items: @1/@2", UI, CI))
+		${buttons}
+		textarea[3.25,5.5;5,1.2;;;${network_info}]
+	]]):from_table{
+		search_string = search_string,
+		buttons = generate_buttons(ctrlpos, index, search_string),
+		network_info = S("Types: @1/@2", UT, CT) .. "\n" .. S("Items: @1/@2", UI, CI),
+	}
 end
 
 minetest.register_node("pulse_network:terminal", {

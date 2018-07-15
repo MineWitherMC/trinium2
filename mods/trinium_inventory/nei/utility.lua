@@ -1,12 +1,12 @@
 local api = trinium.api
 local bi = trinium.bound_inventories
-local S = trinium.player_S
+local S = trinium.nei.S
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	local dp = api.get_data_pointer(pn, "bound_inventories")
 	bi[pn] = minetest.create_detached_inventory("bound~" .. pn, {
-		allow_move = function(_, from_list, _, to_list, _, count)
+		allow_move = function(_, from_list, _, _, _, count)
 			return from_list ~= "trash" and count or 0
 		end,
 

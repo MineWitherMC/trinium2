@@ -12,16 +12,24 @@ function integrator.getter(player)
 	local fs_nei = betterinv.extract_formspec(betterinv.tabs.item_panel.getter(player))
 
 	local fs_base = ([=[
-		container[%s,%s]
-		%s
-		list[detached:bound~%s;trash;0,1;1,1]
+		container[${dx_inventory},${dy_inventory}]
+		${fs_inventory}
+		list[detached:bound~${player};trash;0,1;1,1]
 		image[0,2;1,1;trinium_gui.trash.png]
 		container_end[]
 
-		container[%s,%s]
-		%s
+		container[${dx_nei},${dy_nei}]
+		${fs_nei}
 		container_end[]
-	]=]):format(dx_i, dy_i, fs_inv, pn, dx_n, dy_n, fs_nei)
+	]=]):from_table{
+		dx_inventory = dx_i,
+		dy_inventory = dy_i,
+		fs_inventory = fs_inv,
+		player = pn,
+		dx_nei = dx_n,
+		dy_nei = dy_n,
+		fs_nei = fs_nei,
+	}
 
 	return betterinv.generate_formspec(player, fs_base, { x = w_i + w_n, y = math.max(h_i, h_n) }, false, false)
 end
