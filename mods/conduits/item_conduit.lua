@@ -83,6 +83,36 @@ minetest.register_node("conduits:item_conduit", {
 	groups = {cracky = 2},
 })
 
+-- Extractor Upgrades
+minetest.register_craftitem("conduits:item_pump_speed_upgrade", {
+	description = S"Item Pump Speed Upgrade",
+	stack_max = 16,
+	inventory_image = "conduits.speed_upg.png",
+	groups = {item_conduit_speed_upg = 1},
+})
+minetest.register_craftitem("conduits:item_pump_speed_downgrade", {
+	description = S"Item Pump Speed Downgrade",
+	stack_max = 1,
+	inventory_image = "conduits.speed_downg.png",
+	groups = {item_conduit_speed_upg = 1},
+})
+
+local strings = {S"Never active", S"Active with signal", S"Active without signal", S"Always active"}
+
+local function item_pump_fs(mode)
+	return ([=[
+		size[8,7]
+		list[current_player;main;0,3;8,4]
+		list[context;speed_upg;0.5,0.5;1,1]
+		image[0.5,1.5;1,1;conduits.speed_upg.png^[brighten]
+		label[4,0;%s]
+		button[4,0.5;2,1;set_mode~1;%s]
+		button[6,0.5;2,1;set_mode~2;%s]
+		button[4,1.5;2,1;set_mode~3;%s]
+		button[6,1.5;2,1;set_mode~4;%s]
+	]=]):format(S("Current mode: @1", mode), strings[1], strings[2], strings[3], strings[4])
+end
+
 -- Extractor, uses all the CPU
 minetest.register_node("conduits:item_pump", {
 	paramtype = "light",
@@ -109,15 +139,44 @@ minetest.register_node("conduits:item_pump", {
 		return msg1 .. "\n" .. msg2
 	end,
 
-	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(10) -- 10 seconds when idle and 1 second when working
+	after_place_node = function(pos)
+		minetest.get_node_timer(pos):start(10)
+		for i = 1, #conduits.neighbours do
+			local v1 = vector.add(pos, conduits.neighbours[i])
+			local node = minetest.get_node(v1)
+			local sigparam = minetest.get_item_group(node.name, "signal_param")
+			if sigparam == 3 or (sigparam > 0 and node["param" .. sigparam] > 1) then
+				local node2 = minetest.get_node(pos)
+				node2.param2 = 1
+				minetest.swap_node(pos, node2)
+				return
+			end
+		end
+
+		local meta = minetest.get_meta(pos)
+		api.initialize_inventory(meta:get_inventory(), {speed_upg = 1})
+		meta:set_int("mode", 1)
+		meta:set_string("formspec", item_pump_fs(S"Active with signal"))
 	end,
 
-	after_place_node = conduits.rebuild_signals,
+	on_receive_fields = function(pos, _, fields)
+		if fields.quit then return end
+		local meta = minetest.get_meta(pos)
+		local num = fields["set_mode~1"] and 1 or fields["set_mode~2"] and 2 or fields["set_mode~3"] and 3 or 4
+		meta:set_int("mode", num)
+		meta:set_string("formspec", item_pump_fs(strings[num]))
+	end,
+
+	allow_metadata_inventory_put = function(_, _, _, stack)
+		return minetest.get_item_group(stack:get_name(), "item_conduit_speed_upg") > 0 and stack:get_count() or 0
+	end,
 
 	on_timer = function(pos)
 		local timer = minetest.get_node_timer(pos)
-		if minetest.get_node(pos).param2 == 0 then
+		local meta = minetest.get_meta(pos)
+		local mode = meta:get_int"mode"
+		local param = minetest.get_node(pos).param2
+		if (param == 0 and mode == 2) or (param > 0 and mode == 3) or mode == 1 then
 			timer:start(10)
 			return
 		end
@@ -140,11 +199,19 @@ minetest.register_node("conduits:item_pump", {
 			end
 		end)
 
+		local max_extract = 8
+		local item = meta:get_inventory():get_stack("speed_upg", 1)
+		if item:get_name() == "conduits:item_pump_speed_downgrade" then
+			max_extract = 1
+		elseif not item:is_empty() then
+			max_extract = max_extract + 4 * item:get_count()
+		end
+
 		local action = false
 		positions1:forEach(function(e)
 			local inv, map = e[1], e[2]
 			for k, v in pairs(map) do
-				local size = math.min(v, 8)
+				local size = math.min(v, max_extract)
 				local tbl = {[k] = size}
 				conduits.send_items(pos, tbl)
 				if tbl[k] ~= size then

@@ -20,7 +20,7 @@ end
 
 minetest.register_on_joinplayer(function(player)
     local pn = player:get_player_name()
-    huds[pn] = player:hud_add {
+    huds[pn] = player:hud_add{
         hud_elem_type = "text",
         text = "",
         number = tonumber(cmsg.color, 16),

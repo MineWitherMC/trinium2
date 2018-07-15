@@ -11,7 +11,7 @@ function tinker.add_material(name, def)
 	local groups = table.copy(minetest.registered_items[name].groups)
 	groups._tinker_phase_tool_material = 1
 	tinker.materials[name] = def
-	minetest.override_item(name, { groups = groups })
+	minetest.override_item(name, {groups = groups})
 end
 
 function tinker.add_system_material(data, def)
@@ -78,21 +78,21 @@ end
 
 function tinker.get_color(num)
 	if num <= 0.075 then
-		return"#6D2400"
+		return "#6D2400"
 	elseif num <= 0.2 then
-		return"#DB0000"
+		return "#DB0000"
 	elseif num <= 0.4 then
-		return"#FF4900"
+		return "#FF4900"
 	elseif num <= 0.55 then
-		return"#FF9200"
+		return "#FF9200"
 	elseif num <= 0.7 then
-		return"#FFFF00"
+		return "#FFFF00"
 	elseif num <= 0.8 then
-		return"#92B600"
+		return "#92B600"
 	elseif num <= 0.9 then
-		return"#499200"
+		return "#499200"
 	else
-		return"#00B600"
+		return "#00B600"
 	end
 end
 
@@ -117,16 +117,16 @@ function tinker.wrap_description(version, def)
 	-- END API v1
 
 	if version == 1 then return description end
-	return""
+	return ""
 end
 
 dofile(path .. "/tools.lua")
 
 tinker.base = {
-	cracky = { 20, 8, 4 },
-	crumbly = { 7, 5, 2 },
-	choppy = { 11, 7, 5 },
-	snappy = { 12, 6, 2 },
+	cracky = {20, 8, 4},
+	crumbly = {7, 5, 2},
+	choppy = {11, 7, 5},
+	snappy = {12, 6, 2},
 }
 
 dofile(path .. "/tool_station.lua")

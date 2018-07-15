@@ -68,10 +68,10 @@ minetest.register_node("pulse_network:controller", {
 	on_metadata_inventory_put = pulse_network.import_to_controller,
 	allow_metadata_inventory_take = function() return 0 end,
 
-	get_rich_info = function(pos, player)
+	get_rich_info = function(pos)
 		local meta = minetest.get_meta(pos)
 		return S("Types: @1/@2", meta:get_int"used_types", meta:get_int"capacity_types") .."\n" ..
-		S("Items: @1/@2", meta:get_int"used_items", meta:get_int"capacity_items")
+				S("Items: @1/@2", meta:get_int"used_items", meta:get_int"capacity_items")
 	end,
 
 	after_dig_node = function(_, _, oldmetadata)

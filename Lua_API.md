@@ -302,10 +302,6 @@ These require `trinium_research` and are stored in `trinium.research` table.
 These require `tinker_phase` and are stored in `tinker` table.
 
 ### Constants
-* `materials` - table formatted as `[ItemString] => definition`.
-* `patterns` - table formatted as `[pattern ID] => definition`.
-* `modifiers` - table formatted as `[trait ID] => definition`.
-* `tools` - table formatted as `[tool ID] => definition`.
 * `base` - table with following elements:
 	* `cracky` - speeds of hand-breaking cracky nodes with levels 1, 2 and 3.
 	* `crumbly`
@@ -351,9 +347,6 @@ These require `pulse_network` and are stored in `pulse_network` table.
 ## TesterGregMachines
 These require `trinium_machines` and are stored in `trinium.machines` table.
 
-### Constants
-* `default_hatches` - table formatted as `[hatch ID] => ItemString`.
-
 ### Methods
 * `set_default_hatch(hatch_id, item)`
 	* Sets default hatch.
@@ -381,9 +374,6 @@ These require `trinium_mapgen` and are stored in `trinium.mapgen` table.
 ## HUD
 These require `trinium_hud` and are stored in `trinium.hud` table.
 
-### Constants
-* `steps` - table formatted as `[[globalstep ID] => definition]`.
-
 ### Methods
 * `register_globalstep(def)`
 	* Globalstep wrapper. See **Globalstep Wrapper** for more information.
@@ -397,8 +387,55 @@ These require `trinium_hud` and are stored in `trinium.hud` table.
 * Rich Info
 	* A better way to use `infotext`. Nodes with Rich Info support must have
 	 group `rich_info = 1` and a callback `get_rich_info(pos, player)`.
-	 * The callback can return `nil` in order to hide the Rich Info window.
-	 
+	* The callback can return `nil` in order to hide the Rich Info window.
+
+
+## Conduits
+These require `conduits` and are stored in `conduits` table.
+
+### Methods
+* `get_signal_connections(pos)`
+	* Returns ReverseList of signal-based machines connected with node on
+	 given position.
+* `get_item_connections(pos)`
+	* Returns ReverseList of inventories and conduits connected with node on
+	 given position.
+* `rebuild_signals(pos)`
+	* Rebuilds params, based on signal emitters in the network.
+	* Should be called whenever a node is added/removed from network to change
+	 its state.
+* `send_items(pos, tbl)`
+	* Sends given ItemMap to inventories via Conduit system.
+	* Closer inventories are examined first.
+	* `tbl` changes in process and becomes ItemMap with leftover items when the
+	 function is done.
+
+### Node Definitions
+* Signal Conductors
+	* Certain nodes can conduct signals by adding `signal_param` group to their
+	 definition.
+	* The group value is called Signal Parameter and must be either 1 or 2.
+	* Their signal force will be stored in `paramX` field.
+* Signal Emitters
+	* Certain nodes can "always" be emitters by adding `signal_emitter` group to
+	 their definition.
+	* Other nodes can "sometimes" be emitters by setting their `paramX` to 255,
+	 where X is Signal Parameter.
+* Signal Acceptors
+	* Certain nodes can accept signals by adding `signal_acceptor` group to
+	 their definition.
+	* The signal force is stored in the same way as for Conductors, with X being
+	 this group value.
+* Conduit Item Extraction
+	* Certain nodes can accept items to be extracted via conduits by adding
+	 `conduit_extract` group and `conduit_extract` table to their definition.
+	* The table should be a list of "extractable" lists.
+* Conduit Item Insertion
+	* Certain nodes can accept items to be inserted via conduits by adding
+	 `conduit_insert` group to their definition and a callback 
+	 `conduit_insert(stack)`.
+	* Callback can return `false` to not allow item insertion, `list` to allow
+	 item insertion anywhere to the list or `list, slot` for even more control.
 
 ## Inventory
 Mods can either depend on `trinium_inventory` modpack or individual mods to work.
