@@ -1,4 +1,5 @@
-local path = minetest.get_modpath"trinium_machines"
+local path2 = minetest.get_modpath"trinium_machines"
+local path = path2 .. "/code"
 
 trinium.machines = {}
 trinium.machines.S = minetest.get_translator"trinium_machines"
@@ -14,7 +15,7 @@ dofile(path .. "/distillation_layer.lua")
 dofile(path .. "/distillation_tower.lua")
 dofile(path .. "/blast_furnace.lua")
 
-dofile(path .. "/recipes/init.lua")
-dofile(path .. "/research/init.lua")
+dofile(path2 .. "/recipes/init.lua")
+dofile(path2 .. "/research/init.lua")
 
 trinium.api.send_init_signal()

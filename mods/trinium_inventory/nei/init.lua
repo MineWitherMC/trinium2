@@ -1,4 +1,4 @@
-local path = minetest.get_modpath"nei"
+local path = minetest.get_modpath"nei" .. "/code"
 trinium.bound_inventories = {}
 
 trinium.nei = {}

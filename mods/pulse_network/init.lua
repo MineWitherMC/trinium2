@@ -1,6 +1,6 @@
-local path = minetest.get_modpath "pulse_network"
+local path = minetest.get_modpath"pulse_network" .. "/code"
 pulse_network = {}
-pulse_network.S = minetest.get_translator "pulse_network"
+pulse_network.S = minetest.get_translator"pulse_network"
 pulse_network.recipes = {}
 
 dofile(path .. "/crafting.lua")

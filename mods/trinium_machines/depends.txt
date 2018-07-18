@@ -1,0 +1,4 @@
+trinium_api
+trinium_research
+trinium_materials
+nei

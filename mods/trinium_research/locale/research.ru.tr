@@ -16,9 +16,6 @@ Abacus=Счёты
 Knowledge Crystal=Кристалл знаний
 Basic Lens Upgrade=Улучшение для линзы
 Improved Lens Upgrade=Продвинутое улучшение для линзы
-Forcillium Lamp=Форсиллиумная лампа
-Reflection Glass=Отражающее стекло
-Advanced Lamp Frame=Продвинутая рамка лампы
 
 Research Lens@nGem Material: @1@nMetal Material: @2@nShape: @3@nTier: @4=Линза исследований@nМатериал ядра: @1@nМатериал оболочки: @2@nФорма: @3@nУровень: @4
 Research Press@nGem amount needed: @1@nMetal amount needed: @2@nShape: @3@nTier: @4=Пресс для линзы@nТребуется кристаллов: @1@nТребуется металла: @2@nФорма: @3@nУровень: @4
@@ -104,7 +101,7 @@ Insufficient Paper!=Недостаточно бумаги!
 You already have this research map!=У вас уже есть карта этой главы!
 Insufficient Diamond Dust!=Недостаточно алмазной пыли!
 
-Ink: @1@nPaper: @2@nWarp: @3=Чернил: @1@nБумаги: @2@nИскажения: @3@n
+Ink: @1@nPaper: @2@nWarp: @3=Чернил: @1@nБумаги: @2@nИскажения: @3
 Map=Карта
 Inventory=Инвентарь
 

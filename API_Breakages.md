@@ -1,5 +1,10 @@
 # Trinium API Breakages
 
+### 201807-D (18.07.2018)
+* Object returned by `hud.configurator` now has a table argument instead of a
+ sequence one.
+* `betterinv.XYZ` functions now depend on `betterinv` instead of `sfinv`.
+
 ### 17.06.2018
 * `nei.func` functions now depend on either `trinium_inventory` or `nei`, but not
  `trinium_player`.

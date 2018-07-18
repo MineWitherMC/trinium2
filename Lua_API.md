@@ -442,7 +442,7 @@ Mods can either depend on `trinium_inventory` modpack or individual mods to work
 
 ### BetterInventory
 This mod is mostly backwards-compatible with `sfinv`, however, it has its own
- API. Its methods require modified `sfinv` and are stored in `betterinv` table.
+ API. Its methods require `betterinv` and are stored in `betterinv` table.
 * `register_tab(name, def)`
 	* Registers an inventory tab.
 	* See **Inventory Tab Definition** for more information.
@@ -519,7 +519,9 @@ HUD Configuration Window. Created via `trinium.hud.configurator(...)`. Requires
  `trinium_hud` as a dependency.
  
 Existing methods:
-* `conf:add(id, y, desc, func(player, data))`
+* `conf:add(id, def)`
+	* Adds Configurator element. See **Configurator Element Definition** for more
+	 information.
 
 
 ## Various Definitions
@@ -776,3 +778,11 @@ Inventory Tab Definition is a table with following elements:
 * `available` - function of `player`.
 	* Should return true if the tab is available to the player.
 	* All tabs are available to all players by default.
+
+### Configurator Element Definition (`trinium_hud`)
+Configurator Element Definition is a table with following elements:
+* `label` - localized string.
+* `func` - function of `player` and `value`.
+	* Should change needed configuration field.
+* `y` - integer.
+* `get_current` - function of `player`.

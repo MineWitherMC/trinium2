@@ -1,4 +1,4 @@
-local path = minetest.get_modpath"conduits"
+local path = minetest.get_modpath"conduits" .. "/code"
 conduits = {}
 conduits.S = minetest.get_translator"conduits"
 conduits.recipes = {}

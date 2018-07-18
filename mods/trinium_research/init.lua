@@ -1,4 +1,4 @@
-local path = minetest.get_modpath"trinium_research"
+local path = minetest.get_modpath"trinium_research" .. "/code"
 
 trinium.research = {}
 trinium.research.S = minetest.get_translator"trinium_research"

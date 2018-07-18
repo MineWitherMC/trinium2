@@ -1,6 +1,6 @@
-local path = minetest.get_modpath "trinium_hud"
+local path = minetest.get_modpath"trinium_hud" .. "/code"
 trinium.hud = {}
-trinium.hud.S = minetest.get_translator "trinium_hud"
+trinium.hud.S = minetest.get_translator"trinium_hud"
 
 dofile(path .. "/api.lua")
 dofile(path .. "/block_info.lua")

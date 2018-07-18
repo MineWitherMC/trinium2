@@ -1,4 +1,4 @@
-local path = minetest.get_modpath"trinium_mapgen"
+local path = minetest.get_modpath"trinium_mapgen" .. "/code"
 
 trinium.mapgen = {}
 trinium.mapgen.S = minetest.get_translator"trinium_mapgen"
