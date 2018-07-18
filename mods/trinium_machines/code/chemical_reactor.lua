@@ -23,6 +23,8 @@ recipes.add_method("chemical_reactor", {
 	formspec_width = 7,
 	formspec_height = 5,
 	formspec_name = S"Chemical Reactor",
+	implementing_object = "trinium_machines:controller_chemical_reactor",
+
 	formspec_begin = function(data)
 		local tbl = {}
 		if data.catalyst then
@@ -38,6 +40,7 @@ recipes.add_method("chemical_reactor", {
 		)) end
 		return ("textarea[1,3.5;6,1.5;;;%s]"):format(table.concat(tbl, "\n"))
 	end,
+
 	recipe_correct = function(data)
 		return not data.catalyst or minetest.registered_items["trinium_materials:catalyst_" .. data.catalyst]
 	end,

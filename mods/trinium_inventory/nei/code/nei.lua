@@ -5,18 +5,48 @@ local nei = trinium.nei
 local S = nei.S
 nei.player_stuff = {}
 
+local function satisfies_search(search_string)
+	local expansion = api.search(search_string, api.functions.returner, function(z)
+		local tbl = {}
+		local i = z:match("%(([^()]+)%)")
+		if i then
+			local tbl2 = i:split"|"
+			for j = 1, #tbl2 do
+				local k = tbl2[j]
+				tbl[z:gsub("%(([^()]+)%)", k, 1)] = 1
+			end
+		end
+		return tbl
+	end):push(search_string):filter(function(z) return not z:find"%(" end)
+
+	return function(v)
+		if v.mod_origin == "*builtin*" then return false end
+		if v.groups and v.groups.hidden_from_nei then return false end
+		if v.groups and v.groups.hidden_from_irp then return false end
+		if v.groups and v.groups.not_in_creative_inventory then return false end
+		if not v.description then return false end
+		if search_string == "" then return true end
+		local desc, name = v.description:lower(), v.name:lower()
+		return expansion:exists(function(y)
+			return table.exists(y:split"|", function(z)
+				local t = z:split" "
+				return table.every(t, function(z2)
+					if z2:sub(1, 1) == "@" then
+						return name:find(z2:sub(2))
+					else
+						return desc:find(z2)
+					end
+				end)
+			end)
+		end)
+	end
+end
+
 local function get_formspec_array(search_string, mode)
 	local ss = search_string:lower()
 	local formspec, width, height, cell_size, i = {}, 8, nei.integrate and 9 or 7, 1, 0
 	local length_per_page = width * height
-	local items = table.filter(minetest.registered_items, function(v)
-		return (
-				v.mod_origin ~= "*builtin*" and
-						not (v.groups or {}).hidden_from_nei and
-						not (v.groups or {}).hidden_from_irp and
-						((v.description and v.description:lower():find(ss)) or v.name:lower():find(ss) or v.mod_origin:lower():find(ss))
-		)
-	end)
+	local items = table.filter(minetest.registered_items, satisfies_search(ss))
 	local x, y
 	local page_amount = math.max(math.ceil(table.count(items) / length_per_page), 1)
 	local pa = math.ceil(table.count(items) / length_per_page)
@@ -166,8 +196,17 @@ function nei.draw_recipe_raw(id)
 	return {form = formspec, w = method.formspec_width, h = method.formspec_height}
 end
 
-function nei.draw_recipe_wrapped(item, player, id, type)
-	local tbl = ((type == 1) and recipes.recipes or recipes.usages)[item] or {}
+function nei.draw_recipe_wrapped(item, player, id, r_type)
+	local tbl
+	if r_type == 1 then
+		tbl = recipes.recipes[item]
+	elseif r_type == 2 then
+		tbl = recipes.usages[item]
+	elseif r_type == 3 then
+		tbl = table.merge({}, unpack(recipes.implementing_objects[item] or {}))
+	end
+	tbl = tbl or {}
+
 	tbl = table.remap(table.filter(tbl, function(r)
 		local v = recipes.recipe_registry[r]
 		return recipes.methods[v.type].can_perform(player, v.data)
@@ -180,23 +219,38 @@ function nei.draw_recipe_wrapped(item, player, id, type)
 		fs_base = nei.draw_recipe_raw(tbl[math.modulate(id, #tbl)])
 	else
 		id = 0
+		local message = ""
+		if r_type == 1 then
+			message = S"recipes"
+		elseif r_type == 2 then
+			message = S"usages"
+		elseif r_type == 3 then
+			message = S"implements"
+		end
+
 		fs_base = {
 			w = 6,
 			h = 4,
 			form = ([=[
 				label[0,0.5;%s]
 				item_image[2,1.5;2,2;%s]
-			]=]):format(S("No @1 found for this item.", type == 1 and S"recipes" or S"usages"), item),
+			]=]):format(S("No @1 found for this item.", message), item),
 		}
 	end
 
 	local actual_formspec = {
 		("size[%s,%s]"):format(fs_base.w, fs_base.h + 1),
-		("tabheader[0,0;change_nei_mode~%s;%s,%s;%s;true;false]"):format(item, S"Recipes", S"Usages", type),
+		("tabheader[0,0;change_nei_mode~${item};${rec},${use},${impl};${current};true;false]"):from_table{
+			item = item,
+			current = r_type,
+			rec = S"Recipes",
+			use = S"Usages",
+			impl = S"Implements",
+		},
 		fs_base.form,
 		("label[1,%s;%s]"):format(fs_base.h + 0.5, S("Recipe @1 of @2", id, #tbl)),
-		("button[0,%s;1,1;view_recipe~%s~%s~%s;<]"):format(fs_base.h + 0.3, item, id - 1, type),
-		("button[%s,%s;1,1;view_recipe~%s~%s~%s;>]"):format(fs_base.w - 1, fs_base.h + 0.3, item, id + 1, type),
+		("button[0,%s;1,1;view_recipe~%s~%s~%s;<]"):format(fs_base.h + 0.3, item, id - 1, r_type),
+		("button[%s,%s;1,1;view_recipe~%s~%s~%s;>]"):format(fs_base.w - 1, fs_base.h + 0.3, item, id + 1, r_type),
 	}
 
 	return table.concat(actual_formspec)

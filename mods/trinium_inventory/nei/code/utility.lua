@@ -1,10 +1,21 @@
 local api = trinium.api
 local bi = trinium.bound_inventories
 local S = trinium.nei.S
+local dps = {}
+
+local sizes = {trash = 1, crafting = 9, output = 1}
+function api.save_inventory(pn)
+	for k in pairs(dps[pn]._strings) do
+		for i = 1, sizes[k] do
+			dps[pn][k][i] = bi[pn]:get_stack(k, i):to_string()
+		end
+	end
+end
 
 minetest.register_on_joinplayer(function(player)
 	local pn = player:get_player_name()
 	local dp = api.get_data_pointer(pn, "bound_inventories")
+	dps[pn] = dp
 	bi[pn] = minetest.create_detached_inventory("bound~" .. pn, {
 		allow_move = function(_, from_list, _, _, _, count)
 			return from_list ~= "trash" and count or 0
@@ -50,7 +61,7 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 	})
-	api.initialize_inventory(bi[pn], { trash = 1, crafting = 9, output = 1 })
+	api.initialize_inventory(bi[pn], sizes)
 	for k, v in pairs(dp._strings) do
 		for k1, v1 in pairs(v) do
 			bi[pn]:set_stack(k, k1, v1)

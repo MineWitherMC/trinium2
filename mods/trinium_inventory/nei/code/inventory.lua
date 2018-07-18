@@ -25,7 +25,7 @@ recipes.add_method("crafting", {
 			if max < k then max = k end
 			if min > k then min = k end
 			local mod = math.modulate(k, 3)
-			if max_mod3 < mod then max_mod3 = min end
+			if max_mod3 < mod then max_mod3 = mod end
 			if min_mod3 > mod then min_mod3 = mod end
 		end
 
@@ -108,14 +108,15 @@ function api.try_craft(player)
 	local rr = recipes.recipe_registry
 	local rbm = recipes.recipes_by_method.crafting
 
-	local recipe = table.exists(rbm, function(v)
+	local recipe = table.exists(rbm, function(k)
+		local v = recipes.recipe_registry[k]
 		if v.data.shapeless then
 			local counts = {}
 			for i = 1, #v.inputs do
 				counts[v.inputs[i]] = (counts[v.inputs[i]] or 0) + 1
 			end
 
-			return table.every(counts, function(v1, k) return counts2[k] == v1 end) and
+			return table.every(counts, function(v1, k1) return counts2[k1] == v1 end) and
 					table.sum(counts) == table.sum(counts2)
 		else
 			return v.data.possible_inputs[list]
@@ -170,6 +171,7 @@ betterinv.register_tab("inventory", {
 								inv2:set_stack("crafting", i, s1)
 							end
 							api.try_craft(player)
+							api.save_inventory(pn)
 						end
 					end
 				end

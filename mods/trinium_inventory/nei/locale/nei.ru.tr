@@ -3,6 +3,7 @@
 Recipes=Рецепты
 Usages=Применения
 Cheat=Читы
+Implements=Рецепты этого механизма
 
 Page @1 of @2=Страница @1 из @2
 Change Mode=Сменить режим
@@ -20,3 +21,4 @@ Inventory is full!=Инвентарь заполнен!
 No @1 found for this item.=Для этого предмета не найдено @1.
 recipes=рецептов
 usages=применений
+implements=видов крафта

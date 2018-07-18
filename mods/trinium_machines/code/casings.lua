@@ -1,6 +1,7 @@
 local S = trinium.machines.S
 local api = trinium.api
 local sdh = trinium.machines.set_default_hatch
+local A = trinium.recipes.add
 
 minetest.register_node("trinium_machines:casing_chemical", {
 	description = S"Chemical Casing",
@@ -12,6 +13,7 @@ minetest.register_node("trinium_machines:casing_chemical", {
 	paramtype2 = "color",
 	color = "#5575ff",
 })
+
 minetest.register_node("trinium_machines:casing_pressure", {
 	description = S"Pressure Resistant Casing",
 	groups = {cracky = 1},
@@ -22,6 +24,7 @@ minetest.register_node("trinium_machines:casing_pressure", {
 	paramtype2 = "color",
 	color = "#494949",
 })
+
 minetest.register_node("trinium_machines:casing_distillation", {
 	description = S"Distillation Grate",
 	groups = {cracky = 1},
@@ -33,6 +36,7 @@ minetest.register_node("trinium_machines:casing_distillation", {
 	paramtype2 = "color",
 	color = "#9a00ff",
 })
+
 minetest.register_node("trinium_machines:casing_heat_brick", {
 	description = S"Heat-Proof Brick Block",
 	groups = {cracky = 2},
@@ -43,6 +47,10 @@ minetest.register_node("trinium_machines:casing_heat_brick", {
 	paramtype2 = "color",
 	color = "#c7b671",
 })
+A("crafting", {
+	"trinium_materials:brick", "trinium_materials:brick",
+	[4] = "trinium_materials:brick", [5] = "trinium_materials:brick",
+}, {"trinium_machines:casing_heat_brick"})
 
 local input_bus_fs = "size[8,8.5]list[context;input;2,0;4,4]list[current_player;main;0,4.5;8,4]listring[]"
 local crude_input_bus_fs = "size[8,5.5]list[context;input;2.5,0;3,1]list[current_player;main;0,1.5;8,4]"

@@ -25,6 +25,7 @@ recipes.add_method("crude_blast_furnace", {
 	formspec_width = 7,
 	formspec_height = 4.5,
 	formspec_name = S"Crude Blast Furnace",
+	implementing_object = "trinium_machines:controller_crude_blast_furnace",
 })
 
 local melting_time = 12

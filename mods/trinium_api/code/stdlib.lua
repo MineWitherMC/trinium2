@@ -107,8 +107,14 @@ function table.random(tbl)
 	return tbl[k[el]], k[el], el
 end
 
-function table.random_map(tbl)
-	return table.random(table.keys(tbl))
+function table.merge(tbl1, ...)
+	local tbl = table.copy(tbl1)
+	table.walk({...}, function(x)
+		table.walk(x, function(y)
+			table.insert(tbl, y)
+		end)
+	end)
+	return tbl
 end
 
 function vector.stringify(v)

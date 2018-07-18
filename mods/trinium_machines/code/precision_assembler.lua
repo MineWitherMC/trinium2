@@ -35,6 +35,7 @@ recipes.add_method("precision_assembler", {
 		)) end
 		return ("textarea[1,3.5;6,1.5;;;%s]"):format(table.concat(tbl, "\n"))
 	end,
+	implementing_object = "trinium_machines:controller_precision_assembler",
 })
 
 minetest.register_node("trinium_machines:controller_precision_assembler", {

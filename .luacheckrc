@@ -10,7 +10,7 @@ read_globals = {
 		fields = {
 			"copy", "insert_all", "sign",
 			"count", "filter", "exists", "every", "walk", "iwalk", "map", "keys", "asort", "remap", "sum",
-			"f_concat", "tail", "multi_tail", "random", "random_map" 
+			"f_concat", "tail", "multi_tail", "random", "merge"
 		}
 	},
 	math = {

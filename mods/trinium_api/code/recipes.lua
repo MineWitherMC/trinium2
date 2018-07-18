@@ -13,7 +13,7 @@ local dm = api.DataMesh
 function recipes.stringify(size, inputs)
 	local string = inputs[1] or ""
 	for i = 2, size do
-		string = string .. (inputs[i] or "")
+		string = string .. ";" .. (inputs[i] or "")
 	end
 	return string
 end
@@ -35,7 +35,7 @@ end
 
 local input_cache = {}
 function recipes.add(method, inputs, outputs, data)
-	local method_table = assert(trinium.recipes.methods[method], "Method "..method.." not registered!")
+	local method_table = assert(trinium.recipes.methods[method], "Method " .. method .. " not registered!")
 	data = data or {}
 
 	-- Processing inputs (e.g., MC method of creating workbench recipes)
@@ -112,6 +112,7 @@ function recipes.add(method, inputs, outputs, data)
 	return new_amount
 end
 
+recipes.implementing_objects = {}
 function recipes.add_method(method, tbl)
 	trinium.recipes.methods[method] = api.set_defaults(tbl, {
 		callback = func.const(true),
@@ -124,6 +125,13 @@ function recipes.add_method(method, tbl)
 	})
 
 	trinium.recipes.recipes_by_method[method] = {}
+
+	if tbl.implementing_object then
+		if not recipes.implementing_objects[tbl.implementing_object] then
+			recipes.implementing_objects[tbl.implementing_object] = {}
+		end
+		table.insert(recipes.implementing_objects[tbl.implementing_object], trinium.recipes.recipes_by_method[method])
+	end
 
 	minetest.log("action", "[TrAPI] Adding Recipe method " .. method)
 end
