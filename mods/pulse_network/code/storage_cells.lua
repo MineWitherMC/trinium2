@@ -7,7 +7,6 @@ function pulse_network.add_storage_cell(id, texture, desc, add_types, add_items)
 		sounds = trinium.sounds.default_metal,
 		description = desc,
 		groups = {cracky = 1, pulsenet_slave = 1},
-		paramtype2 = "facedir",
 		on_pulsenet_connection = function(_, ctrlpos)
 			local meta = minetest.get_meta(ctrlpos)
 			local cs = meta:get_int"capacity_types"

@@ -78,7 +78,7 @@ function research.add_aspect(name, def)
 	minetest.register_tool("trinium_research:aspect_" .. name, {
 		description = def.name,
 		inventory_image = def.texture,
-		groups = {hidden_from_irp = 1},
+		groups = {not_in_creative_inventory = 1},
 	})
 end
 
@@ -96,7 +96,7 @@ research.constants = {
 
 function research.random_aspects(pn, num, arr)
 	if not arr then arr = research.aspect_list end
-	for i = 1, num do
+	for _ = 1, num do
 		local rand = table.random(arr)
 		if not research.dp2[pn].aspects[rand] then research.dp2[pn].aspects[rand] = 5 end
 		research.dp2[pn].aspects[rand] = research.dp2[pn].aspects[rand] + 1

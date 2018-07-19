@@ -7,6 +7,7 @@ local tool_station_formspec = [[
 	list[context;output;6,0.5;1,1;]
 	list[current_player;main;0,2.5;8,4;]
 	listring[]
+	image[4.5,0.5;1,1;trinium_gui.arrow.png]
 ]]
 
 local function recalculate(pos)

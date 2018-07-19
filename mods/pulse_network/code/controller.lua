@@ -45,6 +45,40 @@ function pulse_network.import_to_controller(pos)
 	pulse_network.trigger_update(pos)
 end
 
+function pulse_network.export_from_controller(pos, id, count, id2)
+	local meta = minetest.get_meta(pos)
+	local items = meta:get_string"inventory":data()
+	if not items[id] then return false end
+	count = math.min(count, items[id])
+	meta:set_int("used_items", meta:get_int"used_items" - count)
+
+	items[id] = items[id] - count
+	if items[id] == 0 then
+		items[id] = nil
+		meta:set_int("used_types", meta:get_int"used_types" - 1)
+		local new_list
+		if not id2 then
+			local old_list = meta:get_string"inventory_list":data()
+			new_list = {}
+			for i = 1, #old_list do
+				if old_list[i] ~= id then
+					table.insert(new_list, id)
+				end
+			end
+		else
+			new_list = meta:get_string"inventory_list":data()
+			table.remove(new_list, id2)
+		end
+		meta:set_string("inventory_list", minetest.serialize(new_list))
+	end
+	meta:set_string("inventory", minetest.serialize(items))
+	pulse_network.import_to_controller(pos)
+
+	local tbl = id:split" "
+	local additional_info = table.map(table.tail(tbl), function(z) return " "..z end)
+	return tbl[1] .. " " .. count .. table.concat(additional_info)
+end
+
 minetest.register_node("pulse_network:controller", {
 	stack_max = 1,
 	tiles = {"pulse_network.controller_side.png", "pulse_network.controller_side.png", "pulse_network.controller_side.png",

@@ -8,7 +8,7 @@ minetest.register_node("trinium_mapgen:rock", {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, -0.42, 0.5},
 	},
-	groups = {oddly_breakable_by_hand = 3, falling_node = 1, no_silk = 1, hidden_from_irp = 1},
+	groups = {oddly_breakable_by_hand = 3, falling_node = 1, no_silk = 1, not_in_creative_inventory = 1},
 	drop = "trinium_materials:rock",
 	paramtype = "light",
 })
@@ -21,7 +21,7 @@ minetest.register_node("trinium_mapgen:stick", {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, -0.42, 0.5},
 	},
-	groups = {oddly_breakable_by_hand = 3, falling_node = 1, no_silk = 1, hidden_from_irp = 1},
+	groups = {oddly_breakable_by_hand = 3, falling_node = 1, no_silk = 1, not_in_creative_inventory = 1},
 	drop = "trinium_materials:stick",
 	paramtype = "light",
 })

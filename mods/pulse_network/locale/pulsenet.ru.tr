@@ -7,8 +7,13 @@ Void Pulse Network Storage Cell=Пустотная ячейка пульс-се�
 Condensed Pulse Network Storage Cell=Сжатая ячейка пульс-сети
 Ultimate Pulse Network Storage Cell=Совершенная ячейка пульс-сети
 Pulse Network Terminal=Терминал пульс-сети
+Pattern Encoder=Кодировщик шаблонов
+Pulse Network Interface=Интерфейс пульс-сети
 
 Wireless Plating=Беспроводная обшивка
+Blank Pattern=Пустой шаблон
+Encoded Pattern=Закодированный шаблон
+Invalid Pattern=Неверно закодированный шаблон
 
 Combinator successfully connected to network!=Комбинатор привязан к сети!
 Connected to (@1, @2, @3)=Привязан к (@1, @2, @3)
@@ -19,3 +24,12 @@ Device successfully connected to network!=Устройство успешно п
 Incorrect target!=Неверная цель!
 Types: @1/@2=Типов: @1/@2
 Items: @1/@2=Предметов: @1/@2
+Select Recipe=Выбрать рецепт
+Encode=Закодировать
+Extract Encoded Pattern to continue!=Извлеките закодированный шаблон для продолжения!
+Insert Blank Pattern to continue!=Добавьте пустой шаблон для продолжения!
+Insert any item to continue!=Внесите любой предмет для продолжения!
+Pattern successfully encoded!=Шаблон успешно закодирован!
+
+Inputs:=Входы:
+Outputs:=Выходы:

@@ -37,9 +37,9 @@ function conduits.send_items(pos, items)
 	end):filter(function(v)
 		return v[2] > 2 and minetest.get_item_group(v[3], "conduit_insert") > 0
 	end):remap():sort(api.sort_by_param(2)):map(function(v)
-		return {minetest.get_meta(v[1]):get_inventory(), v[3]}
+		return {minetest.get_meta(v[1]):get_inventory(), v[3], v[1]}
 	end):forEach(true, function(v1)
-		local callback = api.get_field(v1[2], "conduit_insert")
+		local callback, callback_after = api.get_field(v1[2], "conduit_insert"), api.get_field(v1[2], "after_conduit_insert")
 		for k, v in pairs(items) do
 			local size = math.min(v, api.get_field(k, "stack_max"))
 			local z, zs = callback(ItemStack(k .. " " .. size))
@@ -48,6 +48,7 @@ function conduits.send_items(pos, items)
 					local ns = v1[1]:add_item(z, k .. " " .. size)
 					items[k] = items[k] - size + ns:get_count()
 					if items[k] == 0 then items[k] = nil end
+					if callback_after then callback_after(v1[3]) end
 					return
 				elseif zs then
 					local stack = v1[1]:get_stack(z, zs)
@@ -55,6 +56,7 @@ function conduits.send_items(pos, items)
 					v1[1]:set_stack(z, zs, stack)
 					items[k] = items[k] - size + ns:get_count()
 					if items[k] == 0 then items[k] = nil end
+					if callback_after then callback_after(v1[3]) end
 					return
 				end
 			end
@@ -97,7 +99,7 @@ minetest.register_craftitem("conduits:item_pump_speed_downgrade", {
 	groups = {item_conduit_speed_upg = 1},
 })
 
-local strings = {S"Never active", S"With signal", S"Without signal", S"Always active"}
+local strings = conduits.strings
 
 local function item_pump_fs(mode)
 	return ([=[
@@ -150,13 +152,13 @@ minetest.register_node("conduits:item_pump", {
 				local node2 = minetest.get_node(pos)
 				node2.param2 = 1
 				minetest.swap_node(pos, node2)
-				return
+				break
 			end
 		end
 
 		local meta = minetest.get_meta(pos)
 		api.initialize_inventory(meta:get_inventory(), {speed_upg = 1})
-		meta:set_int("mode", 1)
+		meta:set_int("mode", 2)
 		meta:set_string("formspec", item_pump_fs(strings[2]))
 	end,
 

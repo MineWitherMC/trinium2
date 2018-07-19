@@ -8,7 +8,7 @@ recipes.add_method("crafting", {
 	output_amount = 1,
 	get_input_coords = recipes.coord_getter(3, 0, 0),
 	get_output_coords = recipes.coord_getter(1, 4.5, 1),
-	formspec_width = 6.5,
+	formspec_width = 7.5,
 	formspec_height = 5,
 	formspec_name = S"Crafting Table",
 
@@ -135,6 +135,7 @@ betterinv.register_tab("inventory", {
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
 		local str = inv2 and inv2:get_stack("output", 1):to_string() or ""
+		local desc = api.get_field(str, "description") or ""
 		return betterinv.generate_formspec(player, ([[
 				list[detached:bound~%s;crafting;1.75,0.5;3,3;]
 				item_image_button[5.75,1.5;1,1;%s;inventory~craft;]
@@ -147,8 +148,11 @@ betterinv.register_tab("inventory", {
 				image[5,4.75;1,1;trinium_gui_hb_bg.png]
 				image[6,4.75;1,1;trinium_gui_hb_bg.png]
 				image[7,4.75;1,1;trinium_gui_hb_bg.png]
-				listring[current_player;main]listring[detached:bound~%s;crafting]
-			]]):format(pn, str, pn), false, false, true)
+				listring[detached:bound~%s;crafting]
+				listring[current_player;main]
+				listring[detached:bound~%s;trash]
+				tooltip[inventory~craft;%s]
+			]]):format(pn, str, pn, pn, desc), false, false, true)
 	end,
 	processor = function(player, _, fields)
 		if fields.quit then return end

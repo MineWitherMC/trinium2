@@ -5,11 +5,14 @@ Signal Emitter=Сигнализатор
 Item Buffer=Предметный буфер
 Item Conduit=Предметная труба
 Item Pump=Предметная помпа
+Time Sensor=Сенсор времени
+Temporal Controller=Временной контроллер
 
 Item Pump Speed Upgrade=Ускоритель предметной помпы
 Item Pump Speed Downgrade=Замедлитель предметной помпы
 
 Current mode: @1=Текущий режим: @1
+Current time: @1=Текущее время: @1
 Power: @1=Мощность: @1
 Next operation in @1 seconds=Активируется через @1 сек.
 
@@ -19,3 +22,6 @@ With signal=По сигналу
 Without signal=Без сигнала
 Never active=Отключен
 Always active=Включен
+@1 left=@1 операций
+Day=День
+Night=Ночь

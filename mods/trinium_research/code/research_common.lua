@@ -51,19 +51,19 @@ minetest.register_craftitem("trinium_research:lens", {
 	inventory_image = "trinium_research.lens.png",
 	description = S"Invalid Research Lens",
 	stack_max = 1,
-	groups = {hidden_from_irp = 1},
+	groups = {not_in_creative_inventory = 1},
 })
 minetest.register_craftitem("trinium_research:press", {
 	inventory_image = "trinium_research.press.png",
 	description = S"Invalid Research Press",
 	stack_max = 1,
-	groups = {hidden_from_irp = 1},
+	groups = {not_in_creative_inventory = 1},
 })
 minetest.register_craftitem("trinium_research:notes_1", {
 	inventory_image = "trinium_research.completed_notes.png",
 	description = S"Invalid Discovery",
 	stack_max = 1,
-	groups = {hidden_from_irp = 1},
+	groups = {not_in_creative_inventory = 1},
 	on_place = function(item, player)
 		local meta = item:get_meta()
 		local pn = player:get_player_name()
@@ -91,13 +91,13 @@ minetest.register_craftitem("trinium_research:notes_2", {
 	inventory_image = "trinium_research.uncompleted_notes.png",
 	description = S"Invalid Research Notes",
 	stack_max = 1,
-	groups = {hidden_from_irp = 1},
+	groups = {not_in_creative_inventory = 1},
 })
 minetest.register_craftitem("trinium_research:notes_3", {
 	inventory_image = "trinium_research.undiscovered_notes.png",
 	description = S"Invalid Research Map",
 	stack_max = 1,
-	groups = {hidden_from_irp = 1},
+	groups = {not_in_creative_inventory = 1},
 })
 
 -- Upgrades

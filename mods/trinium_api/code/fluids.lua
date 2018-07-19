@@ -36,7 +36,7 @@ function api.register_fluid(src_name, flow_name, src_description, flow_descripti
 
 	def2.drawtype = "flowingliquid"
 	def2.paramtype2 = "flowingliquid"
-	def2.groups.hidden_from_irp = 1
+	def2.groups.not_in_creative_inventory = 1
 	def2.tiles = {"fluid_basic.png^[multiply:#" .. color}
 	def2.special_tiles = {
 		{

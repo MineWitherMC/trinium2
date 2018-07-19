@@ -7,19 +7,27 @@ local part_builder_formspec_basic = [[
 	list[context;inputs;3,0;1,2;]
 	list[context;output;5.5,0.5;1,1;]
 	image[0.5,0.5;1,1;tinker_phase.pattern_base.png^[brighten]
+	image[4.25,0.5;1,1;trinium_gui.arrow.png]
 	list[current_player;main;0,2.5;8,4;]
-	listring[]
+	listring[context;output]
+	listring[current_player;main]
+	listring[context;pattern]
 ]]
 
 local part_builder_formspec_chest = [[
 	size[13.5,6.5]
 	list[context;pattern;1.5,0.5;1,1;]
-	list[context;pattern;8.5,0.25;5,6;1]
+	list[context;patterns;8.5,0.25;5,6;]
 	list[context;inputs;3,0;1,2;]
 	list[context;output;5.5,0.5;1,1;]
 	image[0.5,0.5;1,1;tinker_phase.pattern_base.png^[brighten]
+	image[4.25,0.5;1,1;trinium_gui.arrow.png]
 	list[current_player;main;0,2.5;8,4;]
-	listring[]
+	listring[context;output]
+	listring[current_player;main]
+	listring[context;patterns]
+	listring[context;pattern]
+	listring[context;patterns]
 ]]
 
 local function recalculate(pos)
@@ -51,7 +59,7 @@ local function allow_put(pos, list_name, index, stack)
 	local inv = meta:get_inventory()
 
 	local n = stack:get_name()
-	if list_name == "pattern" then
+	if list_name == "pattern" or list_name == "patterns" then
 		return minetest.get_item_group(n, "_tinker_phase_pattern")
 	elseif list_name == "inputs" then
 		local other = inv:get_stack("inputs", 3 - index)
@@ -137,15 +145,17 @@ minetest.register_node("tinker_phase:part_builder_with_chest", {
 	after_place_node = function(pos)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		api.initialize_inventory(inv, {pattern = 31, inputs = 2, output = 1})
+		api.initialize_inventory(inv, {pattern = 1, patterns = 30, inputs = 2, output = 1})
 		meta:set_string("formspec", part_builder_formspec_chest)
 	end,
 	allow_metadata_inventory_put = allow_put,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, _, count)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
-		return (from_list == to_list or
-						minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinker_phase_pattern") > 0)
+		return  (from_list == to_list or
+				(from_list == "pattern" and to_list == "patterns") or
+				(from_list == "patterns" and to_list == "pattern") or
+				minetest.get_item_group(inv:get_stack(from_list, from_index), "_tinker_phase_pattern") > 0)
 				and count or 0
 	end,
 

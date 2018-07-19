@@ -145,7 +145,7 @@ function api.count_stacks(inv, list, disallow_multi_stacks)
 	if not disallow_multi_stacks then
 		dm = dm:map(function(v)
 			return v:get_name()
-		end)   :unique()
+		end):unique()
 	end
 	return dm:count()
 end

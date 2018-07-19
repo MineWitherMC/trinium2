@@ -145,5 +145,5 @@ function string:data()
 end
 
 function string:from_table(params)
-	return self:gsub("${([A-Za-z_0-9]+)}", function(a) return params[a] or "<nil>" end)
+	return self:gsub("${([A-Za-z_0-9]+)}", function(a) return params[a] or params[tonumber(a)] or "<nil>" end)
 end

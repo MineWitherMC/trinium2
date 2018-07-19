@@ -436,10 +436,10 @@ These require `conduits` and are stored in `conduits` table.
 	 `conduit_insert(stack)`.
 	* Callback can return `false` to not allow item insertion, `list` to allow
 	 item insertion anywhere to the list or `list, slot` for even more control.
+	* Optionally, `after_conduit_insert(pos)` callback can be added which is
+	 called whenever items are added to node inventory via conduits.
 
 ## Inventory
-Mods can either depend on `trinium_inventory` modpack or individual mods to work.
-
 ### BetterInventory
 This mod is mostly backwards-compatible with `sfinv`, however, it has its own
  API. Its methods require `betterinv` and are stored in `betterinv` table.

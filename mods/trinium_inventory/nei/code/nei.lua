@@ -13,30 +13,36 @@ local function satisfies_search(search_string)
 			local tbl2 = i:split"|"
 			for j = 1, #tbl2 do
 				local k = tbl2[j]
-				tbl[z:gsub("%(([^()]+)%)", k, 1)] = 1
+				local str = z:gsub("%(([^()]+)%)", k, 1)
+				tbl[str] = 1
 			end
 		end
 		return tbl
-	end):push(search_string):filter(function(z) return not z:find"%(" end)
+	end):push(search_string):map(function(q)
+		return q:gsub("%*", ".*")
+	end):filter(function(z) return not z:find"%(" end)
+
+	local exp2 = api.DataMesh:new()
+	expansion:forEach(function(q)
+		for _,i in pairs(q:split"|") do
+			exp2:push(i:split" ")
+		end
+	end)
+	exp2:filter(function(q) return q ~= "" end)
 
 	return function(v)
 		if v.mod_origin == "*builtin*" then return false end
-		if v.groups and v.groups.hidden_from_nei then return false end
-		if v.groups and v.groups.hidden_from_irp then return false end
 		if v.groups and v.groups.not_in_creative_inventory then return false end
 		if not v.description then return false end
 		if search_string == "" then return true end
 		local desc, name = v.description:lower(), v.name:lower()
-		return expansion:exists(function(y)
-			return table.exists(y:split"|", function(z)
-				local t = z:split" "
-				return table.every(t, function(z2)
-					if z2:sub(1, 1) == "@" then
-						return name:find(z2:sub(2))
-					else
-						return desc:find(z2)
-					end
-				end)
+		return exp2:exists(function(z)
+			return table.every(z, function(z2)
+				if z2:sub(1, 1) == "@" then
+					return name:find(z2:sub(2))
+				else
+					return desc:find(z2)
+				end
 			end)
 		end)
 	end
@@ -253,7 +259,7 @@ function nei.draw_recipe_wrapped(item, player, id, r_type)
 		("button[%s,%s;1,1;view_recipe~%s~%s~%s;>]"):format(fs_base.w - 1, fs_base.h + 0.3, item, id + 1, r_type),
 	}
 
-	return table.concat(actual_formspec)
+	return table.concat(actual_formspec), {x = fs_base.w, y = fs_base.h + 1}, id ~= 0 and tbl[id] or 0
 end
 
 function item_panel.processor(player, _, fields)
