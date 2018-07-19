@@ -133,7 +133,7 @@ local item_panel = {description = S"NeverEnoughItems"}
 function item_panel.getter(player)
 	local pn = player:get_player_name()
 	local ps = nei.player_stuff[pn]
-	return betterinv.generate_formspec(player, ps.formspecs_array[ps.page],
+	return betterinv.generate_formspec(player, ps.formspecs_array[math.min(ps.page, ps.page_amount)],
 			ps.size, false, false)
 end
 

@@ -5,3 +5,5 @@ minetest.register_alias("default:mese_crystal", "trinium_materials:gem_forcilliu
 minetest.register_alias("default:dirt", "trinium_mapgen:dirt")
 minetest.register_alias("default:clay", "trinium_mapgen:clay")
 minetest.register_alias("default:coal_lump", "trinium_materials:dust_coal")
+minetest.register_alias("default:iron_lump", "trinium_materials:dust_iron")
+minetest.register_alias("default:diamond", "trinium_materials:gem_diamond")
