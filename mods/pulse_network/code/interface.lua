@@ -18,8 +18,24 @@ minetest.register_node("pulse_network:interface", {
 	tiles = {"pulse_network.interface.png"},
 	sounds = trinium.sounds.default_metal,
 	description = S"Pulse Network Interface",
-	groups = {cracky = 1, pulsenet_slave = 1, conduit_insert = 1, conduit_extract = 1},
+	groups = {cracky = 1, pulsenet_slave = 1, conduit_insert = 1, conduit_extract = 1, rich_info = 1},
 	conduit_extract = {"output"},
+
+	get_rich_info = function(pos)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		local tbl = {S"Buffered Items:"}
+		local action = false
+		for i = 1, 8 do
+			local stack = inv:get_stack("output", i)
+			if not stack:is_empty() then
+				local name = stack:get_name()
+				table.insert(tbl, stack:get_count() .. " " .. (api.get_field(name, "description") or name):split"\n"[1])
+				action = true
+			end
+		end
+		if action then return table.concat(tbl, "\n") end
+	end,
 
 	on_pulsenet_connection = function(pos)
 		local meta = minetest.get_meta(pos)

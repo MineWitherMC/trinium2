@@ -141,26 +141,10 @@ minetest.register_node("pulse_network:terminal", {
 					meta:set_string("formspec", get_terminal_formspec(ctrlpos, meta:get_int"index", meta:get_string"search"))
 				else
 					local ss = minetest.registered_items[k_split2[1]].stack_max
-					--[[ss = math.min(ss, inv[id])
-					local name
-					if #k_split2 == 1 then
-						name = ("%s %s"):format(k_split2[1], ss)
-					else
-						name = ("%s %s %s"):format(k_split2[1], ss, table.concat(table.tail(k_split2), " "))
-					end
-					local s = ItemStack(name)
-					player:get_inventory():add_item("main", s)
-					inv[id] = inv[id] - ss
-					ctrl_meta:set_int("used_items", ctrl_meta:get_int"used_items" - ss)
-					if inv[id] == 0 then
-						inv[id] = nil
-						table.remove(inv_list, tonumber(k_split[2]))
-						ctrl_meta:set_int("used_types", ctrl_meta:get_int"used_types" - 1)
-						ctrl_meta:set_string("inventory_list", minetest.serialize(inv_list))
-					end]]
 					local item = pulse_network.export_from_controller(ctrlpos, id, ss, tonumber(k_split[2]))
-					assert(item)
-					player:get_inventory():add_item("main", item)
+					if item then
+						player:get_inventory():add_item("main", item)
+					end
 				end
 			end
 		end
