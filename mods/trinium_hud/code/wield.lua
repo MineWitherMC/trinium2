@@ -22,14 +22,13 @@ hud.register_globalstep("wield", {
 		for i = 1, #players do
 			local pn = players[i]:get_player_name()
 			local current_wield = players[i]:get_wielded_item()
-			local desc = current_wield:get_meta():get_string "description"
-			if desc == "" then
-				desc = api.get_field(current_wield:get_name(), "description")
+			local desc = current_wield:get_meta():get_string"description":split"\n"[1]
+			if desc == "" or not desc then
+				desc = api.get_description(current_wield:get_name())
 			end
-			if not desc then desc = "" end
 			if desc ~= wield_descriptions[pn] then
 				wield_descriptions[pn] = desc
-				players[i]:hud_change(huds[pn], "text", desc:split "\n"[1] or "")
+				players[i]:hud_change(huds[pn], "text", desc or "")
 			end
 		end
 	end,

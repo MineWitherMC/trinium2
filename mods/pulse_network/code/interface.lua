@@ -12,6 +12,23 @@ local interface_formspec = [=[
 	listring[context;patterns]
 	listring[current_player;main]
 ]=]
+local interface_inv = {patterns = 8, input = 1, output = 8, output_filter = 8, autocraft_buffer = 16}
+
+local function on_metadata_inventory_change(pos, list, index, stack)
+	if list ~= "patterns" then return end
+	local meta = minetest.get_meta(pos)
+	local ctrlpos = meta:get_string"controller_pos":data()
+	pulse_network.notify_pattern_change(ctrlpos, stack, vector.stringify(pos) .. "|" .. index)
+end
+
+local neighbours = {
+	{x = 1, y = 0, z = 0},
+	{x = -1, y = 0, z = 0},
+	{y = 1, x = 0, z = 0},
+	{y = -1, x = 0, z = 0},
+	{z = 1, x = 0, y = 0},
+	{z = -1, x = 0, y = 0},
+}
 
 minetest.register_node("pulse_network:interface", {
 	stack_max = 16,
@@ -30,7 +47,7 @@ minetest.register_node("pulse_network:interface", {
 			local stack = inv:get_stack("output", i)
 			if not stack:is_empty() then
 				local name = stack:get_name()
-				table.insert(tbl, stack:get_count() .. " " .. (api.get_field(name, "description") or name):split"\n"[1])
+				table.insert(tbl, stack:get_count() .. " " .. api.get_description(name))
 				action = true
 			end
 		end
@@ -40,7 +57,7 @@ minetest.register_node("pulse_network:interface", {
 	on_pulsenet_connection = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", interface_formspec)
-		api.initialize_inventory(meta:get_inventory(), {patterns = 8, input = 1, output = 8, output_filter = 8})
+		api.initialize_inventory(meta:get_inventory(), interface_inv)
 		minetest.get_node_timer(pos):start(10)
 	end,
 
@@ -48,8 +65,31 @@ minetest.register_node("pulse_network:interface", {
 		return (list == "output_filter" or stack:get_name() == "pulse_network:encoded_pattern") and stack:get_count() or 0
 	end,
 
+	on_metadata_inventory_put = on_metadata_inventory_change,
+	on_metadata_inventory_take = on_metadata_inventory_change,
+
 	conduit_insert = function()
 		return "input"
+	end,
+
+	on_autocraft_insert = function(pos)
+		local inv_interface = minetest.get_meta(pos):get_inventory()
+		local map = api.inv_to_itemmap(inv_interface:get_list"autocraft_buffer")
+
+		for i = 1, #neighbours do
+			local vec = vector.add(pos, neighbours[i])
+			local inv = minetest.get_meta(vec):get_inventory()
+			local name = minetest.get_node(vec).name
+			if minetest.get_item_group(name, "conduit_insert") > 0 then
+				conduits.send_items_raw(map, inv, name, vec)
+			end
+		end
+
+		local list = {}
+		for k, v in pairs(map) do
+			table.insert(list, k .. " " .. v)
+		end
+		inv_interface:set_list("autocraft_buffer", list)
 	end,
 
 	after_conduit_insert = function(pos)
@@ -83,5 +123,17 @@ minetest.register_node("pulse_network:interface", {
 		end
 
 		minetest.get_node_timer(pos):start(10)
+	end,
+
+	can_dig = function(pos)
+		local meta = minetest.get_meta(pos)
+		if meta:get_int"network_destruction" == 1 then return true end
+		local inv = meta:get_inventory()
+		for i = 1, 8 do
+			if not inv:get_stack("patterns", i):is_empty() then
+				return false
+			end
+		end
+		return true
 	end,
 })

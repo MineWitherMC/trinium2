@@ -7,11 +7,13 @@ local S = materials.S
 M.titanium = V.titanium:register_material{
 	description = S"Titanium",
 	types = {"ingot", "dust", "plate"},
+	data = {press_time = 11, press_pressure = 7},
 }
 
 M.vanadium = V.vanadium:register_material{
 	description = S"Vanadium",
 	types = {"ingot", "dust", "plate"},
+	data = {press_time = 8, press_pressure = 12},
 }
 
 M.iron = V.iron:register_material{
@@ -22,6 +24,7 @@ M.iron = V.iron:register_material{
 M.copper = V.copper:register_material{
 	description = S"Copper",
 	types = {"ingot", "dust", "rod"},
+	data = {press_time = 5, press_pressure = 2.2},
 }
 
 M.zinc = V.zinc:register_material{
@@ -37,6 +40,7 @@ M.molybdenum = V.molybdenum:register_material{
 M.silver = V.silver:register_material{
 	description = S"Silver",
 	types = {"ingot", "dust", "plate"},
+	data = {press_time = 17, press_pressure = 2.4},
 }
 
 M.tin = V.tin:register_material{
@@ -79,7 +83,8 @@ M.lead = V.lead:register_material{
 M.rhenium_alloy = materials.add("rhenium_alloy", {
 	formula = {{"titanium", 11}, {"rhenium", 2}, {"platinum", 5}},
 	types = {"ingot", "dust", "rod"},
-	description = S"Rhenium Alloy"
+	description = S"Rhenium Alloy",
+	data = {press_time = 30, press_pressure = 9.3},
 }):generate_data("melting_point"):generate_interactions():generate_recipe("smelting_tower")
 
 -- Silver Alloy

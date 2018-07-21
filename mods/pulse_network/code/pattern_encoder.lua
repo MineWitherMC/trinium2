@@ -91,7 +91,7 @@ minetest.register_node("pulse_network:pattern_encoder", {
 		encoder_context[pn] = pos
 		local fs, size, id = nei.draw_recipe_wrapped(item:get_name(), player, 1, 1)
 		encoder_context2[pn] = id
-		if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s"):format(size.x - 2, S"Encode") end
+		if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s]"):format(size.x - 2, S"Encode") end
 		minetest.show_formspec(pn, "pulse_network:pattern_encoding", fs)
 	end,
 })
@@ -113,15 +113,23 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 		local sm = stack:get_meta()
 		local id = encoder_context2[pn]
 		local recipe = recipes.recipe_registry[id]
-		sm:set_string("recipe_data", minetest.serialize(recipe))
+		sm:set_string("recipe_data", minetest.serialize(table.map(table.filter(recipe, function(_,x)
+			return x == "inputs" or x == "outputs"
+		end), function(k)
+			return table.filter(k, function(z)
+				return z:split" "[2] ~= "0"
+			end)
+		end)))
 
 		local desc_tbl = {S"Encoded Pattern", "", minetest.colorize("#CCCCCC", S"Inputs:")}
 		for _,v in pairs(recipe.inputs) do
 			local item, count = unpack(v:split" ")
-			if minetest.registered_items[item] then
-				item = minetest.registered_items[item].description:split"\n"[1]
+			if count ~= 0 and count ~= "0" then
+				if minetest.registered_items[item] then
+					item = minetest.registered_items[item].description:split"\n"[1]
+				end
+				table.insert(desc_tbl, (count or 1) .. " " .. item)
 			end
-			table.insert(desc_tbl, (count or 1) .. " " .. item)
 		end
 		table.insert(desc_tbl, "")
 		table.insert(desc_tbl, minetest.colorize("#CCCCCC", S"Outputs:"))
@@ -147,12 +155,12 @@ minetest.register_on_player_receive_fields(function(player, form_name, fields)
 		local a = k_split[1]
 		if a == "change_nei_mode" then
 			fs, size, id = nei.draw_recipe_wrapped(k_split[2], player, 1, tonumber(v))
-			if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s"):format(size.x - 2, S"Encode") end
+			if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s]"):format(size.x - 2, S"Encode") end
 			encoder_context2[pn] = id
 		elseif a == "view_recipe" then
 			local item, num, type = k_split[2], tonumber(k_split[3]), tonumber(k_split[4])
 			fs, size, id = nei.draw_recipe_wrapped(item, player, num, type)
-			if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s"):format(size.x - 2, S"Encode") end
+			if id and id ~= 0 then fs = fs .. ("button[%s,0;2,1;re_encode_fs;%s]"):format(size.x - 2, S"Encode") end
 			encoder_context2[pn] = id
 		end
 	end

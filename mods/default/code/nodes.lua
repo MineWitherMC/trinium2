@@ -20,6 +20,7 @@ minetest.register_node("default:glass", {
 	drawtype = "glasslike",
 	groups = {cracky = 3},
 	sounds = ss.default_glass,
+	drop = "",
 })
 
 -- Forcillium Lamp

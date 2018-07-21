@@ -38,7 +38,7 @@ function research.basic_grant(pn, name)
 end
 
 function research.get_tree(name)
-	return api.search(name, api.functions.returner, function(c_res)
+	return api.search(name, api.functions.identity, function(c_res)
 		if c_res:find"%-" then
 			return {[c_res:split"-"[1]] = 1}
 		else

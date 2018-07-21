@@ -44,11 +44,12 @@ M.endium = materials.add("endium", {
 	types = {"ingot", "dust", "plate"},
 	color = {40, 185, 250},
 	description = S"Endium",
-	data = {melting_point = 2884},
+	data = {melting_point = 2884, press_time = 12, press_pressure = 5.4},
 }):generate_interactions()
 
 M.pulsating_alloy = materials.add("pulsating_alloy", {
 	formula = {{"silver_alloy", 5}, {"forcillium", 6}, {"platinum", 3}, {"iron", 2}},
 	types = {"ingot", "dust", "plate", "rod"},
 	description = S"Pulsating Alloy",
+	data = {press_time = 40, press_pressure = 12.25},
 }):generate_data("melting_point"):generate_interactions():generate_recipe("smelting_tower")

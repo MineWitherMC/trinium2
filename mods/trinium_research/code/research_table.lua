@@ -83,7 +83,7 @@ local function recalculate_light(meta, pn)
 	local inv = meta:get_inventory()
 	local research_notes = inv:get_stack("research_notes", 1)
 	local rn_meta = research_notes:get_meta()
-	local enlightened = api.search(rn_meta:get_int"begin", api.functions.returner, function(n)
+	local enlightened = api.search(rn_meta:get_int"begin", api.functions.identity, function(n)
 		local output = {}
 		if n > 7 and can_connect(inv, n, n - 7) then output[n - 7] = 1 end
 		if n <= 42 and can_connect(inv, n, n + 7) then output[n + 7] = 1 end

@@ -135,7 +135,7 @@ betterinv.register_tab("inventory", {
 		local pn = player:get_player_name()
 		local inv2 = bi[pn]
 		local str = inv2 and inv2:get_stack("output", 1):to_string() or ""
-		local desc = api.get_field(str, "description") or ""
+		local desc = api.get_description(str)
 		return betterinv.generate_formspec(player, ([[
 				list[detached:bound~%s;crafting;1.75,0.5;3,3;]
 				item_image_button[5.75,1.5;1,1;%s;inventory~craft;]

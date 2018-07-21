@@ -104,13 +104,13 @@ function mat.add(name, def)
 	function object:generate_interactions()
 		for _, v in pairs(mat.material_interactions) do
 			if table.every(v.requirements, function(x) return table.exists(def.types, function(a) return a == x end) end) then
-				-- v.apply(name, def2.data or {})
+				v.apply(name, def2.data or {})
 			end
 		end
 		return self
 	end
 
-	function object:get(kind, amount)
+	function object.get(_, kind, amount)
 		return mat.getter(name, kind, amount)
 	end
 
@@ -123,11 +123,11 @@ end
 function mat.add_element(name, def)
 	mat.elements[name] = def
 	local object = {}
-	function object:register_material(def1)
+	function object.register_material(_, def1)
 		def1.formula_string = def.formula
 		def1.formula = {}
 		def1.color = def.color
-		def1.data = def
+		def1.data = setmetatable(def1.data or {}, {__index = def})
 		local m1 = mat.add(name, def1)
 		m1:generate_interactions()
 		return m1

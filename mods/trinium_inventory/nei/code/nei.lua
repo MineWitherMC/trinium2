@@ -6,7 +6,7 @@ local S = nei.S
 nei.player_stuff = {}
 
 local function satisfies_search(search_string)
-	local expansion = api.search(search_string, api.functions.returner, function(z)
+	local expansion = api.search(search_string, api.functions.identity, function(z)
 		local tbl = {}
 		local i = z:match("%(([^()]+)%)")
 		if i then
@@ -103,7 +103,7 @@ local function get_formspec_array(search_string, mode)
 				cell_size = cell_size,
 				item_id = v.name,
 				current_mode = mode == 1 and "give" or "view_recipe",
-				description = api.get_field(v.name, "description"),
+				description = api.get_description(v.name),
 				mod_origin = minetest.colorize("#4d82d7", api.string_superseparation(api.get_field(v.name, "mod_origin"))),
 			}
 			i = i + 1

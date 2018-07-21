@@ -17,6 +17,7 @@ function pulse_network.add_storage_cell(id, texture, desc, add_types, add_items)
 
 		can_dig = function(pos)
 			local meta = minetest.get_meta(pos)
+			if meta:get_int"network_destruction" == 1 then return true end
 			local ctrlpos = minetest.deserialize(meta:get_string"controller_pos")
 			if not ctrlpos or minetest.get_node(ctrlpos).name ~= "pulse_network:controller" then return true end
 			local ctrl_meta = minetest.get_meta(ctrlpos)

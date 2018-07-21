@@ -5,6 +5,7 @@ Chemical Reactor Controller=Контроллер химического реак
 Distillation Layer Core=Ядро слоя рекрификации
 Distillation Tower Controller=Контроллер рекрификационной колонны
 Precision Assembler Controller=Контроллер точного сборщика
+Industrial Metal Press Controller=Контроллер промышленного металлоформовщика
 
 Chemical Casing=Химический корпус
 Distillation Grate=Дистилляционная труба
@@ -17,9 +18,14 @@ Item Output Hatch=Шина выхода предметов
 Crude Item Output Hatch=Примитивная шина выхода предметов
 Pressure Input Hatch=Шина входа давления
 Heat Input Hatch=Шина нагрева
+Item Buffer=Предметный буфер
 
 Heat Cable=Нагревательный кабель
 Creative Heat Generator=Творческий нагреватель
+
+Metal Press Mold - @1=Форма металлоформовщика - @1
+Rod=Стержень
+Plate=Пластина
 
 Pressure: @1 kPa=Давление: @1 кПа
 Temperature: @1K=Температура: @1 кельвин
@@ -37,6 +43,7 @@ Crude Blast Furnace=Примитивная доменная печь
 Chemical Reactor=Химический реактор
 Distillation=Рекрификация
 Precision Assembler=Сборщик
+Industrial Metal Press=Металлоформовщик
 
 Heat Input=Нагрев
 Pressure Input=Вход давления

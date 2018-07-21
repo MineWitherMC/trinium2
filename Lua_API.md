@@ -39,18 +39,17 @@ All of these functions are in `table` table.
 	* If there is a such element, its key is returned.
 	* Otherwise, this function returns `false`.
 * `every(arr, func)`
-* `walk(arr, func, cond())`
+* `walk(arr, func, [cond()])`
 	* Runs `func` on all `arr` elements.
 	* `cond` is a continuation condition: if it returns `true`, loop is stopped.
-* `iwalk(arr, func, cond)`
+* `iwalk(arr, func, [cond])`
 	* Same but with integer order on lists.
 * `map(arr, func)`
 * `remap(arr)`
 	* Fixes `arr` numerical keys so `#arr` and similar functions would work.
 * `keys(arr)`
-* `asort(arr, func)`
+* `asort(arr, [comparator])`
 	* Returns iterator of `arr` items sorted by keys.
-	* `func` is any comparator function, defaults to lua comparison.
 * `sum(arr)`
 * `f_concat(arr)`
 	* Similar to `concat(arr)`, but works with any keys with random order.
@@ -65,7 +64,7 @@ All of these functions are in `table` table.
 ### Math Helpers
 All of these functions are in `math` table.
 
-* `harmonic_distribution(center, tolerance, current, amplitude)`
+* `harmonic_distribution(center, tolerance, current, [amplitude])`
 	* Returns some value which is between `0` and `amplitude` which is more the
 	 closer `current` is to `center`.
 	* If `current` is not between `center - tolerance` and `center + tolerance`,
@@ -76,11 +75,9 @@ All of these functions are in `math` table.
 * `modulate(num, max)`
 	* Alternative to Lua builtin modulo which actually returns `max` instead of
 	 `0` when `num` is fully divisible by `max`.
-* `weighted_random(arr, func)`
+* `weighted_random(arr, [random_func])`
 	* Returns random key from `arr`. Weight of each key is defined by
 	 corresponding value.
-	* `func` is random function which can be called like following:
-	 `func(min, max)`. `math.random` by default.
 * `weighted_avg(arr)`
 	* Returns weighted mass center of `number`s.
 	* `arr` is an array of pairs `{number, weight}`.
@@ -89,10 +86,15 @@ All of these functions are in `math` table.
 * `gcd(a, b)`
 	* Returns greatest common divisor of given numbers.
 	* Returns `nil` in case one of given inputs (or both) is not number.
+* `round(a, b)`
+	* Rounds `a` so the result is fully divisible by `b`.
+	* `b` can not be integer.
 
 ### Random functions
 All of these functions are in `trinium.api` table.
 
+* `set_master_prepend(string)`
+	* Sets Formspec prepended string for all players.
 * `roman_number(num)`
 	* Returns `num` in roman notation.
 	* Does not work properly in case `num` is too large.
@@ -115,10 +117,10 @@ All of these functions are in `trinium.api` table.
 * `advanced_search(init, serialize, vertex)`
 	* Runs BFS and returns `DataMesh` with search results.
 	* `init` is the first vertex added to graph.
-	* `vertex` is a function that should return list of vertices connected to the
-	 given one.
+	* `vertex(element, depth)` is a function that should return list of vertices
+	 connected to the given one.
 	* `serialize` is a function that should return serialized version of vertex
-	 (must not return a table).
+	 (should not return a table unless it is known that the graph is a tree).
 	* Returned elements have the format `{vertex, distance}`.
 * `search(init, serialize, vertex)`
 	* Similar to previous function, however, returns elements in `vertex`
@@ -137,10 +139,9 @@ All of these functions are in `trinium.api` table.
 	* `tbl` is a table formatted as `[ItemString] => amount`.
 * `sort_by_param(k)`
 	* Returns a function for sorting tables which have `k` key.
-* `count_stacks(inv, list, disallow_multi_stacks)`
+* `count_stacks(inv, list, [disallow_multi_stacks])`
 	* Returns count of stacks in inventory given list.
-	* In case `disallow_multi_stacks` is present and true, returns unique stack
-	 count.
+	* In case `disallow_multi_stacks` is present, returns unique stack count.
 * `iterator(callback)`
 	* Returns an iterator to use in a `for` loop.
 	* `callback(n)` is function that returns `n`-th element of desired table.
@@ -148,8 +149,9 @@ All of these functions are in `trinium.api` table.
 	* Returns a sequence of brightened given items textures.
 * `get_field(item, key)`
 	* Returns definition `key` field if `item` is defined, otherwise `nil`.
-* `get_texture(item)`
-	* Returns item texture if it is defined, otherwise `nil`.
+* `get_description(item)`
+	* Returns first line from item's description if it exists and item name
+	 otherwise.
 * `process_color(color)`
 	* Converts `color` to ColorString format and makes it semi-transparent.
 * `color_string(color)`
@@ -160,7 +162,7 @@ All of these functions are in `trinium.api` table.
 	* Similar to `stack:to_string()`, but strips the item count.
 * `initialize_inventory(inv, arr)`
 	* Sets inventory list sizes.
-* `initializer(def0)`
+* `initializer(def)`
 	* Returns a function that initializes inventory and optionally `formspec` at
 	 given position. Useful for `on_construct`.
 * `inv_to_itemmap(...)`
@@ -174,7 +176,7 @@ All of these functions are in `trinium.api` table.
 
 ### Recipe functions
 All of these functions are in `trinium.recipes` table.
-* `add(method, inputs, outputs, data)`
+* `add(method, inputs, outputs, [data])`
 	* Adds recipe.
 	* `data` is a table which required/optional fields are defined by `method`.
 	* Some `data` values change various recipe aspects regardless of method:
@@ -236,6 +238,7 @@ All of these functions are inside `trinium.api` table.
 	* Does nothing if `dep` is not installed, this can be useful e.g. for soft
 	 dependencies.
 	* Function is launched instantly if given mod has already sent its signal.
+	* `dep` can also be a list of all needed dependencies.
 * `send_init_signal()`
 	* Runs all functions that are queued behind mod this function is executed
 	 from.
@@ -245,7 +248,7 @@ All of these functions are inside `trinium.api` table.
 	* Deserializes the string.
 * `vector.stringify(v)`
 	* Returns `x,y,z` string.
-* `vector.destringify(v)`
+* `vector.destringify(str)`
 	* Opposite to previous function.
 
 
@@ -331,6 +334,8 @@ These require `tinker_phase` and are stored in `tinker` table.
 
 ## Pulse Network
 These require `pulse_network` and are stored in `pulse_network` table.
+
+### Methods
 * `trigger_update(ctrlpos)`
 	* Sends reload signal to all devices connected to network.
 	* Should be called whenever items are put or taken into network, etc.
@@ -338,10 +343,38 @@ These require `pulse_network` and are stored in `pulse_network` table.
 * `import_to_controller(ctrlpos)`
 	* Sends item from controller internal buffer to network, reloading all
 	 devices.
+	* Automatically called by `export_from_controller`.
+* `export_from_controller(ctrlpos, id, count)`
+	* Attempts to extract given item from network. Returns ItemString.
+* `notify_pattern_change(ctrlpos, pattern, referrer)`
+	* Sends controller notification about changed crafting pattern.
+	* Should be called whenever patterns are added or removed.
+	* `referrer` is a string formatted as `x,y,z|index` (index is optional).
+	* `pattern` is pattern ItemStack.
+* `request_autocraft(ctrlpos, item_id, count)`
+	* Requests network autocraft.
+	* Returns either `false, reason` or `data_mesh, used_memory`.
+	* Does NOT initiate the recipe (yet).
+* `execute_autocraft(ctrlpos, item_id, count)`
+	* Initiates the recipe. It *should* be valid (e.g, return no errors when
+	 processed via `request_autocraft`).
+* `update_pending_recipe(ctrlpos, key)`
 * `add_storage_cell(id, texture, desc, types, items)`
 	* Adds storage cell.
 	* `types` is an integer representing type storage added to network.
 	* `items` is an integer representing item storage added to network.
+* `add_crafting_core(id, texture, desc, processes, memory)`
+	* Adds crafting processor.
+
+### Node Definition
+* Network Slaves
+	* Certain nodes can be directly connected to network. These must have group
+	 `pulsenet_slave = 1` and optionally callbacks `on_pulsenet_connection(pos,
+	 ctrlpos)` and `on_pulsenet_update(pos, ctrlpos)`,
+* Network Pattern Interfaces
+	* Certain Network Slaves can contain Patterns for autocrafting. These must
+	 have `autocraft_buffer` inventory slot with size of at least 16 and
+	 optionally `on_autocraft_insert(pos, index)` callback.
 
 
 ## TesterGregMachines
@@ -446,7 +479,7 @@ This mod is mostly backwards-compatible with `sfinv`, however, it has its own
 * `register_tab(name, def)`
 	* Registers an inventory tab.
 	* See **Inventory Tab Definition** for more information.
-* `generate_buttons(size, filter, selected)`
+* `generate_buttons(size, [filter], selected)`
 	* Generates button formspec part or tab header, depending on the mode.
 	* `size` is a table formatted as `[x] => sizeX, [y] => sizeY`.
 	* `filter` is a function of `tab_definition`, constant `true` by default.
@@ -456,7 +489,7 @@ This mod is mostly backwards-compatible with `sfinv`, however, it has its own
 	* `size` is a table formatted as `[x] => sizeX, [y] => sizeY`.
 	* `bg` is a string.
 	* `inv` is a boolean.
-* `redraw_for_player(player, fields)`
+* `redraw_for_player(player, [fields])`
 	* Redraws player's inventory. Should not be called from tab callbacks.
 	* `fields` is empty table by default.
 * `disable_tab(tab)`
@@ -501,7 +534,7 @@ Existing methods:
 	* Sets DataMesh internal table, by reference.
 * `dm:filter(func(value, key))`
 * `dm:map(func(value, key))`
-* `dm:forEach(func(value, key))`
+* `dm:forEach([sorted], func(value, key))`
 * `dm:exists(func(value, key))`
 	* If `func` returns `true` when some of fields is passed, its key is returned.
 	* If several fields return `true`, one if them is returned (in table order).
@@ -513,6 +546,8 @@ Existing methods:
 	* Inserts variable into internal table.
 	* Only works when internal table is a list.
 * `dm:unique()`
+* `dm:remap()`
+* `dm:sort([func])`
 
 ### HUD Configurator
 HUD Configuration Window. Created via `trinium.hud.configurator(...)`. Requires

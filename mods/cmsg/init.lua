@@ -24,7 +24,7 @@ minetest.register_on_joinplayer(function(player)
         hud_elem_type = "text",
         text = "",
         number = tonumber(cmsg.color, 16),
-        position = {x = 0.75, y = 0.475},
+        position = {x = 0.85, y = 0.475},
         offset = {x = -0, y = -256},
         direction = 3,
         alignment = {x = 0, y = 1},

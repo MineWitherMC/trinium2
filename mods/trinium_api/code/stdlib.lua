@@ -41,7 +41,9 @@ end
 
 function table.iwalk(array, callable, cond)
 	cond = cond or api.functions.const(false)
-	for k, v in ipairs(array) do
+	local count = #array
+	for k = 1, count do
+		local v = array[k]
 		callable(v, k)
 		if cond() then break end
 	end
@@ -102,9 +104,10 @@ function table.multi_tail(t, mult)
 end
 
 function table.random(tbl)
-	local k = table.keys(tbl)
+	local k1 = table.keys(tbl)
+	local k = table.keys(k1)
 	local el = math.random(1, #k)
-	return tbl[k[el]], k[el], el
+	return tbl[k1[k[el]]], k1[k[el]], k[el], el
 end
 
 function table.merge(tbl1, ...)
@@ -126,19 +129,22 @@ function vector.destringify(v)
 	return {x = s[1], y = s[2], z = s[3]}
 end
 
-local mt_register_item_old = minetest.register_item
-function minetest.register_item(name, def, ...)
-	assert(not def.max_stack, name .. " uses max_stack instead of stack_max")
-	def.stack_max = def.stack_max or 72
-	local x = mt_register_item_old(name, def, ...)
-	if def.drop and def.drop ~= "" then
+local function update_drop(name, drop)
+	if drop and drop ~= "" then
 		trinium.recipes.add("drop", {name},
-				type(def.drop) == "table" and def.drop.items or {def.drop},
-				{max_items = type(def.drop) == "table" and def.drop.max_items or 99}
-		)
+				type(drop) == "table" and drop.items or {drop},
+				{max_items = type(drop) == "table" and drop.max_items or 99})
 	end
-	return x
 end
+
+minetest.nodedef_default.stack_max = 72
+minetest.craftitemdef_default.stack_max = 72
+
+minetest.after(0, function()
+	for item, v in pairs(minetest.registered_items) do
+		update_drop(item, v.drop)
+	end
+end)
 
 function string:data()
 	return minetest.deserialize(self)

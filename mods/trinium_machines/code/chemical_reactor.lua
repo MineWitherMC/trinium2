@@ -23,7 +23,7 @@ recipes.add_method("chemical_reactor", {
 	formspec_width = 7,
 	formspec_height = 5,
 	formspec_name = S"Chemical Reactor",
-	implementing_object = "trinium_machines:controller_chemical_reactor",
+	implementing_objects = {"trinium_machines:controller_chemical_reactor"},
 
 	formspec_begin = function(data)
 		local tbl = {}

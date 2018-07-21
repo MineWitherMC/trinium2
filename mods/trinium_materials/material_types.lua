@@ -29,14 +29,6 @@ materials.add_type("ingot", function(def)
 		inventory_image = "(trinium_materials.ingot.png^[multiply:#" .. def.color .. ")^trinium_materials.ingot.overlay.png",
 	})
 end)
-materials.add_combination("ingot_bending", {
-	requirements = {"plate", "ingot"},
-	apply = function(name)
-		recipes.add("metal_press",
-				{"trinium_materials:ingot_" .. name},
-				{"trinium_materials:plate_" .. name})
-	end,
-})
 
 materials.add_type("gem", function(def)
 	minetest.register_craftitem(("trinium_materials:gem_%s"):format(def.id), {
@@ -51,29 +43,6 @@ materials.add_type("dust", function(def)
 		inventory_image = "(trinium_materials.dust.png^[multiply:#" .. def.color .. ")^trinium_materials.dust.overlay.png",
 	})
 end)
-materials.add_combination("dust_smelting", {
-	requirements = {"dust", "ingot"},
-	apply = function(name, data)
-		recipes.add("grinder",
-				{"trinium_materials:ingot_" .. name},
-				{"trinium_materials:dust_" .. name})
-		recipes.add("melter",
-				{"trinium_materials:dust_" .. name},
-				{"trinium_materials:ingot_" .. name},
-				{melting_point = data.melting_point})
-	end,
-})
-materials.add_combination("dust_implosion", {
-	requirements = {"dust", "gem"},
-	apply = function(name)
-		recipes.add("grinder",
-				{"trinium_materials:gem_" .. name},
-				{"trinium_materials:dust_" .. name})
-		recipes.add("implosion",
-				{"trinium_materials:dust_" .. name .. " 4"},
-				{"trinium_materials:gem_" .. name .. " 3"})
-	end,
-})
 
 materials.add_type("water_cell", function(def)
 	minetest.register_craftitem(("trinium_materials:cell_%s"):format(def.id), {
@@ -88,22 +57,6 @@ materials.add_type("rod", function(def)
 		inventory_image = "(trinium_materials.rod.png^[multiply:#" .. def.color .. ")^trinium_materials.rod.overlay.png",
 	})
 end)
-materials.add_combination("gem_lathing", {
-	requirements = {"rod", "gem"},
-	apply = function(name)
-		recipes.add("lathe",
-				{"trinium_materials:gem_" .. name},
-				{"trinium_materials:rod_" .. name .. " 2"})
-	end,
-})
-materials.add_combination("ingot_lathing", {
-	requirements = {"rod", "ingot"},
-	apply = function(name)
-		recipes.add("lathe",
-				{"trinium_materials:ingot_" .. name},
-				{"trinium_materials:rod_" .. name .. " 2"})
-	end,
-})
 
 materials.add_type("brick", function(def)
 	minetest.register_craftitem(("trinium_materials:brick_%s"):format(def.id), {
@@ -111,17 +64,6 @@ materials.add_type("brick", function(def)
 		inventory_image = "trinium_materials.ingot.png^[multiply:#" .. def.color,
 	})
 end)
-materials.add_combination("brick_compression", {
-	requirements = {"dust", "brick"},
-	apply = function(name)
-		recipes.add("crude_compressor",
-				{"trinium_materials:dust_" .. name},
-				{"trinium_materials:brick_" .. name})
-		recipes.add("grinder",
-				{"trinium_materials:brick_" .. name},
-				{"trinium_materials:dust_" .. name})
-	end,
-})
 
 materials.add_type("ore", function(def)
 	local def1 = {
@@ -135,20 +77,6 @@ materials.add_type("ore", function(def)
 	end
 	minetest.register_node(("trinium_materials:ore_%s"):format(def.id), def1)
 end)
-materials.add_combination("ore_grinding", {
-	requirements = {"ore", "dust"},
-	apply = function(name)
-		if not minetest.registered_items["trinium_materials:gem_" .. name] then
-			recipes.add("grinder",
-					{"trinium_materials:ore_" .. name},
-					{"trinium_materials:dust_" .. name .. " 3"})
-		else
-			recipes.add("grinder",
-					{"trinium_materials:ore_" .. name},
-					{"trinium_materials:dust_" .. name, "trinium:gem_" .. name .. " 2"})
-		end
-	end,
-})
 
 materials.add_type("pulp", function(def)
 	minetest.register_craftitem(("trinium_materials:pulp_%s"):format(def.id), {

@@ -14,6 +14,7 @@ dofile(path .. "/precision_assembler.lua")
 dofile(path .. "/distillation_layer.lua")
 dofile(path .. "/distillation_tower.lua")
 dofile(path .. "/blast_furnace.lua")
+dofile(path .. "/metal_press.lua")
 
 dofile(path2 .. "/recipes/init.lua")
 dofile(path2 .. "/research/init.lua")

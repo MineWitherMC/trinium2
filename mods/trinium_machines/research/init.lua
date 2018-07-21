@@ -1,4 +1,4 @@
-local path = minetest.get_modpath"trinium_machines" .. DIR_DELIM .. "research" .. DIR_DELIM
+local path = minetest.get_modpath"trinium_machines" .. "/research/"
 local M = trinium.materials.materials
 local research = trinium.research
 local S = research.S

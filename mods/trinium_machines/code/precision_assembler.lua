@@ -35,7 +35,7 @@ recipes.add_method("precision_assembler", {
 		)) end
 		return ("textarea[1,3.5;6,1.5;;;%s]"):format(table.concat(tbl, "\n"))
 	end,
-	implementing_object = "trinium_machines:controller_precision_assembler",
+	implementing_objects = {"trinium_machines:controller_precision_assembler"},
 })
 
 minetest.register_node("trinium_machines:controller_precision_assembler", {
@@ -87,9 +87,9 @@ minetest.register_node("trinium_machines:controller_precision_assembler", {
 		temp = temp and minetest.get_meta(temp):get_int"temperature" or -1
 		pressure = pressure and minetest.get_meta(pressure):get_int"pressure" or -1
 
-		local cr_recipes = recipes.recipes_by_method.precision_assembler
+		local pa_recipes = recipes.recipes_by_method.precision_assembler
 		local vars, func = api.exposed_var()
-		table.iwalk(cr_recipes, function(v)
+		table.iwalk(pa_recipes, function(v)
 			local rec = recipes.recipe_registry[v]
 			if not recipes.check_inputs(input_map, rec.inputs) then return end
 			local data = rec.data

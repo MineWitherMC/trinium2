@@ -25,7 +25,7 @@ recipes.add_method("distillation_tower", {
 	formspec_width = 7,
 	formspec_height = 4.5,
 	formspec_name = S"Distillation",
-	implementing_object = "trinium_machines:controller_distillation_tower",
+	implementing_objects = {"trinium_machines:controller_distillation_tower"},
 
 	formspec_begin = function(data)
 		return ("textarea[0.25,3;6.75,1.5;;;%s\n%s]"):format(S("Pressure: @1-@2 kPa",
@@ -38,11 +38,11 @@ recipes.add_method("distillation_tower", {
 
 		for i = 1, #outputs do
 			if data.temperatures[i] ~= -1 then
-				data.output_tooltips[i] = api.get_field(outputs[i], "description") .. "\n" ..
+				data.output_tooltips[i] = api.get_description(outputs[i]) .. "\n" ..
 						minetest.colorize("#808080", S("Temperature: @1-@2 K",
 								data.temperatures[i] - 5, data.temperatures[i] + 5))
 			else
-				data.output_tooltips[i] = api.get_field(outputs[i], "description") .. "\n" ..
+				data.output_tooltips[i] = api.get_description(outputs[i]) .. "\n" ..
 						minetest.colorize("#808080", S("Extracted from upper Output Bus"))
 			end
 		end

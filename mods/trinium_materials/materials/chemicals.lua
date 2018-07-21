@@ -166,7 +166,7 @@ do
 
 	M.abs = materials.add("abs_plastic", {
 		formula = {{"styrene", 8}, {"butadiene", 5}, {"acrylonitrile", 5}},
-		types = {"cell", "pulp", "ingot", "plate"},
+		types = {"cell", "pulp", "ingot", "sheet"},
 		color = {255, 225, 180},
 		description = S"ABS Plastic",
 	}):generate_interactions()

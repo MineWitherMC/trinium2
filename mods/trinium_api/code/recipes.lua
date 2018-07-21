@@ -126,11 +126,14 @@ function recipes.add_method(method, tbl)
 
 	trinium.recipes.recipes_by_method[method] = {}
 
-	if tbl.implementing_object then
-		if not recipes.implementing_objects[tbl.implementing_object] then
-			recipes.implementing_objects[tbl.implementing_object] = {}
+	if tbl.implementing_objects then
+		for i = 1, #tbl.implementing_objects do
+			local obj = tbl.implementing_objects[i]
+			if not recipes.implementing_objects[obj] then
+				recipes.implementing_objects[obj] = {}
+			end
+			table.insert(recipes.implementing_objects[obj], trinium.recipes.recipes_by_method[method])
 		end
-		table.insert(recipes.implementing_objects[tbl.implementing_object], trinium.recipes.recipes_by_method[method])
 	end
 
 	minetest.log("action", "[TrAPI] Adding Recipe method " .. method)
@@ -170,7 +173,7 @@ recipes.add_method("drop", {
 	formspec_height = 5,
 	formspec_name = api.S"Drop",
 	formspec_begin = function(data)
-		return ("textarea[0,4.7;7,1;;;%s]"):format(api.S("Max Drop: @1", data.max_items))
+		return ("textarea[0.25,4.7;7,1;;;%s]"):format(api.S("Max Drop: @1", data.max_items))
 	end,
 
 	process = function(a, outputs, b)

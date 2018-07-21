@@ -1,20 +1,6 @@
 local S = conduits.S
 local api = trinium.api
-local item_buffer_fs = "size[8,8.5]list[context;main;1,0;6,4]list[current_player;main;0,4.5;8,4]listring[]"
 local dm = api.DataMesh
-
--- Item Buffer
-minetest.register_node("conduits:item_buffer", {
-	tiles = {"conduits.buffer.png"},
-	description = S"Item Buffer",
-	groups = {cracky = 1, conduit_insert = 1, conduit_extract = 1},
-	sounds = trinium.sounds.default_metal,
-	after_place_node = api.initializer{main = 24, formspec = item_buffer_fs},
-	conduit_insert = function()
-		return "main"
-	end,
-	conduit_extract = {"main"},
-})
 
 -- General Functions
 function conduits.get_item_connections(pos)
@@ -39,29 +25,33 @@ function conduits.send_items(pos, items)
 	end):remap():sort(api.sort_by_param(2)):map(function(v)
 		return {minetest.get_meta(v[1]):get_inventory(), v[3], v[1]}
 	end):forEach(true, function(v1)
-		local callback, callback_after = api.get_field(v1[2], "conduit_insert"), api.get_field(v1[2], "after_conduit_insert")
-		for k, v in pairs(items) do
-			local size = math.min(v, api.get_field(k, "stack_max"))
-			local z, zs = callback(ItemStack(k .. " " .. size))
-			if z then
-				if (not zs) and v1[1]:room_for_item(z, k) then
-					local ns = v1[1]:add_item(z, k .. " " .. size)
-					items[k] = items[k] - size + ns:get_count()
-					if items[k] == 0 then items[k] = nil end
-					if callback_after then callback_after(v1[3]) end
-					return
-				elseif zs then
-					local stack = v1[1]:get_stack(z, zs)
-					local ns = stack:add_item(k .. " " .. size)
-					v1[1]:set_stack(z, zs, stack)
-					items[k] = items[k] - size + ns:get_count()
-					if items[k] == 0 then items[k] = nil end
-					if callback_after then callback_after(v1[3]) end
-					return
-				end
+		conduits.send_items_raw(items, unpack(v1))
+	end)
+end
+
+function conduits.send_items_raw(items, inv, name, pos)
+	local callback, callback_after = api.get_field(name, "conduit_insert"), api.get_field(name, "after_conduit_insert")
+	for k, v in pairs(items) do
+		local size = math.min(v, api.get_field(k, "stack_max"))
+		local z, zs = callback(ItemStack(k .. " " .. size))
+		if z then
+			if (not zs) and inv:room_for_item(z, k) then
+				local ns = inv:add_item(z, k .. " " .. size)
+				items[k] = items[k] - size + ns:get_count()
+				if items[k] == 0 then items[k] = nil end
+				if callback_after then callback_after(pos) end
+				return
+			elseif zs then
+				local stack = inv:get_stack(z, zs)
+				local ns = stack:add_item(k .. " " .. size)
+				inv:set_stack(z, zs, stack)
+				items[k] = items[k] - size + ns:get_count()
+				if items[k] == 0 then items[k] = nil end
+				if callback_after then callback_after(pos) end
+				return
 			end
 		end
-	end)
+	end
 end
 
 -- Conduit, basically utilises nothing except for network calculation time
