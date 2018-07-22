@@ -114,8 +114,7 @@ local function get_formspec_array(search_string, mode)
 		end
 	end
 
-	if i == 0 then j = j - 1 end
-	return formspec, j, {x = width * cell_size, y = height * cell_size + 1.6}
+	return formspec, page_amount, {x = width * cell_size, y = height * cell_size + 1.6}
 end
 
 minetest.register_on_joinplayer(function(player)
