@@ -85,7 +85,8 @@ function pulse_network.notify_pattern_change(pos, pattern, referrer)
 	local meta = minetest.get_meta(pos)
 	local patterns = meta:get_string"patterns":data()
 	local pattern_data = pattern:get_meta():get_string"recipe_data":data()
-	for _, v in pairs(pattern_data.outputs) do
+	for _, v1 in pairs(pattern_data.outputs) do
+		local v = v1:split" "[1]
 		if not patterns[v] then
 			patterns[v] = {}
 		end
