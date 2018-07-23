@@ -116,7 +116,7 @@ function machines.parse_multiblock(def0)
 	end
 
 	return def, destroy_meta,
-	{def0.casing}, {def0.controller}, {min_casings = def0.min_casings, hatches = def0.hatches}
+			{def0.casing}, {def0.controller}, {min_casings = def0.min_casings, hatches = def0.hatches}
 end
 
 recipes.add_method("greggy_multiblock", {

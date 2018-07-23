@@ -30,7 +30,7 @@ read_globals = {
 }
 
 globals = {
-	"trinium",
+	"trinium", "api",
 	"conduits",
 	"pulse_network",
 	"cmsg",

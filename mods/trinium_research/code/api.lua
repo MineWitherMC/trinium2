@@ -95,7 +95,7 @@ research.constants = {
 }
 
 function research.random_aspects(pn, num, arr)
-	if not arr then arr = research.aspect_list end
+	arr = arr or research.aspect_list
 	for _ = 1, num do
 		local rand = table.random(arr)
 		if not research.dp2[pn].aspects[rand] then research.dp2[pn].aspects[rand] = 5 end

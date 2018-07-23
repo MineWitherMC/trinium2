@@ -1,5 +1,6 @@
 trinium = {}
 trinium.api = {}
+api = trinium.api
 
 trinium.DEBUG_MODE = false
 

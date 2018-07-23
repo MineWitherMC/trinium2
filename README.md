@@ -7,7 +7,7 @@ Work-in-Progress technological and magical (sub)game for
 ***Warning***: *GitHub Repository is readonly. Actual repository is located on
  [GitLab](https://gitlab.com/MultiDragon/trinium).* 
 
-Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors.
+Copyright (c) 2018 Wizzerine <wizzerine@gmail.com> and contributors (none :D).
 
 ## This game is not finished
 * Don't expect it to work as well as finished one will;
@@ -28,8 +28,10 @@ Requires Minetest `5.0.0-ddd03c3` or higher. Probably some older builds work too
 * Multiblocks
 * **Feature-Requests are always welcome, and most of them will be implemented!**
 
-## More Screenshots
-#### Ore Generation
-![Ore Generation](oregen.jpg)
-Note that all stone in this world is replaced with air in order to show the
- actual vein.
+## Version Scheme
+Since 1.0-1-1, I use `major.minor-protocol-build`. Prior to that different schemes
+ were used.
+* `protocol` is incremented when release breaks worlds, `build` is set to `0`.
+* `build` is incremented each release.
+* `minor` is incremented when release contains non-breaking features.
+* `major` is incremented when release breaks API, `minor` is set to `0`.

@@ -1,5 +1,8 @@
 # Trinium API Breakages
 
+### 1.0-1-1 (23.07.2018)
+* `register_multiblock` -> `add_multiblock` (consistency with other functions)
+
 ### 201807-G (20.07.2018)
 * `implementing_object = node` now is replaced with `implementing_objects =
  {node}` to add possibility to implement via different machines.

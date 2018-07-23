@@ -324,7 +324,7 @@ minetest.register_node("trinium_research:table", {
 	end,
 })
 
-api.register_multiblock("research table", {
+api.add_multiblock("research table", {
 	width = 0,
 	height_d = 2,
 	height_u = 0,

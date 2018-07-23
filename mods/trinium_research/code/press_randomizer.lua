@@ -115,7 +115,7 @@ minetest.register_node("trinium_research:randomizer", {
 	end,
 })
 
-api.register_multiblock("press randomizer", {
+api.add_multiblock("press randomizer", {
 	width = 0,
 	height_d = 0,
 	height_u = 1,

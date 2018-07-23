@@ -95,6 +95,6 @@ local node_mb = {
 	},
 }
 
-api.register_multiblock("research node", node_mb)
+api.add_multiblock("research node", node_mb)
 api.multiblock_rename(node_mb)
 api.multiblock_rich_info"trinium_research:node_controller"

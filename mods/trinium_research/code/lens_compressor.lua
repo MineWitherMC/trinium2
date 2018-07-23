@@ -209,5 +209,5 @@ lens_carver_mb.activator = function(rg)
 	return ctrl and minetest.get_meta(rg.region[ctrl].actual_pos):get_int("assembled") == 1
 end
 
-api.register_multiblock("lens carver", lens_carver_mb)
+api.add_multiblock("lens carver", lens_carver_mb)
 api.multiblock_rich_info"trinium_research:lens_carver"

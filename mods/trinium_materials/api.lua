@@ -11,10 +11,8 @@ local function is_complex(formula)
 	return type(formula) == "table" and #formula > 0 and (formula[1][2] > 1 or #formula > 1)
 end
 
-mat.data_generators = {}
-mat.recipe_generators = {}
-function mat.add_data_generator(name, callback) mat.data_generators[name] = callback end
-function mat.add_recipe_generator(name, callback) mat.recipe_generators[name] = callback end
+mat.data_generators, mat.add_data_generator = api.adder()
+mat.recipe_generators, mat.add_recipe_generator = api.adder()
 
 function mat.getter(name, kind, amount)
 	local x = ("trinium_materials:%s_%s"):format(kind, name)
@@ -48,14 +46,14 @@ function mat.add(name, def)
 		def.color_string = api.color_string(def.color)
 	elseif not def.color_string and def.formula then
 		local formula1 = table.map(def.formula, function(x)
-			return { (mat.materials_reg[x[1]] or mat.elements[x[1]]).color or { 0, 0, 0 }, x[2] }
+			return {(mat.materials_reg[x[1]] or mat.elements[x[1]]).color or {0, 0, 0}, x[2]}
 		end)
 		local r, g, b
-		r = math.weighted_avg(table.map(formula1, function(x) return { x[1][1], x[2] } end))
-		g = math.weighted_avg(table.map(formula1, function(x) return { x[1][2], x[2] } end))
-		b = math.weighted_avg(table.map(formula1, function(x) return { x[1][3], x[2] } end))
+		r = math.weighted_avg(table.map(formula1, function(x) return {x[1][1], x[2]} end))
+		g = math.weighted_avg(table.map(formula1, function(x) return {x[1][2], x[2]} end))
+		b = math.weighted_avg(table.map(formula1, function(x) return {x[1][3], x[2]} end))
 
-		def.color_string = api.color_string { r, g, b }
+		def.color_string = api.color_string{r, g, b}
 	end
 
 	local def2 = {

@@ -16,19 +16,6 @@ function conduits.get_item_connections(pos)
 	return k
 end
 
-function conduits.send_items(pos, items)
-	local search = api.advanced_search(pos, vector.stringify, conduits.get_item_connections)
-	search:map(function(v)
-		return {v[1], v[2], minetest.get_node(v[1]).name}
-	end):filter(function(v)
-		return v[2] > 2 and minetest.get_item_group(v[3], "conduit_insert") > 0
-	end):remap():sort(api.sort_by_param(2)):map(function(v)
-		return {minetest.get_meta(v[1]):get_inventory(), v[3], v[1]}
-	end):forEach(true, function(v1)
-		conduits.send_items_raw(items, unpack(v1))
-	end)
-end
-
 function conduits.send_items_raw(items, inv, name, pos)
 	local callback, callback_after = api.get_field(name, "conduit_insert"), api.get_field(name, "after_conduit_insert")
 	for k, v in pairs(items) do
@@ -52,6 +39,19 @@ function conduits.send_items_raw(items, inv, name, pos)
 			end
 		end
 	end
+end
+
+function conduits.send_items(pos, items)
+	local search = api.advanced_search(pos, vector.stringify, conduits.get_item_connections)
+	search:map(function(v)
+		return {v[1], v[2], minetest.get_node(v[1]).name}
+	end):filter(function(v)
+		return v[2] > 2 and minetest.get_item_group(v[3], "conduit_insert") > 0
+	end):remap():sort(api.sort_by_param(2)):map(function(v)
+		return {minetest.get_meta(v[1]):get_inventory(), v[3], v[1]}
+	end):forEach(true, function(v1)
+		conduits.send_items_raw(items, unpack(v1))
+	end)
 end
 
 -- Conduit, basically utilises nothing except for network calculation time

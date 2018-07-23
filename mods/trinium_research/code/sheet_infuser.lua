@@ -292,6 +292,6 @@ local infuser_mb = {
 	end,
 }
 
-api.register_multiblock("sheet infuser", infuser_mb)
+api.add_multiblock("sheet infuser", infuser_mb)
 api.multiblock_rename(infuser_mb)
 api.multiblock_rich_info"trinium_research:sheet_infuser"

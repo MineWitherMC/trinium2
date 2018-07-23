@@ -1,5 +1,22 @@
 local api = trinium.api
 
+local one = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
+local ten = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
+local hun = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
+function api.roman_number(a)
+	local k = a % 1000
+	local str = ("M"):rep(math.floor(a / 1000))
+
+	str = str .. hun[(k - k % 100) / 100 + 1]
+	str = str .. ten[(k % 100 - k % 10) / 10 + 1]
+	str = str .. one[k % 10 + 1]
+	return str
+end
+
+function api.table_multiply(tbl, n)
+	return table.map(tbl, function(r) return r * n end)
+end
+
 function api.dump(...)
 	local string = ""
 	local add
@@ -64,10 +81,6 @@ end
 
 function api.get_description(item)
 	return (api.get_field(item, "description") or item):split"\n"[1]
-end
-
-function api.get_texture(item)
-	return api.get_field(item, "inventory_image")
 end
 
 function api.get_fs_texture(...)

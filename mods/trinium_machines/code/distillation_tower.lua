@@ -158,6 +158,6 @@ minetest.register_node("trinium_machines:controller_distillation_tower", {
 	end,
 })
 
-api.register_multiblock("distillation tower", def)
+api.add_multiblock("distillation tower", def)
 recipes.add("greggy_multiblock", r_input, r_output, r_data)
 api.multiblock_rich_info"trinium_machines:controller_distillation_tower"

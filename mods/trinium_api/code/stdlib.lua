@@ -81,7 +81,7 @@ end
 
 function table.sum(t)
 	local k = 0
-	table.walk(t, function(v) k = k + v end)
+	table.walk(t, function(v) k = k + (tonumber(v) or 0) end)
 	return k
 end
 
@@ -93,8 +93,8 @@ function table.f_concat(t, x)
 end
 
 function table.tail(t)
-	local function helper(_, ...) return #{...} > 0 and {...} or nil end
-	return helper(unpack(t)) or {}
+	local function helper(_, ...) return {...} end
+	return helper(unpack(t))
 end
 
 function table.multi_tail(t, mult)
@@ -104,16 +104,15 @@ function table.multi_tail(t, mult)
 end
 
 function table.random(tbl)
-	local k1 = table.keys(tbl)
-	local k = table.keys(k1)
+	local k = table.keys(tbl)
 	local el = math.random(1, #k)
-	return tbl[k1[k[el]]], k1[k[el]], k[el], el
+	return tbl[k[el]], k[el], el
 end
 
 function table.merge(tbl1, ...)
 	local tbl = table.copy(tbl1)
 	table.walk({...}, function(x)
-		table.walk(x, function(y)
+		table.iwalk(x, function(y)
 			table.insert(tbl, y)
 		end)
 	end)
@@ -151,5 +150,6 @@ function string:data()
 end
 
 function string:from_table(params)
-	return self:gsub("${([A-Za-z_0-9]+)}", function(a) return params[a] or params[tonumber(a)] or "<nil>" end)
+	local a = self:gsub("${([A-Za-z_0-9]+)}", function(a) return params[a] or params[tonumber(a)] or "<nil>" end)
+	return a
 end

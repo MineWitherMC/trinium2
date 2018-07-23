@@ -21,7 +21,7 @@ for i = 3, 13, 2 do
 	end
 end
 
-function api.register_multiblock(name, def)
+function api.add_multiblock(name, def)
 	if not def.activator and def.map then
 		def.activator = function(reg) return reg(def.map) end
 	end

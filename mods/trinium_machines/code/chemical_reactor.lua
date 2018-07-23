@@ -123,6 +123,6 @@ minetest.register_node("trinium_machines:controller_chemical_reactor", {
 	end,
 })
 
-api.register_multiblock("chemical reactor", def)
+api.add_multiblock("chemical reactor", def)
 recipes.add("greggy_multiblock", r_input, r_output, r_data)
 api.multiblock_rich_info"trinium_machines:controller_chemical_reactor"

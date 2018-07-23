@@ -123,6 +123,6 @@ minetest.register_node("trinium_machines:controller_industrial_metal_press", {
 	end,
 })
 
-api.register_multiblock("industrial metal press", def)
+api.add_multiblock("industrial metal press", def)
 recipes.add("greggy_multiblock", r_input, r_output, r_data)
 api.multiblock_rich_info"trinium_machines:controller_industrial_metal_press"
