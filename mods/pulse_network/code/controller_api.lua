@@ -222,8 +222,16 @@ function pulse_network.update_pending_recipe(pos, key)
 			end
 		end
 		count = math.min(count, 72)
+
 		local pattern, key2 = table.random(patterns[id] or {})
 		if not pattern then return end
+
+		local found_output = table.exists(pattern.outputs, function(n)
+			return n:split" "[1] == id
+		end)
+		if not found_output then return end
+		count = math.ceil(count / tonumber(pattern.outputs[found_output]:split" "[2]))
+
 		local tbl = key2:split"|"
 		local position, index = vector.destringify(tbl[1]), table.concat(table.tail(tbl), "|")
 		local inv = minetest.get_meta(position):get_inventory()
