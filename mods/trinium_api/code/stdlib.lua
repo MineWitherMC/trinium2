@@ -128,23 +128,6 @@ function vector.destringify(v)
 	return {x = s[1], y = s[2], z = s[3]}
 end
 
-local function update_drop(name, drop)
-	if drop and drop ~= "" then
-		trinium.recipes.add("drop", {name},
-				type(drop) == "table" and drop.items or {drop},
-				{max_items = type(drop) == "table" and drop.max_items or 99})
-	end
-end
-
-minetest.nodedef_default.stack_max = 72
-minetest.craftitemdef_default.stack_max = 72
-
-minetest.after(0, function()
-	for item, v in pairs(minetest.registered_items) do
-		update_drop(item, v.drop)
-	end
-end)
-
 function string:data()
 	return minetest.deserialize(self)
 end

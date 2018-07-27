@@ -60,21 +60,17 @@ These require `trinium_api` as a dependency.
 * `DataMesh(Object) api.search(Object init, Primitive serialize(Object o),
  Set(Object) vertex(Object o, int depth))`
  	* Similar to previous function, but has different return type.
-* `Iterator(Object...) api.iterator(Object... call(int current))`
-	* Returns an iterator to use in a `for` loop.
 
 #### Simple Callback Functions
 * `Object api.functions.identity(Object x)`: returns `x`
 * `function<Object>() api.functions.const(Object x)`: returns function returning `x`
-* `function<bool>(Object) api.functions.equal(Object b)`: returns function checking whether `a=b`
+* `function<bool>(Object a) api.functions.equal(Object b)`: returns function checking whether `a=b`
 * `void api.functions.empty()`: does nothing
 * `Object<0> api.functions.new_object()`: returns new empty object 
 * `function<bool>(Object[], Object[]) api.sort_by_param(Object k)`
 	* Returns comparison function which compares object by given value.
-
-### Compatibility
-* `void api.set_master_prepend(String s)`
-	* Sets Formspec prepended string for all players.
+* `Iterator(Object...) api.iterator(Object... call(int current))`
+	* Returns an iterator to use in a `for` loop.
 
 ### Data Pointers
 * `DataPointer api.get_data_pointer(String pn, String id)`
@@ -107,6 +103,8 @@ These require `trinium_api` as a dependency.
 	* In case `disallow_multi_stacks` is present, returns unique stack count.
 * `String api.formspec_escape_reverse(String escaped_s)`
 	* Reverse function to `minetest.formspec_escape`.
+* `void api.merge_itemmaps(ItemMap a, ItemMap b)`
+	* Adds all items from `b` to `a`.
 
 ### Math
 * `int math.modulate(int num, int divisor)`
@@ -201,6 +199,8 @@ Did you ever need to soft-depend on mod, or to create a cyclic dependency? These
 	* Node Metadata is unchanged.
 * `void api.assert(String condition, String a, String b, String c)`
 	* Crashes gracefully if `condition` is not satisfied.
+* `void api.set_master_prepend(String s)`
+	* Sets Formspec prepended string for all players.
 
 ### Recipes
 All of these functions are in `trinium.recipes` table.
@@ -292,7 +292,9 @@ All of these tables are in `trinium.sounds` table.
 
 ### Miscellaneous
 * `String vector.stringify(vector v)`
+	* Returns `"x,y,z"`.
 * `vector vector.destringify(String str)`
+	* Returns vector by `"x,y,z"` string.
 * `Object string.data(String self)`
 	* Deserializes the string.
 * `String string.from_table(String self, Object[] data)`
@@ -346,7 +348,7 @@ These require `conduits` as a dependency.
 			* If this callback returns `String`, item is put into that list.
 			* If this callback returns `{String, int}`, item is put into given list and slot.
 			* Regardless of callback, it is automatically checked if item fits into its slot.
-		* Optionally, callback `void after_conduit_insert(pos)`.
+		* Optionally, callback `void after_conduit_insert(vector pos)`.
 			* Called after items are inserted into given inventory.
 
 
@@ -502,6 +504,8 @@ These require `pulse_network` as a dependency.
 	* Updates inputs and outputs of given autocraft request.
 	* Automatically called by `execute_autocraft`.
 	* Automatically called by `import_to_controller` when needed.
+* `void pulse_network.send_items_to_referrer(String ref, ItemMap items)`
+	* Adds given itemmap to referrer internal buffer.
 * `void pulse_network.add_storage_cell(String id, Object[] texture, String desc, int types, int items)`
 	* Adds storage cell.
 	* `types` is an integer representing type storage added to network.
@@ -518,7 +522,7 @@ These require `pulse_network` as a dependency.
 			* `void on_pulsenet_update(vector pos, vector ctrlpos)`.
 * Network Pattern Interfaces
 	* Certain Network Slaves can contain Patterns for autocrafting. These must have:
-		* `autocraft_buffer` inventory slot with size of at least 16;
+		* `autocraft_itemmap` meta table, storing Itemmaps;
 		* Optionally some of the following callbacks:
 			* `void on_autocraft_insert(vector pos, String index)`.
 

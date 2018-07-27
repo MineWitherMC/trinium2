@@ -34,7 +34,9 @@ local function get_preview_formspec(dm, memory)
 	else
 		status = S"Following items are crafted/used:"
 		dm:forEach(function(k)
-			status = status .. "\n" .. k[1][2] .. " " .. api.get_description(k[1][1])
+			if k.type ~= "item" then return end
+			local id, count1, count2 = k.item, k.buffered, k.needed
+			status = status .. "\n" .. api.get_description(id) .. " (" .. count1 .. "/" .. count2 .. ")"
 		end)
 	end
 	return ([=[

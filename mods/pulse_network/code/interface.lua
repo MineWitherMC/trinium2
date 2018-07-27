@@ -57,8 +57,9 @@ minetest.register_node("pulse_network:interface", {
 	on_pulsenet_connection = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", interface_formspec)
+		meta:set_string("autocraft_itemmap", minetest.serialize{})
 		api.initialize_inventory(meta:get_inventory(), interface_inv)
-		minetest.get_node_timer(pos):start(10)
+		minetest.get_node_timer(pos):start(1)
 	end,
 
 	allow_metadata_inventory_put = function(_, list, _, stack)
@@ -70,26 +71,6 @@ minetest.register_node("pulse_network:interface", {
 
 	conduit_insert = function()
 		return "input"
-	end,
-
-	on_autocraft_insert = function(pos)
-		local inv_interface = minetest.get_meta(pos):get_inventory()
-		local map = api.inv_to_itemmap(inv_interface:get_list"autocraft_buffer")
-
-		for i = 1, #neighbours do
-			local vec = vector.add(pos, neighbours[i])
-			local inv = minetest.get_meta(vec):get_inventory()
-			local name = minetest.get_node(vec).name
-			if minetest.get_item_group(name, "conduit_insert") > 0 then
-				conduits.send_items_raw(map, inv, name, vec)
-			end
-		end
-
-		local list = {}
-		for k, v in pairs(map) do
-			table.insert(list, k .. " " .. v)
-		end
-		inv_interface:set_list("autocraft_buffer", list)
 	end,
 
 	after_conduit_insert = function(pos)
@@ -106,23 +87,37 @@ minetest.register_node("pulse_network:interface", {
 		pulse_network.import_to_controller(ctrlpos)
 	end,
 
-	on_timer = function(pos)
+	on_timer = function(pos, elapsed)
+		elapsed = elapsed % 10
 		local meta = minetest.get_meta(pos)
-		local inv = meta:get_inventory()
-		local ctrlpos = meta:get_string"controller_pos":data()
+		if elapsed == 0 then
+			local inv = meta:get_inventory()
+			local ctrlpos = meta:get_string"controller_pos":data()
 
-		for i = 1, 8 do
-			if inv:get_stack("output", i):is_empty() then
-				local s1 = inv:get_stack("output_filter", i)
-				if not s1:is_empty() and s1:is_known() then
-					local id, c = api.get_item_identifier(s1), s1:get_count()
-					local extracted_stack = pulse_network.export_from_controller(ctrlpos, id, c)
-					if extracted_stack then inv:set_stack("output", i, extracted_stack) end
+			for i = 1, 8 do
+				if inv:get_stack("output", i):is_empty() then
+					local s1 = inv:get_stack("output_filter", i)
+					if not s1:is_empty() and s1:is_known() then
+						local id, c = api.get_item_identifier(s1), s1:get_count()
+						local extracted_stack = pulse_network.export_from_controller(ctrlpos, id, c)
+						if extracted_stack then inv:set_stack("output", i, extracted_stack) end
+					end
 				end
 			end
 		end
 
-		minetest.get_node_timer(pos):start(10)
+		local map = meta:get_string"autocraft_itemmap":data()
+		for i = 1, #neighbours do
+			local vec = vector.add(pos, neighbours[i])
+			local inv = minetest.get_meta(vec):get_inventory()
+			local name = minetest.get_node(vec).name
+			if minetest.get_item_group(name, "conduit_insert") > 0 then
+				conduits.send_items_raw(map, inv, name, vec)
+			end
+		end
+		meta:set_string("autocraft_itemmap", minetest.serialize(map))
+
+		minetest.get_node_timer(pos):set(elapsed + 1, elapsed)
 	end,
 
 	can_dig = function(pos)

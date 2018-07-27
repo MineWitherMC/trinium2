@@ -23,14 +23,22 @@ function pulse_network.import_to_controller(pos)
 		for i = 1, #pending_recipes do
 			if s:is_empty() then break end
 
-			local x = pending_recipes[i]
-			if x[3][name] then
-				local decr = math.min(x[3][name], s:get_count())
-				s:take_item(decr)
-				inv:set_stack("input", 1, s)
-				x[3][name] = x[3][name] - decr
-				if x[3][name] == 0 then x[3][name] = nil end
-				x[2][name] = (x[2][name] or 0) + decr
+			local referrers_parsed = pending_recipes[i].refs
+			local action = false
+			for _, v in pairs(referrers_parsed) do
+				if v[name] then
+					local change = math.min(s:get_count(), v[name].needed)
+					if change > 0 then
+						v[name].needed = v[name].needed - change
+						v[name].buffered = v[name].buffered + change
+						s:take_item(change)
+						inv:set_stack("input", 1, s)
+						action = true
+					end
+				end
+			end
+
+			if action then
 				meta:set_string("pending_recipes", minetest.serialize(pending_recipes))
 				pulse_network.update_pending_recipe(pos, i)
 			end
@@ -85,6 +93,9 @@ function pulse_network.notify_pattern_change(pos, pattern, referrer)
 	local meta = minetest.get_meta(pos)
 	local patterns = meta:get_string"patterns":data()
 	local pattern_data = pattern:get_meta():get_string"recipe_data":data()
+	pattern_data.referrer = referrer
+
+	local flagged_for_addition = false
 	for _, v1 in pairs(pattern_data.outputs) do
 		local v = v1:split" "[1]
 		if not patterns[v] then
@@ -93,7 +104,8 @@ function pulse_network.notify_pattern_change(pos, pattern, referrer)
 
 		if not patterns[v][referrer] then
 			patterns[v][referrer] = pattern_data
-		else
+			flagged_for_addition = true
+		elseif not flagged_for_addition then
 			patterns[v][referrer] = nil
 			if table.count(patterns[v]) == 0 then
 				patterns[v] = nil
@@ -106,36 +118,82 @@ function pulse_network.notify_pattern_change(pos, pattern, referrer)
 end
 
 local function sequence(storage, patterns)
-	return function(z, step)
-		assert(step <= 10, S"Too complicated pattern sequence!")
-		local name, count = unpack(z)
-		if storage[name] and storage[name] >= count then
-			return {}
-		end
+	return function(object, steps)
+		assert(steps <= 25, S"Too complicated pattern sequence!")
+		local set = {}
 
-		if not patterns[name] then
-			error(S("Could not craft @1 of @2!", count, api.get_description(name)))
-		end
+		if object.type == "pattern" then
+			--[[
+				If we obtained a pattern, we need to buffer all of its components.
+			]]--
+			for _, v in pairs(object.pattern.inputs) do
+				local input_id, input_count = unpack(v:split" ")
+				input_count = (tonumber(input_count) or 1) * object.multiplier
+				if not storage[input_id] then
+					storage[input_id] = 0
+				end
+				local added_count = math.min(storage[input_id], input_count)
+				storage[input_id] = storage[input_id] - added_count
+				input_count = input_count - added_count
+				if storage[input_id] == 0 then
+					storage[input_id] = nil
+				end
+				local needed_item = {
+					type = "item",
+					item = input_id,
+					buffered = added_count,
+					needed = input_count,
+					distance = steps,
+					parent = object.pattern.referrer,
+				}
+				set[needed_item] = 1
+			end
+		else
+			--[[
+				More interesting case is obtaining item.
 
-		assert(table.count(patterns[name]) == 1, S("@1 has >1 recipes!", api.get_description(name)))
-		local pattern = table.random(patterns[name])
+				In this case, we should select patterns we could use.
+				E.g, if first pattern for X is {Y, 2Z} and second is {T, 5W},
+				we need 10 Xs and we have 5 Ys and 10 Ts (and Z/W are free-craftable),
+				then we should request 5 Y-based recipes and
+				5 T-based recipes.
+				If we cannot produce the last recipe possible, it means we have not enough items.
 
-		local found = 0
-		for i = 1, #pattern.outputs do
-			local output, output_count = unpack(pattern.outputs[i]:split" ")
-			if output == name then
-				found = found + (tonumber(output_count) or 1)
+				However, we need to find whether we actually can craft Z
+				or we have to request 10 T-based recipes.
+
+				To do that, a probably good way is to binary-search maximum amount of {Y, 2Z} recipes.
+
+				However, I am too lazy ATM and just check the first recipe producing X.
+			]]--
+			if not patterns[object.item] and object.needed > 0 then
+				error(S("Could not craft @1 of @2!", object.needed, api.get_description(object.item)))
+			end
+			if object.needed == 0 then return {} end
+			for _, v in pairs(patterns[object.item]) do
+				local outputted_amount = 0
+				for _, output in pairs(v.outputs) do
+					local id, count = unpack(output:split" ")
+					if id == object.item then
+						count = tonumber(count) or 1
+						outputted_amount = outputted_amount + count
+					end
+				end
+				assert(outputted_amount > 0, S"System error!")
+
+				local needed_recipe_amount = math.ceil(object.needed / outputted_amount)
+				local needed_item = {
+					type = "pattern",
+					pattern = v,
+					multiplier = needed_recipe_amount
+				}
+				set[needed_item] = 1
+
+				break
 			end
 		end
-		assert(found > 0, S"System error!")
 
-		local recipe_number = math.ceil((count - (storage[name] or 0)) / found)
-		local tbl = {}
-		for _, x in pairs(pattern.inputs) do
-			local input, input_count = unpack(x:split" ")
-			tbl[{input, (tonumber(input_count) or 1) * recipe_number}] = 1
-		end
-		return tbl
+		return set
 	end
 end
 
@@ -147,9 +205,11 @@ function pulse_network.request_autocraft(pos, item_id, count)
 
 	local storage = meta:get_string"inventory":data()
 	local patterns = meta:get_string"patterns":data()
-	local a, b = pcall(api.advanced_search, {item_id, count}, api.functions.new_object, sequence(storage, patterns))
+
+	local step_1 = {type = "item", item = item_id, buffered = 0, needed = count, distance = 1, parent = false}
+	local a, b = pcall(api.search, step_1, api.functions.new_object, sequence(storage, patterns))
 	if a then
-		b:push{{item_id, count}, 1}:sort(api.sort_by_param(2, true))
+		b:push(step_1)
 		local memory = count * #b:data()
 		if meta:get_int"used_memory" + memory > meta:get_int"available_memory" then
 			return false, S"Insufficient crafting memory!"
@@ -167,125 +227,81 @@ function pulse_network.execute_autocraft(pos, item_id, count)
 	meta:set_int("used_memory", meta:get_int"used_memory" + memory)
 	meta:set_int("active_processes", meta:get_int"active_processes" + 1)
 
-	local CI, CT = meta:get_int"used_items", meta:get_int"used_types"
+	local UI, UT = meta:get_int"used_items", meta:get_int"used_types"
 
-	local buffer, needed = {}, {}
-	dm:forEach(function(z, k)
-		local id, countx = unpack(z[1])
-		local decr = math.min(countx, storage[id] or 0)
-
-		if countx ~= decr then
-			needed[id] = (needed[id] or 0) + countx - decr
-		end
-
-		if storage[id] then
-			storage[id] = storage[id] - decr
-			dm:data()[k][1][2] = dm:data()[k][1][2] - decr
-			CI = CI - countx
-			if storage[id] == 0 then
-				storage[id] = nil
-				CT = CT - 1
+	local referrers_parsed = {}
+	dm:forEach(function(obj)
+		api.dump(obj)
+		if obj.type == "item" then
+			local recursive_input_id = obj.item
+			local buf = obj.buffered
+			if buf > 0 then
+				storage[recursive_input_id] = storage[recursive_input_id] - buf
+				UI = UI - buf
+				if storage[recursive_input_id] == 0 then
+					storage[recursive_input_id] = nil
+					UT = UT - 1
+				end
 			end
-			if dm:data()[k][1][2] == 0 then
-				dm:data()[k] = nil
-			end
-			buffer[id] = (buffer[id] or 0) + countx
-		end
-	end):remap()
 
-	meta:set_int("used_items", CI)
-	meta:set_int("used_types", CT)
-	local active_recipes = meta:get_string"pending_recipes":data()
-	table.insert(active_recipes, {dm:data(), buffer, needed, memory})
-	meta:set_string("pending_recipes", minetest.serialize(active_recipes))
+			if not obj.parent then return end
+			if not referrers_parsed[obj.parent] then
+				referrers_parsed[obj.parent] = {}
+			end
+
+			local old = referrers_parsed[obj.parent][recursive_input_id] or {}
+			referrers_parsed[obj.parent][recursive_input_id] = {
+				needed = (old.needed or 0) + obj.needed,
+				buffered = (old.buffered or 0) + obj.buffered,
+			}
+		end
+	end)
+	api.dump(referrers_parsed)
+
+	meta:set_int("used_items", UI)
+	meta:set_int("used_types", UT)
+	local pending_recipes = meta:get_string"pending_recipes":data()
+	table.insert(pending_recipes, {refs = referrers_parsed, memory = memory})
+	meta:set_string("pending_recipes", minetest.serialize(pending_recipes))
 	meta:set_string("inventory", minetest.serialize(storage))
 
 	pulse_network.trigger_update(pos)
-	pulse_network.update_pending_recipe(pos, #active_recipes)
+	pulse_network.update_pending_recipe(pos, #pending_recipes)
 end
 
 function pulse_network.update_pending_recipe(pos, key)
 	local meta = minetest.get_meta(pos)
-	local active_recipes = meta:get_string"pending_recipes":data()
-	local patterns = meta:get_string"patterns":data()
-	local recipe = active_recipes[key]
-	if not recipe then return end
+	local pending_recipes = meta:get_string"pending_recipes":data()
+	local processed_recipe = pending_recipes[key]
 
-	local action = false
-	table.iwalk(recipe[1], function(v, k)
-		local id, count = v[1][1], v[1][2]
-		if recipe[2][id] then
-			v[1][2] = math.max(v[1][2] - recipe[2][id], 0)
-			if v[1][2] == 0 then
-				recipe[1][k] = nil
-				return
-			end
+	for k, v in pairs(processed_recipe.refs) do
+		if table.every(v, function(x) return x.needed == 0 end) then
+			processed_recipe.refs[k] = nil
+			local map = table.map(v, function(x) return x.buffered end)
+			pulse_network.send_items_to_referrer(k, map)
 		end
-		count = math.min(count, 72)
-
-		local pattern, key2 = table.random(patterns[id] or {})
-		if not pattern then return end
-
-		local found_output = table.exists(pattern.outputs, function(n)
-			return n:split" "[1] == id
-		end)
-		if not found_output then return end
-		count = math.ceil(count / tonumber(pattern.outputs[found_output]:split" "[2]))
-
-		local tbl = key2:split"|"
-		local position, index = vector.destringify(tbl[1]), table.concat(table.tail(tbl), "|")
-		local inv = minetest.get_meta(position):get_inventory()
-		if not inv:is_empty"autocraft_buffer" then return end
-
-		local node_name = minetest.get_node(position).name
-		local callback = api.get_field(node_name, "on_autocraft_insert")
-
-		if table.every(pattern.inputs, function(x)
-			local name, count_mult = unpack(x:split" ")
-			count_mult = (tonumber(count_mult) or 1) * count
-			return recipe[2][name] and recipe[2][name] >= count_mult
-		end) then
-			action = true
-
-			table.walk(pattern.inputs, function(x)
-				local name, count_mult = unpack(x:split" ")
-				count_mult = (tonumber(count_mult) or 1) * count
-				recipe[2][name] = recipe[2][name] - count_mult
-				if recipe[2][name] == 0 then
-					recipe[2][name] = nil
-				end
-
-				inv:add_item("autocraft_buffer", name .. " " .. count_mult)
-				if callback then
-					callback(position, index)
-				end
-			end)
-		end
-	end, function() return action end)
-	recipe[1] = table.remap(recipe[1])
-	active_recipes[key] = recipe
-
-	if #recipe[1] > 0 then
-		local output_name = recipe[1][#recipe[1]][1][1]
-		if recipe[2][output_name] then
-			local pending_recipe_outputs = meta:get_string"pending_outputs":data()
-			table.insert(pending_recipe_outputs, {output_name, recipe[2][output_name]})
-			recipe[2][output_name] = nil
-			meta:set_string("pending_outputs", minetest.serialize(pending_recipe_outputs))
-		end
-	else
-		local e, k = table.random(recipe[2])
-		if e then
-			local pending_recipe_outputs = meta:get_string"pending_outputs":data()
-			table.insert(pending_recipe_outputs, {k, e})
-			meta:set_string("pending_outputs", minetest.serialize(pending_recipe_outputs))
-		end
-		meta:set_int("used_memory", meta:get_int"used_memory" - recipe[4])
-		meta:set_int("active_processes", meta:get_int"active_processes" - 1)
-		table.remove(active_recipes, key)
 	end
 
-	if action then
-		meta:set_string("pending_recipes", minetest.serialize(active_recipes))
+	if table.count(processed_recipe.refs) == 0 then
+		meta:set_int("used_memory", meta:get_int"used_memory" - processed_recipe.memory)
+		meta:set_int("active_processes", meta:get_int"active_processes" - 1)
+		table.remove(pending_recipes, key)
+	end
+
+	meta:set_string("pending_recipes", minetest.serialize(pending_recipes))
+end
+
+function pulse_network.send_items_to_referrer(referrer, itemmap)
+	local pos, index = unpack(referrer:split"|")
+	pos = vector.destringify(pos)
+	local meta = minetest.get_meta(pos)
+	local old_items = meta:get_string"autocraft_itemmap":data()
+	api.merge_itemmaps(old_items, itemmap)
+	meta:set_string("autocraft_itemmap", minetest.serialize(old_items))
+
+	local node = minetest.get_node(pos)
+	local callback = api.get_field(node.name, "on_autocraft_insert")
+	if callback then
+		callback(pos, index)
 	end
 end

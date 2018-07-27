@@ -1,6 +1,7 @@
 local api = trinium.api
 local DataMesh = api.DataMesh
 
+--[[ Difficult algorithms ]]--
 function api.advanced_search(begin, serialize, vertex)
 	local dm = DataMesh:new()
 	local dd = dm._data
@@ -35,6 +36,16 @@ function api.search(begin, serialize, vertex)
 	return api.advanced_search(begin, serialize, vertex):map(function(r) return r[1] end)
 end
 
+--[[ Transformers ]]--
+function api.iterator(callback)
+	return function(max, current)
+		if max == current then return end
+		current = current + 1
+		return callback(current)
+	end
+end
+
+--[[ Small Functions ]]--
 function api.sort_by_param(param, x)
 	if not x then
 		return function(a, b)
@@ -52,15 +63,7 @@ function api.exposed_var()
 	return tbl, function() return not tbl.good end
 end
 
-function api.iterator(callback)
-	return function(max, current)
-		if max == current then return end
-		current = current + 1
-		return callback(current)
-	end
-end
-
-api.functions = {} -- table of functions
+api.functions = {}
 local func = api.functions
 
 function func.identity(a)

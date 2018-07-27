@@ -1,12 +1,3 @@
--- Prepends
-local api = trinium.api
-function api.set_master_prepend(string)
-	minetest.register_on_joinplayer(function(player)
-		player:set_formspec_prepend(string)
-	end)
-end
-
--- Recipe Import
 minetest.after(0, function()
 	for item in pairs(minetest.registered_items) do
 		local recipes = minetest.get_all_craft_recipes(item)

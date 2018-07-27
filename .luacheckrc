@@ -40,8 +40,8 @@ globals = {
 
 files["mods/trinium_api/code/math.lua"].globals = {"math"}
 files["mods/trinium_inventory/betterinv/init.lua"].globals = {"sfinv"}
-files["mods/trinium_api/code/compat.lua"].globals = {"minetest", "Raycast"}
 files["mods/default/*"].globals = {"LIGHT_MAX", "screwdriver", "farming", "default"}
-files["mods/trinium_api/code/stdlib.lua"].globals = {"table", "vector", "minetest", "string"}
+files["mods/trinium_api/code/stdlib.lua"].globals = {"table", "vector", "string"}
 files["mods/trinium_player/creative.lua"].globals = {"minetest"}
+files["mods/default/code/random_compat.lua"].globals = {"minetest"}
 files["mods/trinium_machines/research/*"].max_line_length = false

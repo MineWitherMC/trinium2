@@ -53,3 +53,9 @@ function api.formspec_escape_reverse(text)
 	text = text:gsub("\\%[", "["):gsub("\\%]", "]"):gsub("\\\\", "\\"):gsub("\\,", ","):gsub("\\;", ";")
 	return text
 end
+
+function api.merge_itemmaps(a, b)
+	for k, v in pairs(b) do
+		a[k] = (a[k] or 0) + v
+	end
+end

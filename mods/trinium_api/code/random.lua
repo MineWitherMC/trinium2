@@ -117,3 +117,9 @@ end
 function api.assert(x, y, z, t)
 	return assert(x, "\n" .. y .. " requested nonexistent " .. z .. " " .. t)
 end
+
+function api.set_master_prepend(string)
+	minetest.register_on_joinplayer(function(player)
+		player:set_formspec_prepend(string)
+	end)
+end

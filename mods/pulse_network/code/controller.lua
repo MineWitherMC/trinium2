@@ -23,10 +23,7 @@ minetest.register_node("pulse_network:controller", {
 		meta:set_string("inventory", minetest.serialize{})
 		meta:set_string("patterns", minetest.serialize{})
 		meta:set_string("pending_recipes", minetest.serialize{})
-		meta:set_string("pending_outputs", minetest.serialize{})
 		api.initialize_inventory(meta:get_inventory(), {input = 1})
-
-		minetest.get_node_timer(pos):start(5)
 	end,
 
 	on_metadata_inventory_put = pulse_network.import_to_controller,
@@ -46,42 +43,5 @@ minetest.register_node("pulse_network:controller", {
 			minetest.get_meta(r):set_int("network_destruction", 1)
 			minetest.dig_node(r)
 		end)
-	end,
-
-	on_timer = function(pos)
-		local meta = minetest.get_meta(pos)
-		local outputs = meta:get_string"pending_outputs":data()
-		if #outputs == 0 then
-			minetest.get_node_timer(pos):start(5)
-			return
-		end
-
-		local inventory = meta:get_string"inventory":data()
-		local CI, UI, CT, UT = meta:get_int"capacity_items", meta:get_int"used_items",
-				meta:get_int"capacity_types", meta:get_int"used_types"
-
-		local item, count = unpack(outputs[1])
-		if not inventory[item] and CT == UT then return end
-		count = math.min(count, CI - UI)
-		if count == 0 then return end
-		if not inventory[item] then
-			inventory[item] = count
-			UT = UT + 1
-			meta:set_int("used_types", UT)
-		else
-			inventory[item] = inventory[item] + count
-		end
-		outputs[1][2] = outputs[1][2] - count
-
-		UI = UI + count
-		meta:set_int("used_items", UI)
-		meta:set_string("inventory", minetest.serialize(inventory))
-		if outputs[1][2] == 0 then
-			table.remove(outputs, 1)
-		end
-		meta:set_string("pending_outputs", minetest.serialize(outputs))
-		minetest.get_node_timer(pos):start(5)
-
-		pulse_network.trigger_update(pos)
 	end,
 })
