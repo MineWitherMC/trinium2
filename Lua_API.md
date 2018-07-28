@@ -236,6 +236,15 @@ All of these functions are in `trinium.recipes` table.
 * `void remove_inputs(InvRef inv, String list, String[] inputs)`
 	* Removes a lot of items from inventory in one run.
 
+### Sandboxing
+* `{bool, Object} api.sandbox_loadstring(func)`
+	* Returns given string as a function if it is possible.
+	* Returns `false, error_message` otherwise.
+* `{bool, Object} api.sandbox_call(sandbox, func, args)`
+	* Substitutes `_G` with given sandbox and calls function.
+* `{bool, Object} api.limited_call(limit, func, args)`
+	* Calls given function, doing not more than given operations.
+
 ### Sounds
 All of these tables are in `trinium.sounds` table.
 * `default`

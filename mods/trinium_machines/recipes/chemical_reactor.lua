@@ -6,27 +6,27 @@ local R = trinium.machines.recipes
 R.ammonia = A("chemical_reactor",
 		{M.nitrogen:get"cell", M.hydrogen:get("cell", 3)},
 		{M.ammonia:get("cell", 2), "trinium_materials:cell_empty 2"},
-		{time = 25, pressure = 175, temperature = 850, catalyst = "osmium",
-		  pressure_tolerance = 25, temperature_tolerance = 20})
+		{time = 25, pressure = 175, temperature = 750, catalyst = "osmium",
+			pressure_tolerance = 25, temperature_tolerance = 35})
 
 -- 2(C3H6) + 2NH3 + 3O2 -> 2C3H3N + 6H2O
 R.acrylonitrile = A("chemical_reactor",
 		{M.propene:get("cell", 2), M.ammonia:get("cell", 2), M.oxygen:get("cell", 3), "trinium_materials:cell_empty"},
 		{M.acrylonitrile:get("cell", 2), M.water:get("cell", 6)},
-		{time = 8, temperature = 587, temperature_tolerance = 16, catalyst = "bismuth_molybdenum"})
+		{time = 8, temperature = 587, temperature_tolerance = 32, catalyst = "bismuth_molybdenum"})
 
 -- C4H10 Steam-Cracking -> C4H6^ + 2H2^
 R.butane_cracking = A("chemical_reactor",
 		{M.butane:get"cell", M.steam:get("cell", 2)},
 		{M.butadiene:get"cell", M.hydrogen:get("cell", 2)},
-		{time = 0.5, temperature = 1225, temperature_tolerance = 10})
+		{time = 0.5, temperature = 1225, temperature_tolerance = 55})
 
 -- C7H8 + H2 -> C6H6 + CH4^
 R.toluene_hydration = A("chemical_reactor",
 		{M.toluene:get"cell", M.hydrogen:get"cell"},
 		{M.benzene:get"cell", M.methane:get"cell"},
-		{time = 28, temperature = 550, temperature_tolerance = 60, catalyst = "chromium_trioxide",
-		  pressure = 50, pressure_tolerance = 8})
+		{time = 28, temperature = 570, temperature_tolerance = 60, catalyst = "chromium_trioxide",
+			pressure = 50, pressure_tolerance = 8})
 
 -- С6H6 + C2H4 -> C8H10
 R.ethylbenzene = A("chemical_reactor",
@@ -38,7 +38,7 @@ R.ethylbenzene = A("chemical_reactor",
 R.styrene = A("chemical_reactor",
 		{M.ethylbenzene:get"cell", "trinium_materials:cell_empty"},
 		{M.styrene:get"cell", M.hydrogen:get"cell"},
-		{time = 55, catalyst = "iron_trioxide", temperature = 785, temperature_tolerance = 10})
+		{time = 55, catalyst = "iron_trioxide", temperature = 902.5, temperature_tolerance = 27.5})
 
 -- 2H2S + O2 -> 2S + 2H2O turned into Oil Desulfurization
 R.desulf = A("chemical_reactor",
@@ -76,14 +76,14 @@ R.hc_diesel = A("chemical_reactor",
 R.sc_gas = A("chemical_reactor",
 		{M.frac_gas:get("cell", 12), M.steam:get"cell"},
 		{M.methane:get("cell", 7), M.ethylene:get("cell", 3), M.propene:get("cell", 2), "trinium_materials:cell_empty"},
-		{time = 0.5, temperature = 1150, temperature_tolerance = 10})
+		{time = 0.5, temperature = 1150, temperature_tolerance = 80})
 
 R.sc_ether = A("chemical_reactor",
 		{M.frac_ether:get("cell", 12), M.steam:get"cell"},
 		{M.ethylene:get("cell", 7), M.propene:get("cell", 4), M.butadiene:get"cell", "trinium_materials:cell_empty"},
-		{time = 0.5, temperature = 1250, temperature_tolerance = 10})
+		{time = 0.5, temperature = 1250, temperature_tolerance = 80})
 
 R.sc_naphtha = A("chemical_reactor",
 		{M.naphtha:get("cell", 12), M.steam:get"cell"},
 		{M.toluene:get("cell", 9), M.isoprene:get("cell", 2), M.butadiene:get"cell", "trinium_materials:cell_empty"},
-		{time = 0.5, temperature = 1325, temperature_tolerance = 10})
+		{time = 0.5, temperature = 1325, temperature_tolerance = 80})

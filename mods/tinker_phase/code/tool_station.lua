@@ -6,7 +6,9 @@ local tool_station_formspec = [[
 	list[context;inputs;1,0;3,2;]
 	list[context;output;6,0.5;1,1;]
 	list[current_player;main;0,2.5;8,4;]
-	listring[]
+	listring[context;output]
+	listring[current_player;main]
+	listring[context;inputs]
 	image[4.5,0.5;1,1;trinium_gui.arrow.png]
 ]]
 

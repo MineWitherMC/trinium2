@@ -12,7 +12,7 @@ local interface_formspec = [=[
 	listring[context;patterns]
 	listring[current_player;main]
 ]=]
-local interface_inv = {patterns = 8, input = 1, output = 8, output_filter = 8, autocraft_buffer = 16}
+local interface_inv = {patterns = 8, input = 1, output = 8, output_filter = 8}
 
 local function on_metadata_inventory_change(pos, list, index, stack)
 	if list ~= "patterns" then return end
@@ -90,7 +90,7 @@ minetest.register_node("pulse_network:interface", {
 	on_timer = function(pos, elapsed)
 		elapsed = elapsed % 10
 		local meta = minetest.get_meta(pos)
-		if elapsed == 0 then
+		if math.floor(elapsed) == 0 then
 			local inv = meta:get_inventory()
 			local ctrlpos = meta:get_string"controller_pos":data()
 

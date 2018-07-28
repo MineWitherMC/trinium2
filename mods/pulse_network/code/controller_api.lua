@@ -231,7 +231,6 @@ function pulse_network.execute_autocraft(pos, item_id, count)
 
 	local referrers_parsed = {}
 	dm:forEach(function(obj)
-		api.dump(obj)
 		if obj.type == "item" then
 			local recursive_input_id = obj.item
 			local buf = obj.buffered
@@ -256,7 +255,6 @@ function pulse_network.execute_autocraft(pos, item_id, count)
 			}
 		end
 	end)
-	api.dump(referrers_parsed)
 
 	meta:set_int("used_items", UI)
 	meta:set_int("used_types", UT)

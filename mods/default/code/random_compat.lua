@@ -22,11 +22,11 @@ local function update_drop(name, drop)
 	end
 end
 
-minetest.nodedef_default.stack_max = 72
-minetest.craftitemdef_default.stack_max = 72
-
-minetest.after(0, function()
-	for item, v in pairs(minetest.registered_items) do
-		update_drop(item, v.drop)
-	end
-end)
+if minetest.register_on_mods_loaded then
+	minetest.register_on_mods_loaded(function()
+		minetest.log("action", "[TrD] Registering Node Drops")
+		for item, v in pairs(minetest.registered_items) do
+			update_drop(item, v.drop)
+		end
+	end)
+end

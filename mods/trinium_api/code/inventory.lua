@@ -34,6 +34,7 @@ end
 
 function api.get_item_identifier(stack)
 	local s = stack:to_string():split(" ")
+	if not s[1] then return nil end
 	return s[1] .. (s[3] and " " .. table.concat(table.multi_tail(s, 2), " ") or "")
 end
 

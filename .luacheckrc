@@ -3,7 +3,7 @@
 read_globals = {
 	"DIR_DELIM",
 	"minetest", "core", "vector",
-	"dump", "dump2", "unpack",
+	"dump", "dump2", "unpack", "setfenv", "loadstring",
 	"VoxelManip", "VoxelArea", "PerlinNoiseMap", "PseudoRandom", "PcgRandom", "ItemStack", "Settings", "Raycast",
 	
 	table = { 

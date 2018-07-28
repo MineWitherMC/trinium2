@@ -21,5 +21,6 @@ conduits.strings = {
 dofile(path .. "/signal_cable.lua")
 dofile(path .. "/item_conduit.lua")
 dofile(path .. "/temporal_controller.lua")
+dofile(path .. "/lua_controller.lua")
 
 trinium.api.send_init_signal()

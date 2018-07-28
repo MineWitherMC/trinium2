@@ -6,6 +6,7 @@ Item Conduit=Предметная труба
 Item Pump=Предметная помпа
 Time Sensor=Сенсор времени
 Temporal Controller=Временной контроллер
+Lua Controller=Программируемый контроллер
 
 Item Pump Speed Upgrade=Ускоритель предметной помпы
 Item Pump Speed Downgrade=Замедлитель предметной помпы
@@ -24,3 +25,4 @@ Always active=Включен
 @1 left=@1 операций
 Day=День
 Night=Ночь
+Save & Execute=Сохранить и запустить
